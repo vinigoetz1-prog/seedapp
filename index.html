@@ -340,7 +340,7 @@
                 </div>
                 <button onclick="toggleFocusNotes()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x"></i></button>
             </div>
-            <textarea id="focus-notes-input" oninput="updateFocusNotes(this.value)" class="flex-1 w-full bg-transparent outline-none resize-none p-6 text-zinc-200 leading-relaxed custom-scrollbar font-medium" placeholder="Registe aqui pensamentos, ideias ou lembretes rápidos para não perder o foco..."></textarea>
+            <textarea id="focus-notes-input" onchange="updateFocusNotes(this.value)" class="flex-1 w-full bg-transparent outline-none resize-none p-6 text-zinc-200 leading-relaxed custom-scrollbar font-medium" placeholder="Registe aqui pensamentos, ideias ou lembretes rápidos para não perder o foco..."></textarea>
         </div>
 
         <!-- Conteúdo Rolável -->
@@ -917,7 +917,7 @@
                     <div class="lg:col-span-5 space-y-6">
                         <div class="glass p-8 rounded-[2.5rem] space-y-4 h-full flex flex-col">
                             <h3 class="text-[10px] font-black uppercase text-zinc-400">Notas & Ideias</h3>
-                            <textarea ${isArchived ? 'readonly' : ''} oninput="updateNotes(this.value)" class="w-full flex-1 min-h-[250px] bg-transparent outline-none resize-none font-medium text-zinc-200 leading-relaxed custom-scrollbar" placeholder="Escreva aqui ideias, links ou contatos para esta semente...">${p.notes || ''}</textarea>
+                            <textarea ${isArchived ? 'readonly' : ''} onchange="updateNotes(this.value)" class="w-full flex-1 min-h-[250px] bg-transparent outline-none resize-none font-medium text-zinc-200 leading-relaxed custom-scrollbar" placeholder="Escreva aqui ideias, links ou contatos para esta semente...">${p.notes || ''}</textarea>
                         </div>
                         <button onclick="deleteProject(${p.id}, this)" class="w-full py-5 text-rose-400/60 hover:text-rose-400 hover:bg-rose-500/10 text-[10px] font-black uppercase tracking-widest transition-all border border-rose-500/10 rounded-2xl">Remover Ideia</button>
                     </div>
