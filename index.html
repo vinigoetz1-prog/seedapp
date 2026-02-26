@@ -387,17 +387,24 @@
         let projects = [];
         let currentUser = null;
         let unsubscribeSnapshot = null;
-        let activityLog = JSON.parse(localStorage.getItem('seed_activity_v1')) || {}; // Novo Estado do Heatmap
-        let achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || []; // Estado das Conquistas
-        let isOfflineMode = false; // Controle de login pulado
+        let activityLog = JSON.parse(localStorage.getItem('seed_activity_v1')) || {}; 
+        let achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || []; 
+        let isOfflineMode = false; 
 
-        // Removido o sistema de syncId manual (agora é atrelado à conta)
+        // --- SISTEMA DE NOTIFICAÇÕES (Toasts visíveis que não são bloqueados) ---
+        window.showToast = (message, type = 'success') => {
+            const toast = document.createElement('div');
+            const bgClass = type === 'error' ? 'bg-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.6)]' : 'bg-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.6)]';
+            toast.className = `fixed top-10 left-1/2 -translate-x-1/2 text-black px-6 py-3 rounded-full font-black uppercase tracking-widest text-[10px] md:text-xs z-[300] animate-slide-up transition-opacity duration-500 ${bgClass}`;
+            toast.innerHTML = message;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 4000);
+        };
 
         window.initCloud = () => {
             if (!currentUser) return;
             if (unsubscribeSnapshot) unsubscribeSnapshot();
 
-            // Usando o UID da conta do usuário logado para segurança e sincronização perfeita
             const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'seed_data', 'main');
             unsubscribeSnapshot = onSnapshot(docRef, (snapshot) => {
                 if (snapshot.exists()) {
@@ -426,7 +433,6 @@
             console.log("🌱 Erro de conexão, mantendo na tela de login.", error);
         };
 
-        // Escuta automaticamente se o usuário já fez login alguma vez
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
             if (user) {
@@ -439,18 +445,18 @@
             }
         });
 
-        // Funções da tela de Login e Cadastro
+        // Funções da tela de Login e Cadastro (Sem alertas do navegador)
         window.handleAuth = async (action) => {
             const email = document.getElementById('auth-email').value;
             const pass = document.getElementById('auth-pass').value;
             
             if(!email || !pass) {
-                alert("Por favor, preencha seu email e senha.");
+                window.showToast("❌ Preencha seu email e senha.", "error");
                 return;
             }
 
             if (pass.length < 6) {
-                alert("A senha precisa ter pelo menos 6 caracteres para garantir a segurança da sua conta.");
+                window.showToast("❌ A senha precisa ter 6 caracteres.", "error");
                 return;
             }
 
@@ -466,28 +472,27 @@
             } catch(error) {
                 console.error(error);
                 if(error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
-                    alert("Email ou senha incorretos.");
+                    window.showToast("❌ Email ou senha incorretos.", "error");
                 } else if(error.code === 'auth/email-already-in-use') {
-                    alert("Este email já está sendo usado por outro projeto.");
+                    window.showToast("❌ Este email já está em uso.", "error");
                 } else if(error.code === 'auth/weak-password') {
-                    alert("A senha precisa ter pelo menos 6 caracteres.");
+                    window.showToast("❌ A senha precisa ter 6 caracteres.", "error");
                 } else if(error.code === 'auth/operation-not-allowed') {
-                    alert("⚠️ Autenticação desativada! Para corrigir: Vá no seu painel do Firebase > Authentication > Sign-in method > E ative a opção 'E-mail/senha'.");
+                    window.showToast("❌ E-mail/Senha desativado no Firebase!", "error");
                 } else {
-                    alert("Erro ao acessar: " + error.message);
+                    window.showToast("❌ Erro ao acessar a conta.", "error");
                 }
             }
         };
 
         window.logout = async () => {
-            if(confirm("Deseja realmente sair do seu Jardim?")) {
-                await signOut(auth);
-                projects = []; 
-                activityLog = {};
-                achievements = [];
-                renderProjects();
-                document.getElementById('auth-overlay').classList.remove('hidden');
-            }
+            await signOut(auth);
+            projects = []; 
+            activityLog = {};
+            achievements = [];
+            renderProjects();
+            document.getElementById('auth-overlay').classList.remove('hidden');
+            window.showToast("🌱 Você saiu do seu Jardim.");
         };
 
         window.continueOffline = () => {
@@ -526,14 +531,6 @@
             foco: { id: 'foco', icon: '🔥', title: 'Inabalável', desc: 'Sessão de 60m' },
             botanico: { id: 'botanico', icon: '🌳', title: 'Botânico Master', desc: '5 sementes no Jardim' },
             pesquisador: { id: 'pesquisador', icon: '📚', title: 'Pesquisador', desc: 'Notas com 1000+ letras' }
-        };
-
-        window.showToast = (message) => {
-            const toast = document.createElement('div');
-            toast.className = 'fixed top-10 left-1/2 -translate-x-1/2 bg-amber-500 text-black px-6 py-3 rounded-full font-black uppercase tracking-widest text-[10px] md:text-xs z-[200] shadow-[0_0_20px_rgba(245,158,11,0.6)] animate-slide-up transition-opacity duration-500';
-            toast.innerHTML = message;
-            document.body.appendChild(toast);
-            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 4000);
         };
 
         window.checkAchievements = () => {
