@@ -152,7 +152,14 @@
                     </div>
                     <div>
                         <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Senha Secreta</label>
-                        <input id="auth-pass" type="password" placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors">
+                        <div class="relative">
+                            <input id="auth-pass" type="password" placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-2xl pl-5 pr-12 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors">
+                            <!-- Botão do Olhinho da Senha -->
+                            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors" title="Mostrar Senha">
+                                <i data-lucide="eye" id="icon-eye" class="w-5 h-5 block"></i>
+                                <i data-lucide="eye-off" id="icon-eye-off" class="w-5 h-5 hidden"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -171,7 +178,7 @@
 
     <!-- Navegação -->
     <nav class="p-6 flex justify-between items-center border-b border-white/5 sticky top-0 bg-black/40 backdrop-blur-xl z-50 transition-colors">
-        <div class="flex items-center gap-3 cursor-pointer group" onclick="closeDetails(); closeFocusMode(); closeStats(); closeMentor()">
+        <div class="flex items-center gap-3 cursor-pointer group" onclick="closeDetails(); closeFocusMode(); closeStats(); closeMentor(); closeSettings()">
             <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] flex items-center justify-center shadow-lg shadow-[var(--primary)]/30 group-hover:rotate-12 transition-transform">
                 <i data-lucide="leaf" class="text-white w-6 h-6"></i>
             </div>
@@ -179,11 +186,11 @@
         </div>
         
         <div class="flex items-center gap-2 md:gap-4">
-            <button onclick="logout()" class="glass p-3 rounded-xl hover:text-rose-500 transition-all text-zinc-400" title="Sair da Conta">
-                <i data-lucide="log-out" class="w-5 h-5"></i>
-            </button>
-            <button onclick="openStats()" class="glass p-3 rounded-xl hover:text-[var(--primary)] transition-all">
+            <button onclick="openStats()" class="glass p-3 rounded-xl hover:text-[var(--primary)] transition-all text-zinc-400" title="Termômetro">
                 <i data-lucide="pie-chart" class="w-5 h-5"></i>
+            </button>
+            <button onclick="openSettings()" class="glass p-3 rounded-xl hover:text-[var(--primary)] transition-all text-zinc-400" title="Configurações">
+                <i data-lucide="settings" class="w-5 h-5"></i>
             </button>
             <div class="hidden md:flex items-center gap-3 glass p-2 rounded-2xl px-5">
                 <button onclick="changeTheme('theme-purple')" class="w-4 h-4 rounded-full bg-violet-500 hover:scale-125 transition-transform"></button>
@@ -238,6 +245,32 @@
             </div>
             <div id="stats-chart" class="space-y-4">
                 <!-- Conteúdo dos stats gerado via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Configurações / Perfil -->
+    <div id="settings-overlay" class="fixed inset-0 bg-black/80 z-[120] hidden items-center justify-center p-6 backdrop-blur-md animate-slide-up">
+        <div class="glass w-full max-w-sm rounded-[3rem] p-8 md:p-10 space-y-6 text-center relative overflow-hidden shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="settings" class="w-6 h-6 text-[var(--primary)]"></i>
+                    <h3 class="text-2xl font-black tracking-tight">Ajustes</h3>
+                </div>
+                <button onclick="closeSettings()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x"></i></button>
+            </div>
+            
+            <div class="space-y-4">
+                <button onclick="logout()" class="w-full glass py-4 rounded-2xl font-black text-zinc-300 hover:bg-white/10 active:scale-95 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2">
+                    <i data-lucide="log-out" class="w-4 h-4"></i> Sair do Jardim
+                </button>
+                
+                <div class="pt-6 border-t border-white/5 space-y-3">
+                    <p class="text-[9px] text-rose-500 uppercase tracking-widest font-black opacity-80">Zona de Perigo</p>
+                    <button onclick="deleteAccount(this)" class="w-full bg-rose-500/10 border border-rose-500/20 py-4 rounded-2xl font-black text-rose-500 hover:bg-rose-500 hover:text-white active:scale-95 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i> <span id="delete-btn-text">Excluir Conta e Dados</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -367,9 +400,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        // Importando o updateProfile para guardar o nome na conta do usuário
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, deleteUser } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const apiKey = "";
         
@@ -395,7 +427,7 @@
         let activityLog = JSON.parse(localStorage.getItem('seed_activity_v1')) || {}; 
         let achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || []; 
         let isOfflineMode = false; 
-        let currentAuthMode = 'login'; // Começa na tela de login
+        let currentAuthMode = 'login'; 
 
         // --- SISTEMA DE NOTIFICAÇÕES ---
         window.showToast = (message, type = 'success') => {
@@ -411,11 +443,9 @@
         const updateHeroName = () => {
             const heroTitle = document.getElementById('main-hero-title');
             if(currentUser && currentUser.displayName && heroTitle) {
-                // Pega apenas o primeiro nome para ficar íntimo
                 const firstName = currentUser.displayName.trim().split(' ')[0];
                 heroTitle.innerHTML = `Bem-vindo, <br><span class="text-[var(--primary)]">${firstName}.</span>`;
             } else if (heroTitle) {
-                // Modo offline ou sem nome cadastrado
                 heroTitle.innerHTML = `O equilíbrio da <br><span class="text-[var(--primary)]">sua jornada.</span>`;
             }
         };
@@ -452,17 +482,33 @@
             currentUser = user;
             if (user) {
                 document.getElementById('auth-overlay').classList.add('hidden');
-                updateHeroName(); // Atualiza a tela inicial
+                updateHeroName(); 
                 window.initCloud();
             } else {
-                updateHeroName(); // Volta ao padrão
+                updateHeroName(); 
                 if (!isOfflineMode) {
                     document.getElementById('auth-overlay').classList.remove('hidden');
                 }
             }
         });
 
-        // Alternar entre Login e Cadastro
+        // Alternar visualização da Senha (O Olhinho)
+        window.togglePasswordVisibility = () => {
+            const passInput = document.getElementById('auth-pass');
+            const iconEye = document.getElementById('icon-eye');
+            const iconEyeOff = document.getElementById('icon-eye-off');
+            
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                iconEye.classList.replace('block', 'hidden');
+                iconEyeOff.classList.replace('hidden', 'block');
+            } else {
+                passInput.type = 'password';
+                iconEye.classList.replace('hidden', 'block');
+                iconEyeOff.classList.replace('block', 'hidden');
+            }
+        };
+
         window.toggleAuthMode = () => {
             currentAuthMode = currentAuthMode === 'login' ? 'register' : 'login';
             
@@ -487,7 +533,6 @@
             }
         };
 
-        // Executar o Login ou Cadastro
         window.executeAuth = async () => {
             const email = document.getElementById('auth-email').value;
             const pass = document.getElementById('auth-pass').value;
@@ -514,9 +559,7 @@
                     window.showToast("✅ Login realizado com sucesso!");
                 } else {
                     const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-                    // Salvar o nome no perfil da conta recém-criada
                     await updateProfile(userCredential.user, { displayName: name.trim() });
-                    // Atualiza a variável atual para refletir o nome sem precisar recarregar
                     currentUser = userCredential.user;
                     window.showToast("🎉 Bem-vindo ao Seed!");
                 }
@@ -536,16 +579,6 @@
             }
         };
 
-        window.logout = async () => {
-            await signOut(auth);
-            projects = []; 
-            activityLog = {};
-            achievements = [];
-            renderProjects();
-            document.getElementById('auth-overlay').classList.remove('hidden');
-            window.showToast("🌱 Você saiu do seu Jardim.");
-        };
-
         window.continueOffline = () => {
             isOfflineMode = true;
             document.getElementById('auth-overlay').classList.add('hidden');
@@ -556,6 +589,73 @@
             updateHeroName();
             if(typeof renderProjects === 'function') renderProjects();
             window.showToast("🌱 Iniciando Modo Offline");
+        };
+
+        // --- SISTEMA DE CONFIGURAÇÕES E CONTA ---
+        window.openSettings = () => document.getElementById('settings-overlay').classList.replace('hidden', 'flex');
+        window.closeSettings = () => document.getElementById('settings-overlay').classList.replace('flex', 'hidden');
+
+        window.logout = async () => {
+            if (currentUser) await signOut(auth);
+            projects = []; 
+            activityLog = {};
+            achievements = [];
+            isOfflineMode = false;
+            renderProjects();
+            closeSettings();
+            document.getElementById('auth-overlay').classList.remove('hidden');
+            window.showToast("🌱 Você saiu do seu Jardim.");
+        };
+
+        window.deleteAccount = async (btn) => {
+            if (btn.innerText.includes("CERTEZA")) {
+                try {
+                    if (currentUser) {
+                        // 1. Apagar documentos do banco de dados primeiro
+                        const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'seed_data', 'main');
+                        await deleteDoc(docRef);
+                        // 2. Apagar credenciais de autenticação
+                        await deleteUser(currentUser);
+                    }
+                    
+                    // 3. Limpar memória local do aparelho
+                    projects = [];
+                    activityLog = {};
+                    achievements = [];
+                    localStorage.removeItem('seed_master_v1');
+                    localStorage.removeItem('seed_activity_v1');
+                    localStorage.removeItem('seed_achievements_v1');
+                    renderProjects();
+                    
+                    closeSettings();
+                    isOfflineMode = false;
+                    document.getElementById('auth-overlay').classList.remove('hidden');
+                    window.showToast("🗑️ Conta e dados apagados com sucesso.", "success");
+
+                } catch (error) {
+                    console.error(error);
+                    if (error.code === 'auth/requires-recent-login') {
+                        window.showToast("❌ Por segurança, saia da conta, faça login novamente e tente excluir.", "error");
+                    } else {
+                        window.showToast("❌ Erro ao excluir conta. Tente novamente.", "error");
+                    }
+                    btn.innerHTML = `<i data-lucide="trash-2" class="w-4 h-4"></i> <span id="delete-btn-text">Excluir Conta e Dados</span>`;
+                    btn.classList.remove('bg-rose-600', 'text-white');
+                    lucide.createIcons();
+                }
+            } else {
+                btn.innerHTML = `<i data-lucide="alert-triangle" class="w-4 h-4"></i> <span id="delete-btn-text">Certeza? Clique para apagar</span>`;
+                btn.classList.add('bg-rose-600', 'text-white');
+                lucide.createIcons();
+                
+                setTimeout(() => {
+                    if(document.body.contains(btn) && btn.innerText.includes("Certeza")) {
+                        btn.innerHTML = `<i data-lucide="trash-2" class="w-4 h-4"></i> <span id="delete-btn-text">Excluir Conta e Dados</span>`;
+                        btn.classList.remove('bg-rose-600', 'text-white');
+                        lucide.createIcons();
+                    }
+                }, 4000);
+            }
         };
 
         window.save = async () => {
