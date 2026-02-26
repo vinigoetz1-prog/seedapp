@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -117,7 +117,7 @@
             opacity: 0.6 !important;
         }
 
-        /* Proteção para o conteúdo não colar no topo em telas pequenas */
+        /* Proteção para o conteúdo não colar no topo em ecrãs pequenos */
         #detail-view .relative, #focus-overlay .text-center {
             padding-top: 4rem;
             padding-bottom: 4rem;
@@ -133,7 +133,7 @@
 </head>
 <body class="theme-purple custom-scrollbar min-h-screen relative">
 
-    <!-- Tela de Login / Cadastro Dinâmica -->
+    <!-- Ecrã de Login / Registo Dinâmico -->
     <div id="auth-overlay" class="fixed inset-0 bg-black/95 z-[200] flex flex-col items-center justify-center p-6 backdrop-blur-2xl transition-opacity duration-500 hidden">
         <div class="glass w-full max-w-md rounded-[3rem] p-10 space-y-8 animate-slide-up text-center relative overflow-hidden shadow-2xl shadow-[var(--primary)]/10">
             <div class="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/10 to-transparent opacity-50"></div>
@@ -141,24 +141,24 @@
                 <div class="w-16 h-16 rounded-3xl bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] flex items-center justify-center shadow-xl shadow-[var(--primary)]/30 mx-auto mb-6">
                     <i data-lucide="leaf" class="text-white w-8 h-8"></i>
                 </div>
-                <h2 id="auth-title" class="text-3xl font-black tracking-tighter mb-2">Seu Jardim</h2>
-                <p id="auth-subtitle" class="text-zinc-400 text-xs mb-8 font-bold uppercase tracking-widest">Entre para cultivar suas ideias</p>
+                <h2 id="auth-title" class="text-3xl font-black tracking-tighter mb-2">O seu Jardim</h2>
+                <p id="auth-subtitle" class="text-zinc-400 text-xs mb-8 font-bold uppercase tracking-widest">Entre para cultivar as suas ideias</p>
                 
                 <div class="space-y-4 text-left">
                     <div id="auth-name-group" class="hidden transition-all duration-300">
                         <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Como quer ser chamado?</label>
-                        <input id="auth-name" type="text" placeholder="Seu Nome" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors">
+                        <input id="auth-name" type="text" placeholder="O seu Nome" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors">
                     </div>
                     <div>
                         <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Email de Acesso</label>
                         <input id="auth-email" type="email" placeholder="seu@email.com" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors">
                     </div>
                     <div>
-                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Senha Secreta</label>
+                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Palavra-passe Secreta</label>
                         <div class="relative">
                             <input id="auth-pass" type="password" placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-2xl pl-5 pr-12 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors">
                             <!-- Botão do Olhinho da Senha -->
-                            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors" title="Mostrar Senha">
+                            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors" title="Mostrar Palavra-passe">
                                 <i data-lucide="eye" id="icon-eye" class="w-5 h-5 block"></i>
                                 <i data-lucide="eye-off" id="icon-eye-off" class="w-5 h-5 hidden"></i>
                             </button>
@@ -189,7 +189,7 @@
         </div>
         
         <div class="flex items-center gap-2 md:gap-4">
-            <button onclick="openStats()" class="glass p-3 rounded-xl hover:text-[var(--primary)] transition-all text-zinc-400" title="Termômetro">
+            <button onclick="openStats()" class="glass p-3 rounded-xl hover:text-[var(--primary)] transition-all text-zinc-400" title="Termómetro">
                 <i data-lucide="pie-chart" class="w-5 h-5"></i>
             </button>
             <button onclick="openSettings()" class="glass p-3 rounded-xl hover:text-[var(--primary)] transition-all text-zinc-400" title="Configurações">
@@ -233,7 +233,7 @@
                 <button onclick="closeDetails()" class="flex items-center gap-2 text-zinc-300 hover:text-[var(--primary)] transition-colors font-bold uppercase tracking-widest text-xs drop-shadow-md">
                     <i data-lucide="arrow-left" class="w-4 h-4"></i> Seed
                 </button>
-                <div id="save-status" class="text-[10px] font-black text-emerald-500 uppercase tracking-widest opacity-0 transition-opacity">Salvo</div>
+                <div id="save-status" class="text-[10px] font-black text-emerald-500 uppercase tracking-widest opacity-0 transition-opacity">Guardado</div>
             </div>
             <div id="detail-content" class="space-y-12"></div>
         </div>
@@ -243,7 +243,7 @@
     <div id="stats-overlay" class="fixed inset-0 bg-black/80 z-[70] hidden items-start justify-center p-4 md:p-6 backdrop-blur-3xl animate-slide-up overflow-y-auto custom-scrollbar">
         <div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-8 shadow-2xl my-auto">
             <div class="flex justify-between items-center">
-                <h3 class="text-3xl font-black">Termômetro</h3>
+                <h3 class="text-3xl font-black">Termómetro</h3>
                 <button onclick="closeStats()" class="text-zinc-500 hover:text-white"><i data-lucide="x"></i></button>
             </div>
             <div id="stats-chart" class="space-y-4">
@@ -303,10 +303,29 @@
         <div id="focus-bg" class="absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-1000 z-0"></div>
         <div id="focus-darken" class="absolute inset-0 bg-black/95 backdrop-blur-3xl transition-all duration-1000 z-10"></div>
         
-        <!-- Botão para trocar o GIF de fundo -->
-        <button id="btn-cycle-gif" onclick="cycleFocusGif()" class="absolute top-6 right-6 md:top-8 md:right-8 p-3 rounded-2xl glass hover:text-[var(--primary)] transition-all z-30 text-zinc-400 opacity-0 pointer-events-none" title="Mudar Animação">
-            <i data-lucide="image" class="w-5 h-5"></i>
-        </button>
+        <!-- Botões do Canto Superior Direito -->
+        <div class="absolute top-6 right-6 md:top-8 md:right-8 flex gap-3 z-30 opacity-0 pointer-events-none transition-opacity duration-500" id="focus-top-buttons">
+            <button onclick="toggleFocusNotes()" class="p-3 rounded-2xl glass hover:text-[var(--primary)] transition-all text-zinc-400" title="Bloco de Notas">
+                <i data-lucide="pen-tool" class="w-5 h-5"></i>
+            </button>
+            <button onclick="cycleFocusGif()" class="p-3 rounded-2xl glass hover:text-[var(--primary)] transition-all text-zinc-400" title="Alterar Animação">
+                <i data-lucide="image" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <!-- Painel Lateral de Notas do Modo Foco (Brain Dump) -->
+        <div id="focus-notes-panel" class="fixed top-0 right-0 w-full md:w-[400px] h-full bg-black/60 backdrop-blur-3xl border-l border-white/10 transform translate-x-full transition-transform duration-500 z-[200] flex flex-col shadow-2xl">
+            <div class="p-6 border-b border-white/10 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 rounded-xl bg-[var(--primary)]/20 text-[var(--primary)]">
+                        <i data-lucide="book-open" class="w-4 h-4"></i>
+                    </div>
+                    <h3 class="font-black tracking-tight text-white">Notas da Sessão</h3>
+                </div>
+                <button onclick="toggleFocusNotes()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x"></i></button>
+            </div>
+            <textarea id="focus-notes-input" oninput="updateFocusNotes(this.value)" class="flex-1 w-full bg-transparent outline-none resize-none p-6 text-zinc-200 leading-relaxed custom-scrollbar font-medium" placeholder="Registe aqui pensamentos, ideias ou lembretes rápidos para não perder o foco..."></textarea>
+        </div>
 
         <!-- Conteúdo Rolável -->
         <div class="absolute inset-0 z-20 flex items-start justify-center p-4 md:p-6 overflow-y-auto custom-scrollbar">
@@ -524,13 +543,13 @@
             if (currentAuthMode === 'register') {
                 nameGroup.classList.remove('hidden');
                 title.innerText = "Nova Semente";
-                subtitle.innerText = "Crie sua conta para começar";
+                subtitle.innerText = "Crie a sua conta para começar";
                 btnMain.innerText = "Criar Minha Conta";
                 btnToggle.innerText = "Já tenho conta";
             } else {
                 nameGroup.classList.add('hidden');
-                title.innerText = "Seu Jardim";
-                subtitle.innerText = "Entre para cultivar suas ideias";
+                title.innerText = "O seu Jardim";
+                subtitle.innerText = "Entre para cultivar as suas ideias";
                 btnMain.innerText = "Entrar no Seed";
                 btnToggle.innerText = "Criar Nova Conta";
             }
@@ -542,17 +561,17 @@
             const name = document.getElementById('auth-name').value;
             
             if(!email || !pass) {
-                window.showToast("❌ Preencha seu email e senha.", "error");
+                window.showToast("❌ Preencha o seu email e palavra-passe.", "error");
                 return;
             }
 
             if (currentAuthMode === 'register' && !name.trim()) {
-                window.showToast("❌ Digite como quer ser chamado.", "error");
+                window.showToast("❌ Diga-nos como quer ser chamado.", "error");
                 return;
             }
 
             if (pass.length < 6) {
-                window.showToast("❌ A senha precisa ter pelo menos 6 caracteres.", "error");
+                window.showToast("❌ A palavra-passe precisa de ter 6 caracteres.", "error");
                 return;
             }
 
@@ -571,13 +590,13 @@
             } catch(error) {
                 console.error(error);
                 if(error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
-                    window.showToast("❌ Email ou senha incorretos.", "error");
+                    window.showToast("❌ Email ou palavra-passe incorretos.", "error");
                 } else if(error.code === 'auth/email-already-in-use') {
                     window.showToast("❌ Este email já está em uso.", "error");
                 } else if(error.code === 'auth/weak-password') {
-                    window.showToast("❌ A senha precisa ter 6 caracteres.", "error");
+                    window.showToast("❌ A palavra-passe precisa de ter 6 caracteres.", "error");
                 } else {
-                    window.showToast("❌ Erro ao acessar a conta.", "error");
+                    window.showToast("❌ Erro ao aceder à conta.", "error");
                 }
             }
         };
@@ -591,7 +610,7 @@
             achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || [];
             updateHeroName();
             if(typeof renderProjects === 'function') renderProjects();
-            window.showToast("🌱 Iniciando Modo Offline");
+            window.showToast("🌱 A Iniciar Modo Offline");
         };
 
         // --- SISTEMA DE CONFIGURAÇÕES E CONTA ---
@@ -607,7 +626,7 @@
             renderProjects();
             closeSettings();
             document.getElementById('auth-overlay').classList.remove('hidden');
-            window.showToast("🌱 Você saiu do seu Jardim.");
+            window.showToast("🌱 Saiu do seu Jardim.");
         };
 
         window.deleteAccount = async (btn) => {
@@ -669,7 +688,7 @@
                     localStorage.setItem('seed_master_v1', JSON.stringify(projects));
                     localStorage.setItem('seed_activity_v1', JSON.stringify(activityLog));
                     localStorage.setItem('seed_achievements_v1', JSON.stringify(achievements));
-                } catch(e) { console.log("Salvo apenas localmente."); }
+                } catch(e) { console.log("Guardado apenas localmente."); }
             } else {
                 localStorage.setItem('seed_master_v1', JSON.stringify(projects));
                 localStorage.setItem('seed_activity_v1', JSON.stringify(activityLog));
@@ -775,11 +794,9 @@
             const filtered = projects.filter(p => p.station === currentStation);
             
             if (currentStation === 'archive') {
-                // NOVO SISTEMA DE SKINS E RARIDADES NO JARDIM (Visual Refinado e Elegante)
                 grid.className = "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6";
                 grid.innerHTML = filtered.length ? filtered.map(p => {
                     
-                    // 1. Calcular Raridade baseada no esforço (Visual Premium e Sutil)
                     let rarity = 'Comum';
                     let cardClass = 'border-white/5 hover:border-white/10';
                     let bgGradient = 'from-white/5 to-transparent';
@@ -804,7 +821,6 @@
                     <div onclick="openDetails(${p.id})" class="glass p-6 rounded-[2.5rem] flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-500 group relative overflow-hidden min-h-[200px] border ${cardClass}">
                         <div class="absolute inset-0 bg-gradient-to-t opacity-30 group-hover:opacity-100 transition-opacity ${bgGradient}"></div>
                         
-                        <!-- Selo de Raridade (Minimalista) -->
                         <div class="absolute top-4 right-4 text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded-full ${badgeClass} z-10 transition-all backdrop-blur-sm">
                             ${rarity}
                         </div>
@@ -814,9 +830,8 @@
                         <h4 class="font-bold text-sm line-clamp-2 px-2 text-zinc-300 relative z-10">${p.title}</h4>
                         <span class="text-[8px] font-bold uppercase mt-3 tracking-widest opacity-40 text-zinc-400 relative z-10">${p.archivedAt || 'Floresceu'}</span>
                     </div>
-                `}).join('') : `<div class="col-span-full py-24 text-center opacity-40 animate-slide-up"><i data-lucide="flower" class="w-16 h-16 mx-auto mb-6 text-zinc-500"></i><p class="font-black uppercase tracking-widest text-sm text-zinc-400">Seu jardim ainda está vazio.<br>Cultive sementes para vê-las florescer aqui.</p></div>`;
+                `}).join('') : `<div class="col-span-full py-24 text-center opacity-40 animate-slide-up"><i data-lucide="flower" class="w-16 h-16 mx-auto mb-6 text-zinc-500"></i><p class="font-black uppercase tracking-widest text-sm text-zinc-400">O seu jardim ainda está vazio.<br>Cultive sementes para vê-las florescer aqui.</p></div>`;
             } else {
-                // Layout Padrão de Sementes
                 grid.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8";
                 grid.innerHTML = filtered.length ? filtered.map(p => {
                     const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0;
@@ -1015,8 +1030,8 @@
             document.getElementById('focus-time-selector').style.opacity = '1';
             document.getElementById('focus-time-selector').style.pointerEvents = 'auto';
             
-            document.getElementById('btn-cycle-gif').style.opacity = '0';
-            document.getElementById('btn-cycle-gif').style.pointerEvents = 'none';
+            document.getElementById('focus-top-buttons').style.opacity = '0';
+            document.getElementById('focus-top-buttons').style.pointerEvents = 'none';
             
             // Pausar som ao sair
             if(typeof soundStates !== 'undefined') {
@@ -1028,7 +1043,32 @@
             document.getElementById('focus-bg').style.opacity = '0';
             document.getElementById('focus-darken').className = 'absolute inset-0 bg-black/95 backdrop-blur-3xl transition-all duration-1000 z-10';
 
+            // Fecha o painel de notas se estiver aberto
+            document.getElementById('focus-notes-panel').classList.add('translate-x-full');
+
             document.getElementById('focus-overlay').classList.replace('block', 'hidden'); 
+        };
+
+        // --- SISTEMA DO BLOCO DE NOTAS NO MODO FOCO ---
+        window.toggleFocusNotes = () => {
+            const panel = document.getElementById('focus-notes-panel');
+            const isClosed = panel.classList.contains('translate-x-full');
+            if (isClosed) {
+                // Ao abrir, carrega as notas atuais daquele projeto
+                const p = projects.find(proj => proj.id === activeProjectId);
+                document.getElementById('focus-notes-input').value = p.notes || '';
+                panel.classList.remove('translate-x-full');
+            } else {
+                panel.classList.add('translate-x-full');
+            }
+        };
+
+        window.updateFocusNotes = (val) => {
+            const p = projects.find(proj => proj.id === activeProjectId);
+            if(p && p.station !== 'archive') {
+                p.notes = val;
+                save(); // Guarda na nuvem sem fechar a tela
+            }
         };
 
         // Estado dos sons
@@ -1073,7 +1113,7 @@
             const focusBg = document.getElementById('focus-bg');
             const focusDarken = document.getElementById('focus-darken');
             const timeSelector = document.getElementById('focus-time-selector');
-            const btnCycleGif = document.getElementById('btn-cycle-gif');
+            const topButtons = document.getElementById('focus-top-buttons');
 
             if(isTimerRunning) { 
                 clearInterval(timerInterval); 
@@ -1082,8 +1122,8 @@
                 timeSelector.style.opacity = '1';
                 timeSelector.style.pointerEvents = 'auto';
                 
-                btnCycleGif.style.opacity = '0';
-                btnCycleGif.style.pointerEvents = 'none';
+                topButtons.style.opacity = '0';
+                topButtons.style.pointerEvents = 'none';
                 
                 // Pausado: Esconde o GIF e volta o desfoque
                 focusBg.style.opacity = '0';
@@ -1092,8 +1132,8 @@
                 timeSelector.style.opacity = '0';
                 timeSelector.style.pointerEvents = 'none';
                 
-                btnCycleGif.style.opacity = '1';
-                btnCycleGif.style.pointerEvents = 'auto';
+                topButtons.style.opacity = '1';
+                topButtons.style.pointerEvents = 'auto';
 
                 // Iniciar: Revela o GIF atual e diminui o escurecimento/desfoque
                 currentFocusGifIndex = Math.floor(Math.random() * FOCUS_GIFS.length);
@@ -1257,9 +1297,9 @@
 
             } catch(e) {
                 responseDiv.innerHTML = `
-                    <p class="font-bold text-xl text-white">Sua jornada está só começando!</p><br>
-                    <p>No momento, estou recarregando minhas energias (API não configurada), mas analisando a semente <strong>"${p.title}"</strong>, vejo muito potencial.</p><br>
-                    <p>O segredo para avançar não é a velocidade, mas sim a constância. Foque no próximo marco que está incompleto e coloque 25 minutos de atenção total nele. Você consegue!</p>
+                    <p class="font-bold text-xl text-white">A sua jornada está apenas a começar!</p><br>
+                    <p>Neste momento, estou a recarregar as minhas energias (API não configurada), mas analisando a semente <strong>"${p.title}"</strong>, vejo muito potencial.</p><br>
+                    <p>O segredo para avançar não é a velocidade, mas sim a constância. Foque-se no próximo marco que está incompleto e coloque 25 minutos de atenção total nele. Você consegue!</p>
                 `;
             }
         };
