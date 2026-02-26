@@ -17,7 +17,6 @@
     <title>Seed: Project Life</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -131,9 +130,40 @@
 </head>
 <body class="theme-purple custom-scrollbar min-h-screen relative">
 
-    <!-- Sistema de Fundo Dinâmico -->
-    <div id="app-bg" class="fixed inset-0 z-[-2] bg-cover bg-center transition-opacity duration-1000 opacity-0"></div>
-    <div id="app-overlay" class="fixed inset-0 z-[-1] bg-[#0a0a0c] transition-colors duration-1000"></div>
+    <!-- Tela de Login / Cadastro -->
+    <div id="auth-overlay" class="fixed inset-0 bg-black/95 z-[200] flex flex-col items-center justify-center p-6 backdrop-blur-2xl transition-opacity duration-500 hidden">
+        <div class="glass w-full max-w-md rounded-[3rem] p-10 space-y-8 animate-slide-up text-center relative overflow-hidden shadow-2xl shadow-[var(--primary)]/10">
+            <div class="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/10 to-transparent opacity-50"></div>
+            <div class="relative z-10">
+                <div class="w-16 h-16 rounded-3xl bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] flex items-center justify-center shadow-xl shadow-[var(--primary)]/30 mx-auto mb-6">
+                    <i data-lucide="leaf" class="text-white w-8 h-8"></i>
+                </div>
+                <h2 class="text-3xl font-black tracking-tighter mb-2">Seu Jardim</h2>
+                <p class="text-zinc-400 text-xs mb-8 font-bold uppercase tracking-widest">Entre para cultivar suas ideias</p>
+                
+                <div class="space-y-4 text-left">
+                    <div>
+                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Email de Acesso</label>
+                        <input id="auth-email" type="email" placeholder="seu@email.com" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Senha Secreta</label>
+                        <input id="auth-pass" type="password" placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors">
+                    </div>
+                </div>
+
+                <div class="mt-8 space-y-3">
+                    <button onclick="handleAuth('login')" class="w-full bg-[var(--primary)] py-4 rounded-2xl font-black text-white shadow-xl hover:opacity-90 active:scale-95 transition-all uppercase tracking-widest text-xs">Entrar no Seed</button>
+                    <button onclick="handleAuth('register')" class="w-full bg-white/5 border border-white/10 py-4 rounded-2xl font-black text-zinc-300 hover:bg-white/10 active:scale-95 transition-all uppercase tracking-widest text-xs">Criar Nova Conta</button>
+                </div>
+                <button onclick="continueOffline()" class="mt-6 text-[10px] font-bold text-zinc-500 hover:text-zinc-300 uppercase tracking-widest underline decoration-zinc-700 underline-offset-4 transition-colors">Continuar Offline (Sem Nuvem)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sistema de Fundo Dinâmico (Degradê Temático) -->
+    <div class="fixed inset-0 z-[-2] bg-[#0a0a0c]"></div>
+    <div class="fixed inset-0 z-[-1] opacity-20 transition-all duration-1000" style="background-image: radial-gradient(circle at 10% 0%, var(--primary) 0%, transparent 45%), radial-gradient(circle at 90% 100%, var(--primary-dark) 0%, transparent 45%);"></div>
 
     <!-- Navegação -->
     <nav class="p-6 flex justify-between items-center border-b border-white/5 sticky top-0 bg-black/40 backdrop-blur-xl z-50 transition-colors">
@@ -145,11 +175,8 @@
         </div>
         
         <div class="flex items-center gap-2 md:gap-4">
-            <button onclick="linkDevice()" class="glass p-3 rounded-xl hover:text-emerald-400 transition-all text-emerald-500/50" title="Sincronizar Celular">
-                <i data-lucide="smartphone" class="w-5 h-5"></i>
-            </button>
-            <button onclick="cycleBackground()" class="glass p-3 rounded-xl hover:text-[var(--primary)] transition-all" title="Mudar Cenário">
-                <i data-lucide="image" class="w-5 h-5"></i>
+            <button onclick="logout()" class="glass p-3 rounded-xl hover:text-rose-500 transition-all text-zinc-400" title="Sair da Conta">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
             </button>
             <button onclick="openStats()" class="glass p-3 rounded-xl hover:text-[var(--primary)] transition-all">
                 <i data-lucide="pie-chart" class="w-5 h-5"></i>
@@ -175,7 +202,7 @@
             <button onclick="setStation('next')" id="tab-next" class="station-tab px-4 py-3 font-bold text-xs tracking-widest uppercase transition-all opacity-40 whitespace-nowrap drop-shadow-md">Próximos</button>
             <button onclick="setStation('someday')" id="tab-someday" class="station-tab px-4 py-3 font-bold text-xs tracking-widest uppercase transition-all opacity-40 whitespace-nowrap drop-shadow-md">Algum dia</button>
             <button onclick="setStation('archive')" id="tab-archive" class="station-tab px-4 py-3 font-bold text-xs tracking-widest uppercase transition-all opacity-40 whitespace-nowrap flex items-center gap-2 drop-shadow-md">
-                <i data-lucide="award" class="w-4 h-4"></i> Jardim
+                <i data-lucide="tree-deciduous" class="w-4 h-4"></i> Jardim
             </button>
         </section>
 
@@ -336,10 +363,9 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Chave API Vazia - O ambiente injeta no runtime se disponível
         const apiKey = "";
         
         // --- CHAVES DO BANCO DE DADOS DO VINICIUS ---
@@ -361,25 +387,28 @@
         let projects = [];
         let currentUser = null;
         let unsubscribeSnapshot = null;
+        let activityLog = JSON.parse(localStorage.getItem('seed_activity_v1')) || {}; // Novo Estado do Heatmap
+        let achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || []; // Estado das Conquistas
+        let isOfflineMode = false; // Controle de login pulado
 
-        // --- SISTEMA DE SINCRONIZAÇÃO PC <-> CELULAR ---
-        window.syncId = localStorage.getItem('seed_sync_id');
-        if (!window.syncId) {
-            window.syncId = 'jardim_' + Math.floor(Math.random() * 90000 + 10000); 
-            localStorage.setItem('seed_sync_id', window.syncId);
-        }
+        // Removido o sistema de syncId manual (agora é atrelado à conta)
 
         window.initCloud = () => {
             if (!currentUser) return;
             if (unsubscribeSnapshot) unsubscribeSnapshot();
 
-            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'sync_data', window.syncId);
+            // Usando o UID da conta do usuário logado para segurança e sincronização perfeita
+            const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'seed_data', 'main');
             unsubscribeSnapshot = onSnapshot(docRef, (snapshot) => {
                 if (snapshot.exists()) {
                     projects = snapshot.data().projects || [];
+                    activityLog = snapshot.data().activityLog || {};
+                    achievements = snapshot.data().achievements || [];
                 } else {
                     const oldData = JSON.parse(localStorage.getItem('seed_master_v1')) || JSON.parse(localStorage.getItem('horizon_master_v5')) || [];
                     projects = oldData;
+                    activityLog = JSON.parse(localStorage.getItem('seed_activity_v1')) || {};
+                    achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || [];
                     if(oldData.length > 0) window.save();
                 }
                 if(typeof renderProjects === 'function') renderProjects();
@@ -389,60 +418,146 @@
                     if(p && typeof window.openDetails === 'function') window.openDetails(activeProjectId);
                 }
             }, (err) => {
-                // Erros silenciosos para não atrapalhar a experiência se a conexão cair
                 console.log("Desconectado da nuvem em tempo real.");
             });
         };
 
         const handleAuthError = (error) => {
-            console.log("🌱 Modo offline ativado. Para usar a nuvem, ative o provedor 'Anônimo' no painel Authentication do Firebase.");
-            const oldData = JSON.parse(localStorage.getItem('seed_master_v1')) || JSON.parse(localStorage.getItem('horizon_master_v5')) || [];
-            projects = oldData;
-            if(typeof renderProjects === 'function') renderProjects();
+            console.log("🌱 Erro de conexão, mantendo na tela de login.", error);
         };
 
-        const initAuth = () => {
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                signInWithCustomToken(auth, __initial_auth_token).catch(() => {
-                    signInAnonymously(auth).catch(handleAuthError);
-                });
-            } else {
-                signInAnonymously(auth).catch(handleAuthError);
-            }
-        };
-        
-        initAuth();
-
+        // Escuta automaticamente se o usuário já fez login alguma vez
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
             if (user) {
+                document.getElementById('auth-overlay').classList.add('hidden');
                 window.initCloud();
+            } else {
+                if (!isOfflineMode) {
+                    document.getElementById('auth-overlay').classList.remove('hidden');
+                }
             }
         });
 
+        // Funções da tela de Login e Cadastro
+        window.handleAuth = async (action) => {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+            
+            if(!email || !pass) {
+                alert("Por favor, preencha seu email e senha.");
+                return;
+            }
+
+            if (pass.length < 6) {
+                alert("A senha precisa ter pelo menos 6 caracteres para garantir a segurança da sua conta.");
+                return;
+            }
+
+            try {
+                if(action === 'login') {
+                    await signInWithEmailAndPassword(auth, email, pass);
+                    window.showToast("✅ Login realizado com sucesso!");
+                } else {
+                    await createUserWithEmailAndPassword(auth, email, pass);
+                    window.showToast("🎉 Bem-vindo! Conta criada com sucesso.");
+                }
+                document.getElementById('auth-overlay').classList.add('hidden');
+            } catch(error) {
+                console.error(error);
+                if(error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
+                    alert("Email ou senha incorretos.");
+                } else if(error.code === 'auth/email-already-in-use') {
+                    alert("Este email já está sendo usado por outro projeto.");
+                } else if(error.code === 'auth/weak-password') {
+                    alert("A senha precisa ter pelo menos 6 caracteres.");
+                } else if(error.code === 'auth/operation-not-allowed') {
+                    alert("⚠️ Autenticação desativada! Para corrigir: Vá no seu painel do Firebase > Authentication > Sign-in method > E ative a opção 'E-mail/senha'.");
+                } else {
+                    alert("Erro ao acessar: " + error.message);
+                }
+            }
+        };
+
+        window.logout = async () => {
+            if(confirm("Deseja realmente sair do seu Jardim?")) {
+                await signOut(auth);
+                projects = []; 
+                activityLog = {};
+                achievements = [];
+                renderProjects();
+                document.getElementById('auth-overlay').classList.remove('hidden');
+            }
+        };
+
+        window.continueOffline = () => {
+            isOfflineMode = true;
+            document.getElementById('auth-overlay').classList.add('hidden');
+            const oldData = JSON.parse(localStorage.getItem('seed_master_v1')) || [];
+            projects = oldData;
+            activityLog = JSON.parse(localStorage.getItem('seed_activity_v1')) || {};
+            achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || [];
+            if(typeof renderProjects === 'function') renderProjects();
+            window.showToast("🌱 Iniciando Modo Offline");
+        };
+
         window.save = async () => {
             if (currentUser) {
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'sync_data', window.syncId);
+                const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'seed_data', 'main');
                 try { 
-                    await setDoc(docRef, { projects: projects }); 
+                    await setDoc(docRef, { projects: projects, activityLog: activityLog, achievements: achievements }); 
                     localStorage.setItem('seed_master_v1', JSON.stringify(projects));
+                    localStorage.setItem('seed_activity_v1', JSON.stringify(activityLog));
+                    localStorage.setItem('seed_achievements_v1', JSON.stringify(achievements));
                 } catch(e) { console.log("Salvo apenas localmente."); }
             } else {
                 localStorage.setItem('seed_master_v1', JSON.stringify(projects));
+                localStorage.setItem('seed_activity_v1', JSON.stringify(activityLog));
+                localStorage.setItem('seed_achievements_v1', JSON.stringify(achievements));
             }
             const s = document.getElementById('save-status');
             if(s) { s.style.opacity = '1'; setTimeout(() => s.style.opacity = '0', 1000); }
         };
         const save = window.save;
 
-        window.linkDevice = () => {
-            const code = prompt("📱 SINCRONIZAR CELULAR E PC\n\nAbra o app no outro dispositivo, clique no ícone do Celular e digite o SEU CÓDIGO abaixo:\n\n👉 " + window.syncId + " 👈\n\n(Ou se você quiser puxar os dados de outro aparelho para cá, digite o código dele na caixa abaixo):");
-            if(code && code.trim() !== "" && code.trim() !== window.syncId) {
-                window.syncId = code.trim();
-                localStorage.setItem('seed_sync_id', window.syncId);
-                window.initCloud();
-                alert("✅ Jardim sincronizado com sucesso! As duas telas agora compartilham as mesmas sementes.");
+        // --- SISTEMA DE MEDALHAS ---
+        const MEDALS = {
+            explorador: { id: 'explorador', icon: '🥇', title: 'Explorador', desc: 'Criou 10 projetos' },
+            foco: { id: 'foco', icon: '🔥', title: 'Inabalável', desc: 'Sessão de 60m' },
+            botanico: { id: 'botanico', icon: '🌳', title: 'Botânico Master', desc: '5 sementes no Jardim' },
+            pesquisador: { id: 'pesquisador', icon: '📚', title: 'Pesquisador', desc: 'Notas com 1000+ letras' }
+        };
+
+        window.showToast = (message) => {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-10 left-1/2 -translate-x-1/2 bg-amber-500 text-black px-6 py-3 rounded-full font-black uppercase tracking-widest text-[10px] md:text-xs z-[200] shadow-[0_0_20px_rgba(245,158,11,0.6)] animate-slide-up transition-opacity duration-500';
+            toast.innerHTML = message;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 4000);
+        };
+
+        window.checkAchievements = () => {
+            let unlockedAny = false;
+
+            if (!achievements.includes('explorador') && projects.length >= 10) {
+                achievements.push('explorador'); unlockedAny = true; window.showToast('🏆 Conquista: Explorador de Ideias!');
             }
+            if (!achievements.includes('botanico') && projects.filter(p => p.station === 'archive').length >= 5) {
+                achievements.push('botanico'); unlockedAny = true; window.showToast('🏆 Conquista: Botânico Master!');
+            }
+            const hasLongNote = projects.some(p => (p.notes || '').length >= 1000);
+            if (!achievements.includes('pesquisador') && hasLongNote) {
+                achievements.push('pesquisador'); unlockedAny = true; window.showToast('🏆 Conquista: Pesquisador!');
+            }
+
+            if (unlockedAny) {
+                save();
+            }
+        };
+
+        window.logActivity = () => {
+            const today = new Date().toISOString().split('T')[0];
+            activityLog[today] = (activityLog[today] || 0) + 1;
         };
 
         const VIBE_IMAGES = {
@@ -453,13 +568,11 @@
             dices: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1000'
         };
 
-        // Áudios atualizados: Servidores públicos permanentes da Wikimedia (Não expiram)
         const SOUNDS = {
-            rain: 'https://upload.wikimedia.org/wikipedia/commons/transcoded/4/47/Sound_of_rain.ogg/Sound_of_rain.ogg.mp3',
-            thunder: 'https://upload.wikimedia.org/wikipedia/commons/transcoded/1/1a/Thunder_storm.ogg/Thunder_storm.ogg.mp3'
+            rain: 'https://assets.mixkit.co/active_storage/sfx/2431/2431-preview.mp3',
+            thunder: 'https://assets.mixkit.co/active_storage/sfx/2391/2391-preview.mp3'
         };
 
-        // Gifs animados para o Modo Foco
         const FOCUS_GIFS = [
             'https://i.pinimg.com/originals/ff/34/3a/ff343aa8819c2573ad3409baf4af5e3e.gif',
             'https://i.pinimg.com/originals/92/9f/98/929f9811fba2f931a0f4b3581976695b.gif',
@@ -473,44 +586,12 @@
             document.getElementById('focus-bg').style.backgroundImage = `url('${FOCUS_GIFS[currentFocusGifIndex]}')`;
         };
 
-        // Mapeamento de Plantas para o Jardim Visual
         const PLANT_ICONS = {
-            zap: 'tree-pine',       // Energia vira um Pinheiro forte
-            palette: 'flower-2',    // Arte vira uma Flor detalhada
-            plane: 'tree-deciduous',// Aventura vira uma Árvore frondosa
-            target: 'sprout',       // Foco vira Broto robusto
-            dices: 'clover'         // Lazer vira um Trevo da sorte
-        };
-
-        // Sistema de Cenários Lo-Fi
-        const BG_SCENES = [
-            { id: 'dark', url: '' },
-            { id: 'lofi_room', url: 'https://images.unsplash.com/photo-1635394931710-ea145d797335?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-            { id: 'rainy', url: 'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?q=80&w=1920&auto=format&fit=crop' }, 
-            { id: 'japan', url: 'https://i.pinimg.com/736x/a8/ef/3c/a8ef3c2d67a14e4c0439bfb7548ecd25.jpg' },
-            { id: 'japani', url: 'https://i.pinimg.com/736x/88/cd/21/88cd216810a2be6669f35bea9c98293c.jpg' }
-        ];
-        let currentBgIndex = 0;
-
-        const applyBackground = (index) => {
-            const bgEl = document.getElementById('app-bg');
-            const overlayEl = document.getElementById('app-overlay');
-            const scene = BG_SCENES[index];
-            
-            if(scene.id === 'dark') {
-                bgEl.style.opacity = '0';
-                overlayEl.className = 'fixed inset-0 z-[-1] bg-[#0a0a0c] transition-colors duration-1000';
-            } else {
-                bgEl.style.backgroundImage = `url('${scene.url}')`;
-                bgEl.style.opacity = '1';
-                overlayEl.className = 'fixed inset-0 z-[-1] bg-black/60 transition-colors duration-1000';
-            }
-        };
-
-        window.cycleBackground = () => {
-            currentBgIndex = (currentBgIndex + 1) % BG_SCENES.length;
-            localStorage.setItem('seed_bg_index', currentBgIndex);
-            applyBackground(currentBgIndex);
+            zap: 'tree-pine',       // Energia
+            palette: 'flower-2',    // Arte
+            plane: 'tree-deciduous',// Aventura
+            target: 'sprout',       // Foco
+            dices: 'clover'         // Lazer
         };
 
         let currentStation = 'now';
@@ -542,16 +623,46 @@
             const filtered = projects.filter(p => p.station === currentStation);
             
             if (currentStation === 'archive') {
-                // Layout Exclusivo do Jardim Visual
+                // NOVO SISTEMA DE SKINS E RARIDADES NO JARDIM (Visual Refinado e Elegante)
                 grid.className = "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6";
-                grid.innerHTML = filtered.length ? filtered.map(p => `
-                    <div onclick="openDetails(${p.id})" class="glass p-6 rounded-[2.5rem] flex flex-col items-center justify-center text-center cursor-pointer hover:-translate-y-2 hover:shadow-2xl hover:shadow-[var(--primary)]/20 transition-all group relative overflow-hidden min-h-[200px] border-b-4 border-b-[var(--primary)]/30">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[var(--primary)]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        <i data-lucide="${PLANT_ICONS[p.icon] || 'flower-2'}" class="w-16 h-16 text-[var(--primary)] mb-4 drop-shadow-[0_0_15px_rgba(139,92,246,0.3)] group-hover:scale-110 transition-transform duration-500"></i>
-                        <h4 class="font-black text-sm line-clamp-2 px-2 text-zinc-200">${p.title}</h4>
-                        <span class="text-[8px] font-bold text-emerald-400 uppercase mt-3 tracking-widest bg-emerald-400/10 px-3 py-1 rounded-full">${p.archivedAt || 'Floresceu'}</span>
+                grid.innerHTML = filtered.length ? filtered.map(p => {
+                    
+                    // 1. Calcular Raridade baseada no esforço (Visual Premium e Sutil)
+                    let rarity = 'Comum';
+                    let cardClass = 'border-white/5 hover:border-white/10';
+                    let bgGradient = 'from-white/5 to-transparent';
+                    let badgeClass = 'bg-white/5 text-zinc-500 border border-white/5';
+                    let iconClass = 'text-white/20 group-hover:text-[var(--primary)]';
+
+                    if (p.milestones.length >= 5) {
+                        rarity = 'Lendária';
+                        cardClass = 'border-amber-900/30 hover:border-amber-700/50 hover:shadow-[0_10px_30px_-15px_rgba(245,158,11,0.2)]';
+                        bgGradient = 'from-amber-900/20 to-transparent';
+                        badgeClass = 'bg-amber-900/40 text-amber-300/80 border border-amber-700/50';
+                        iconClass = 'text-amber-500/40 group-hover:text-amber-400';
+                    } else if (p.milestones.length >= 3) {
+                        rarity = 'Rara';
+                        cardClass = 'border-indigo-900/30 hover:border-indigo-700/50 hover:shadow-[0_10px_30px_-15px_rgba(79,70,229,0.2)]';
+                        bgGradient = 'from-indigo-900/20 to-transparent';
+                        badgeClass = 'bg-indigo-900/40 text-indigo-300/80 border border-indigo-700/50';
+                        iconClass = 'text-indigo-400/40 group-hover:text-indigo-300';
+                    }
+
+                    return `
+                    <div onclick="openDetails(${p.id})" class="glass p-6 rounded-[2.5rem] flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-500 group relative overflow-hidden min-h-[200px] border ${cardClass}">
+                        <div class="absolute inset-0 bg-gradient-to-t opacity-30 group-hover:opacity-100 transition-opacity ${bgGradient}"></div>
+                        
+                        <!-- Selo de Raridade (Minimalista) -->
+                        <div class="absolute top-4 right-4 text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded-full ${badgeClass} z-10 transition-all backdrop-blur-sm">
+                            ${rarity}
+                        </div>
+
+                        <i data-lucide="${PLANT_ICONS[p.icon] || 'flower-2'}" class="w-14 h-14 mb-4 relative z-10 group-hover:-translate-y-1 transition-all duration-500 ${iconClass}"></i>
+                        
+                        <h4 class="font-bold text-sm line-clamp-2 px-2 text-zinc-300 relative z-10">${p.title}</h4>
+                        <span class="text-[8px] font-bold uppercase mt-3 tracking-widest opacity-40 text-zinc-400 relative z-10">${p.archivedAt || 'Floresceu'}</span>
                     </div>
-                `).join('') : `<div class="col-span-full py-24 text-center opacity-40 animate-slide-up"><i data-lucide="flower" class="w-16 h-16 mx-auto mb-6 text-emerald-500 drop-shadow-[0_0_15px_rgba(16,185,129,0.3)]"></i><p class="font-black uppercase tracking-widest text-sm">Seu jardim ainda está vazio.<br>Cultive sementes para vê-las florescer aqui.</p></div>`;
+                `}).join('') : `<div class="col-span-full py-24 text-center opacity-40 animate-slide-up"><i data-lucide="flower" class="w-16 h-16 mx-auto mb-6 text-zinc-500"></i><p class="font-black uppercase tracking-widest text-sm text-zinc-400">Seu jardim ainda está vazio.<br>Cultive sementes para vê-las florescer aqui.</p></div>`;
             } else {
                 // Layout Padrão de Sementes
                 grid.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8";
@@ -586,7 +697,7 @@
                 <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div class="space-y-4">
                         <div class="inline-flex gap-2 px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-widest text-[var(--primary)] drop-shadow-md">
-                            ${isArchived ? '<i data-lucide="award" class="w-3 h-3"></i> JARDIM (CONGELADO)' : p.station.toUpperCase()}
+                            ${isArchived ? '<i data-lucide="tree-deciduous" class="w-3 h-3"></i> JARDIM (CONGELADO)' : p.station.toUpperCase()}
                         </div>
                         <h2 class="text-3xl md:text-5xl font-black tracking-tighter drop-shadow-lg">${p.title}</h2>
                     </div>
@@ -656,22 +767,22 @@
             document.getElementById('proj-habit').value = '';
             document.getElementById('proj-milestones').value = '';
             
-            save(); closeModal(); renderProjects();
+            save(); window.checkAchievements(); closeModal(); renderProjects();
         };
 
         window.archiveProject = (id) => { 
             const p = projects.find(p => p.id === id);
             p.station = 'archive'; 
             p.archivedAt = new Date().toLocaleDateString('pt-BR'); // Salva a data de conclusão
-            confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 } }); 
-            save(); 
+            window.logActivity();
+            save(); window.checkAchievements();
             window.closeDetails(); 
         };
         
-        window.toggleMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; p.milestones[i].completed = !p.milestones[i].completed; if(p.milestones[i].completed) confetti(); save(); openDetails(activeProjectId); };
+        window.toggleMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; p.milestones[i].completed = !p.milestones[i].completed; if(p.milestones[i].completed) { window.logActivity(); } save(); openDetails(activeProjectId); };
         window.addMilestone = () => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; const v = document.getElementById('new-m').value; if(!v) return; p.milestones.push({text: v, completed: false}); save(); openDetails(activeProjectId); };
         window.removeMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; p.milestones.splice(i,1); save(); openDetails(activeProjectId); };
-        window.updateNotes = (v) => { const p = projects.find(p => p.id === activeProjectId); if(p.station!=='archive') { p.notes = v; save(); } };
+        window.updateNotes = (v) => { const p = projects.find(p => p.id === activeProjectId); if(p.station!=='archive') { p.notes = v; save(); window.checkAchievements(); } };
         
         window.checkHabit = () => { 
             const p = projects.find(p => p.id === activeProjectId); 
@@ -689,7 +800,7 @@
                 p.habit.previousCheck = p.habit.lastCheck;
                 p.habit.lastCheck = today; 
                 p.habit.streak++; 
-                confetti(); 
+                window.logActivity();
             } 
             save(); 
             openDetails(activeProjectId); 
@@ -843,7 +954,14 @@
                     updateTimerDisplay(); 
                     if(timeLeft<=0) { 
                         clearInterval(timerInterval); 
-                        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); 
+                        window.logActivity();
+                        
+                        if (selectedFocusTime === 60 && !achievements.includes('foco')) {
+                            achievements.push('foco');
+                            window.showToast('🏆 Conquista: Foco Inabalável!');
+                        }
+                        
+                        save();
                         closeFocusMode(); 
                     } 
                 }, 1000); 
@@ -869,12 +987,31 @@
             });
             const overallProgress = totalMilestones === 0 ? 0 : Math.round((completedMilestones / totalMilestones) * 100);
 
+            // Gerar dados do Mapa de Calor (Últimos 70 dias)
+            const todayDate = new Date();
+            const days = [];
+            for(let i=69; i>=0; i--) {
+                const d = new Date(todayDate);
+                d.setDate(d.getDate() - i);
+                days.push(d.toISOString().split('T')[0]);
+            }
+
+            const heatmapHTML = days.map(date => {
+                const count = activityLog[date] || 0;
+                let bgClass = 'bg-white/5 border border-white/5';
+                if (count > 0 && count <= 2) bgClass = 'bg-[var(--primary)]/30 border border-[var(--primary)]/20';
+                else if (count >= 3 && count <= 5) bgClass = 'bg-[var(--primary)]/60 border border-[var(--primary)]/40';
+                else if (count > 5) bgClass = 'bg-[var(--primary)] border border-[var(--primary)]/80 shadow-[0_0_8px_var(--primary)]';
+
+                return `<div class="w-3 h-3 md:w-4 md:h-4 rounded-[3px] transition-all hover:scale-125 cursor-help ${bgClass}" title="${count} atividade(s) no dia ${date.split('-').reverse().join('/')}"></div>`;
+            }).join('');
+
             document.getElementById('stats-chart').innerHTML = `
                 <div class="glass p-6 rounded-2xl flex justify-between items-center mb-4 border border-[var(--primary)]">
                     <span class="font-bold text-lg">Evolução Geral da Vida</span>
                     <span class="font-black text-3xl text-[var(--primary)]">${overallProgress}%</span>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 gap-4 mb-4">
                     <div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors">
                         <i data-lucide="layers" class="w-8 h-8 text-indigo-400"></i>
                         <span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Ideias Totais</span>
@@ -894,6 +1031,36 @@
                         <i data-lucide="calendar" class="w-8 h-8 text-blue-400"></i>
                         <span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Planejamento</span>
                         <span class="font-black text-3xl text-blue-400">${planning}</span>
+                    </div>
+                </div>
+                <div class="glass p-6 rounded-2xl space-y-4">
+                    <h4 class="text-[10px] font-black uppercase tracking-widest text-zinc-400 text-center">Jornada Consistente (Últimos 70 dias)</h4>
+                    <div class="flex flex-wrap gap-1 md:gap-1.5 justify-center">
+                        ${heatmapHTML}
+                    </div>
+                    <div class="flex justify-between items-center text-[8px] text-zinc-500 font-bold uppercase mt-4">
+                        <span>Descanso</span>
+                        <div class="flex gap-1 items-center">
+                            <div class="w-2 h-2 rounded-[2px] bg-white/5"></div>
+                            <div class="w-2 h-2 rounded-[2px] bg-[var(--primary)]/30"></div>
+                            <div class="w-2 h-2 rounded-[2px] bg-[var(--primary)]/60"></div>
+                            <div class="w-2 h-2 rounded-[2px] bg-[var(--primary)]"></div>
+                        </div>
+                        <span>Foco Intenso</span>
+                    </div>
+                </div>
+
+                <div class="glass p-6 rounded-2xl space-y-4 mt-4">
+                    <h4 class="text-[10px] font-black uppercase tracking-widest text-zinc-400 text-center">Sala de Troféus</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        ${Object.values(MEDALS).map(m => {
+                            const unlocked = achievements.includes(m.id);
+                            return `<div class="glass p-4 rounded-xl text-center flex flex-col items-center justify-center gap-2 ${unlocked ? 'border border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.2)] bg-amber-500/10' : 'opacity-40 grayscale'} transition-all">
+                                <div class="text-3xl drop-shadow-md">${m.icon}</div>
+                                <div class="text-[10px] font-black uppercase text-zinc-200">${m.title}</div>
+                                <div class="text-[8px] text-zinc-400 leading-tight">${m.desc}</div>
+                            </div>`;
+                        }).join('')}
                     </div>
                 </div>
             `;
@@ -947,9 +1114,6 @@
 
         window.onload = () => { 
             changeTheme(localStorage.getItem('seed_theme') || 'theme-purple'); 
-            const savedBg = parseInt(localStorage.getItem('seed_bg_index')) || 0;
-            currentBgIndex = savedBg;
-            applyBackground(currentBgIndex);
             renderProjects(); 
             
             // Pré-carregar fontes de áudio
