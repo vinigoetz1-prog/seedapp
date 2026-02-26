@@ -130,7 +130,7 @@
 </head>
 <body class="theme-purple custom-scrollbar min-h-screen relative">
 
-    <!-- Tela de Login / Cadastro -->
+    <!-- Tela de Login / Cadastro Dinâmica -->
     <div id="auth-overlay" class="fixed inset-0 bg-black/95 z-[200] flex flex-col items-center justify-center p-6 backdrop-blur-2xl transition-opacity duration-500 hidden">
         <div class="glass w-full max-w-md rounded-[3rem] p-10 space-y-8 animate-slide-up text-center relative overflow-hidden shadow-2xl shadow-[var(--primary)]/10">
             <div class="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/10 to-transparent opacity-50"></div>
@@ -138,10 +138,14 @@
                 <div class="w-16 h-16 rounded-3xl bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] flex items-center justify-center shadow-xl shadow-[var(--primary)]/30 mx-auto mb-6">
                     <i data-lucide="leaf" class="text-white w-8 h-8"></i>
                 </div>
-                <h2 class="text-3xl font-black tracking-tighter mb-2">Seed</h2>
-                <p class="text-zinc-400 text-xs mb-8 font-bold uppercase tracking-widest">Entre para cultivar suas ideias</p>
+                <h2 id="auth-title" class="text-3xl font-black tracking-tighter mb-2">Seu Jardim</h2>
+                <p id="auth-subtitle" class="text-zinc-400 text-xs mb-8 font-bold uppercase tracking-widest">Entre para cultivar suas ideias</p>
                 
                 <div class="space-y-4 text-left">
+                    <div id="auth-name-group" class="hidden transition-all duration-300">
+                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Como quer ser chamado?</label>
+                        <input id="auth-name" type="text" placeholder="Seu Nome" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors">
+                    </div>
                     <div>
                         <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Email de Acesso</label>
                         <input id="auth-email" type="email" placeholder="seu@email.com" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors">
@@ -153,8 +157,8 @@
                 </div>
 
                 <div class="mt-8 space-y-3">
-                    <button onclick="handleAuth('login')" class="w-full bg-[var(--primary)] py-4 rounded-2xl font-black text-white shadow-xl hover:opacity-90 active:scale-95 transition-all uppercase tracking-widest text-xs">Entrar no Seed</button>
-                    <button onclick="handleAuth('register')" class="w-full bg-white/5 border border-white/10 py-4 rounded-2xl font-black text-zinc-300 hover:bg-white/10 active:scale-95 transition-all uppercase tracking-widest text-xs">Criar Nova Conta</button>
+                    <button id="btn-auth-main" onclick="executeAuth()" class="w-full bg-[var(--primary)] py-4 rounded-2xl font-black text-white shadow-xl hover:opacity-90 active:scale-95 transition-all uppercase tracking-widest text-xs">Entrar no Seed</button>
+                    <button id="btn-auth-toggle" onclick="toggleAuthMode()" class="w-full bg-white/5 border border-white/10 py-4 rounded-2xl font-black text-zinc-300 hover:bg-white/10 active:scale-95 transition-all uppercase tracking-widest text-xs">Criar Nova Conta</button>
                 </div>
                 <button onclick="continueOffline()" class="mt-6 text-[10px] font-bold text-zinc-500 hover:text-zinc-300 uppercase tracking-widest underline decoration-zinc-700 underline-offset-4 transition-colors">Continuar Offline (Sem Nuvem)</button>
             </div>
@@ -193,7 +197,7 @@
     <!-- Visão Geral -->
     <main id="main-view" class="max-w-6xl mx-auto p-4 md:p-6 space-y-12 pb-32">
         <section class="py-8 md:py-12 text-center space-y-5 animate-slide-up">
-            <h2 class="text-4xl md:text-7xl font-black leading-none tracking-tight">O equilíbrio da <br><span class="text-[var(--primary)]">sua jornada.</span></h2>
+            <h2 id="main-hero-title" class="text-4xl md:text-7xl font-black leading-none tracking-tight">O equilíbrio da <br><span class="text-[var(--primary)]">sua jornada.</span></h2>
             <p class="text-zinc-400 max-w-xl mx-auto text-base md:text-lg font-medium drop-shadow-md">Plante ideias, foque no agora e cultive hábitos diários.</p>
         </section>
 
@@ -363,12 +367,13 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        // Importando o updateProfile para guardar o nome na conta do usuário
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const apiKey = "";
         
-        // --- CHAVES DO BANCO DE DADOS DO VINICIUS ---
+        // --- CHAVES DO BANCO DE DADOS ---
         const firebaseConfig = {
             apiKey: "AIzaSyCReE2nGwS6i3ZCAwphTykSL5g-VbDP07k",
             authDomain: "projectseed-b4af5.firebaseapp.com",
@@ -390,8 +395,9 @@
         let activityLog = JSON.parse(localStorage.getItem('seed_activity_v1')) || {}; 
         let achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || []; 
         let isOfflineMode = false; 
+        let currentAuthMode = 'login'; // Começa na tela de login
 
-        // --- SISTEMA DE NOTIFICAÇÕES (Toasts visíveis que não são bloqueados) ---
+        // --- SISTEMA DE NOTIFICAÇÕES ---
         window.showToast = (message, type = 'success') => {
             const toast = document.createElement('div');
             const bgClass = type === 'error' ? 'bg-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.6)]' : 'bg-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.6)]';
@@ -399,6 +405,19 @@
             toast.innerHTML = message;
             document.body.appendChild(toast);
             setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 4000);
+        };
+
+        // --- SISTEMA DE BOAS-VINDAS ---
+        const updateHeroName = () => {
+            const heroTitle = document.getElementById('main-hero-title');
+            if(currentUser && currentUser.displayName && heroTitle) {
+                // Pega apenas o primeiro nome para ficar íntimo
+                const firstName = currentUser.displayName.trim().split(' ')[0];
+                heroTitle.innerHTML = `Bem-vindo, <br><span class="text-[var(--primary)]">${firstName}.</span>`;
+            } else if (heroTitle) {
+                // Modo offline ou sem nome cadastrado
+                heroTitle.innerHTML = `O equilíbrio da <br><span class="text-[var(--primary)]">sua jornada.</span>`;
+            }
         };
 
         window.initCloud = () => {
@@ -429,46 +448,80 @@
             });
         };
 
-        const handleAuthError = (error) => {
-            console.log("🌱 Erro de conexão, mantendo na tela de login.", error);
-        };
-
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
             if (user) {
                 document.getElementById('auth-overlay').classList.add('hidden');
+                updateHeroName(); // Atualiza a tela inicial
                 window.initCloud();
             } else {
+                updateHeroName(); // Volta ao padrão
                 if (!isOfflineMode) {
                     document.getElementById('auth-overlay').classList.remove('hidden');
                 }
             }
         });
 
-        // Funções da tela de Login e Cadastro (Sem alertas do navegador)
-        window.handleAuth = async (action) => {
+        // Alternar entre Login e Cadastro
+        window.toggleAuthMode = () => {
+            currentAuthMode = currentAuthMode === 'login' ? 'register' : 'login';
+            
+            const nameGroup = document.getElementById('auth-name-group');
+            const title = document.getElementById('auth-title');
+            const subtitle = document.getElementById('auth-subtitle');
+            const btnMain = document.getElementById('btn-auth-main');
+            const btnToggle = document.getElementById('btn-auth-toggle');
+
+            if (currentAuthMode === 'register') {
+                nameGroup.classList.remove('hidden');
+                title.innerText = "Nova Semente";
+                subtitle.innerText = "Crie sua conta para começar";
+                btnMain.innerText = "Criar Minha Conta";
+                btnToggle.innerText = "Já tenho conta";
+            } else {
+                nameGroup.classList.add('hidden');
+                title.innerText = "Seu Jardim";
+                subtitle.innerText = "Entre para cultivar suas ideias";
+                btnMain.innerText = "Entrar no Seed";
+                btnToggle.innerText = "Criar Nova Conta";
+            }
+        };
+
+        // Executar o Login ou Cadastro
+        window.executeAuth = async () => {
             const email = document.getElementById('auth-email').value;
             const pass = document.getElementById('auth-pass').value;
+            const name = document.getElementById('auth-name').value;
             
             if(!email || !pass) {
                 window.showToast("❌ Preencha seu email e senha.", "error");
                 return;
             }
 
+            if (currentAuthMode === 'register' && !name.trim()) {
+                window.showToast("❌ Digite como quer ser chamado.", "error");
+                return;
+            }
+
             if (pass.length < 6) {
-                window.showToast("❌ A senha precisa ter 6 caracteres.", "error");
+                window.showToast("❌ A senha precisa ter pelo menos 6 caracteres.", "error");
                 return;
             }
 
             try {
-                if(action === 'login') {
+                if(currentAuthMode === 'login') {
                     await signInWithEmailAndPassword(auth, email, pass);
                     window.showToast("✅ Login realizado com sucesso!");
                 } else {
-                    await createUserWithEmailAndPassword(auth, email, pass);
-                    window.showToast("🎉 Bem-vindo! Conta criada com sucesso.");
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+                    // Salvar o nome no perfil da conta recém-criada
+                    await updateProfile(userCredential.user, { displayName: name.trim() });
+                    // Atualiza a variável atual para refletir o nome sem precisar recarregar
+                    currentUser = userCredential.user;
+                    window.showToast("🎉 Bem-vindo ao Seed!");
                 }
                 document.getElementById('auth-overlay').classList.add('hidden');
+                updateHeroName();
             } catch(error) {
                 console.error(error);
                 if(error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
@@ -477,8 +530,6 @@
                     window.showToast("❌ Este email já está em uso.", "error");
                 } else if(error.code === 'auth/weak-password') {
                     window.showToast("❌ A senha precisa ter 6 caracteres.", "error");
-                } else if(error.code === 'auth/operation-not-allowed') {
-                    window.showToast("❌ E-mail/Senha desativado no Firebase!", "error");
                 } else {
                     window.showToast("❌ Erro ao acessar a conta.", "error");
                 }
@@ -502,6 +553,7 @@
             projects = oldData;
             activityLog = JSON.parse(localStorage.getItem('seed_activity_v1')) || {};
             achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || [];
+            updateHeroName();
             if(typeof renderProjects === 'function') renderProjects();
             window.showToast("🌱 Iniciando Modo Offline");
         };
