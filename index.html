@@ -462,7 +462,6 @@
         let projects = [];
         let currentUser = null;
         let unsubscribeSnapshot = null;
-        let activityLog = JSON.parse(localStorage.getItem('seed_activity_v1')) || {}; 
         let achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || []; 
         let isOfflineMode = false; 
         let currentAuthMode = 'login'; 
@@ -496,12 +495,10 @@
             unsubscribeSnapshot = onSnapshot(docRef, (snapshot) => {
                 if (snapshot.exists()) {
                     projects = snapshot.data().projects || [];
-                    activityLog = snapshot.data().activityLog || {};
                     achievements = snapshot.data().achievements || [];
                 } else {
                     const oldData = JSON.parse(localStorage.getItem('seed_master_v1')) || JSON.parse(localStorage.getItem('horizon_master_v5')) || [];
                     projects = oldData;
-                    activityLog = JSON.parse(localStorage.getItem('seed_activity_v1')) || {};
                     achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || [];
                     if(oldData.length > 0) window.save();
                 }
@@ -622,7 +619,6 @@
             document.getElementById('auth-overlay').classList.add('hidden');
             const oldData = JSON.parse(localStorage.getItem('seed_master_v1')) || [];
             projects = oldData;
-            activityLog = JSON.parse(localStorage.getItem('seed_activity_v1')) || {};
             achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || [];
             updateHeroName();
             if(typeof renderProjects === 'function') renderProjects();
@@ -636,7 +632,6 @@
         window.logout = async () => {
             if (currentUser) await signOut(auth);
             projects = []; 
-            activityLog = {};
             achievements = [];
             isOfflineMode = false;
             renderProjects();
@@ -658,7 +653,6 @@
                     
                     // 3. Limpar memória local do aparelho
                     projects = [];
-                    activityLog = {};
                     achievements = [];
                     localStorage.removeItem('seed_master_v1');
                     localStorage.removeItem('seed_activity_v1');
@@ -700,14 +694,12 @@
             if (currentUser) {
                 const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'seed_data', 'main');
                 try { 
-                    await setDoc(docRef, { projects: projects, activityLog: activityLog, achievements: achievements }); 
+                    await setDoc(docRef, { projects: projects, achievements: achievements }); 
                     localStorage.setItem('seed_master_v1', JSON.stringify(projects));
-                    localStorage.setItem('seed_activity_v1', JSON.stringify(activityLog));
                     localStorage.setItem('seed_achievements_v1', JSON.stringify(achievements));
                 } catch(e) { console.log("Guardado apenas localmente."); }
             } else {
                 localStorage.setItem('seed_master_v1', JSON.stringify(projects));
-                localStorage.setItem('seed_activity_v1', JSON.stringify(activityLog));
                 localStorage.setItem('seed_achievements_v1', JSON.stringify(achievements));
             }
             const s = document.getElementById('save-status');
@@ -740,11 +732,6 @@
             if (unlockedAny) {
                 save();
             }
-        };
-
-        window.logActivity = () => {
-            const today = new Date().toISOString().split('T')[0];
-            activityLog[today] = (activityLog[today] || 0) + 1;
         };
 
         const VIBE_IMAGES = {
@@ -957,12 +944,11 @@
             const p = projects.find(p => p.id === id);
             p.station = 'archive'; 
             p.archivedAt = new Date().toLocaleDateString('pt-BR'); // Salva a data de conclusão
-            window.logActivity();
             save(); window.checkAchievements();
             window.closeDetails(); 
         };
         
-        window.toggleMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; p.milestones[i].completed = !p.milestones[i].completed; if(p.milestones[i].completed) { window.logActivity(); } save(); openDetails(activeProjectId); };
+        window.toggleMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; p.milestones[i].completed = !p.milestones[i].completed; save(); openDetails(activeProjectId); };
         window.addMilestone = () => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; const v = document.getElementById('new-m').value; if(!v) return; p.milestones.push({text: v, completed: false}); save(); openDetails(activeProjectId); };
         window.removeMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; p.milestones.splice(i,1); save(); openDetails(activeProjectId); };
         window.updateNotes = (v) => { const p = projects.find(p => p.id === activeProjectId); if(p.station!=='archive') { p.notes = v; save(); window.checkAchievements(); } };
@@ -983,7 +969,6 @@
                 p.habit.previousCheck = p.habit.lastCheck;
                 p.habit.lastCheck = today; 
                 p.habit.streak++; 
-                window.logActivity();
             } 
             save(); 
             openDetails(activeProjectId); 
@@ -1162,7 +1147,6 @@
                     updateTimerDisplay(); 
                     if(timeLeft<=0) { 
                         clearInterval(timerInterval); 
-                        window.logActivity();
                         
                         if (selectedFocusTime === 60 && !achievements.includes('foco')) {
                             achievements.push('foco');
@@ -1195,25 +1179,6 @@
             });
             const overallProgress = totalMilestones === 0 ? 0 : Math.round((completedMilestones / totalMilestones) * 100);
 
-            // Gerar dados do Mapa de Calor (Últimos 70 dias)
-            const todayDate = new Date();
-            const days = [];
-            for(let i=69; i>=0; i--) {
-                const d = new Date(todayDate);
-                d.setDate(d.getDate() - i);
-                days.push(d.toISOString().split('T')[0]);
-            }
-
-            const heatmapHTML = days.map(date => {
-                const count = activityLog[date] || 0;
-                let bgClass = 'bg-white/5 border border-white/5';
-                if (count > 0 && count <= 2) bgClass = 'bg-[var(--primary)]/30 border border-[var(--primary)]/20';
-                else if (count >= 3 && count <= 5) bgClass = 'bg-[var(--primary)]/60 border border-[var(--primary)]/40';
-                else if (count > 5) bgClass = 'bg-[var(--primary)] border border-[var(--primary)]/80 shadow-[0_0_8px_var(--primary)]';
-
-                return `<div class="w-3 h-3 md:w-4 md:h-4 rounded-[3px] transition-all hover:scale-125 cursor-help ${bgClass}" title="${count} atividade(s) no dia ${date.split('-').reverse().join('/')}"></div>`;
-            }).join('');
-
             document.getElementById('stats-chart').innerHTML = `
                 <div class="glass p-6 rounded-2xl flex justify-between items-center mb-4 border border-[var(--primary)]">
                     <span class="font-bold text-lg">Evolução Geral da Vida</span>
@@ -1239,22 +1204,6 @@
                         <i data-lucide="calendar" class="w-8 h-8 text-blue-400"></i>
                         <span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Planejamento</span>
                         <span class="font-black text-3xl text-blue-400">${planning}</span>
-                    </div>
-                </div>
-                <div class="glass p-6 rounded-2xl space-y-4">
-                    <h4 class="text-[10px] font-black uppercase tracking-widest text-zinc-400 text-center">Jornada Consistente (Últimos 70 dias)</h4>
-                    <div class="flex flex-wrap gap-1 md:gap-1.5 justify-center">
-                        ${heatmapHTML}
-                    </div>
-                    <div class="flex justify-between items-center text-[8px] text-zinc-500 font-bold uppercase mt-4">
-                        <span>Descanso</span>
-                        <div class="flex gap-1 items-center">
-                            <div class="w-2 h-2 rounded-[2px] bg-white/5"></div>
-                            <div class="w-2 h-2 rounded-[2px] bg-[var(--primary)]/30"></div>
-                            <div class="w-2 h-2 rounded-[2px] bg-[var(--primary)]/60"></div>
-                            <div class="w-2 h-2 rounded-[2px] bg-[var(--primary)]"></div>
-                        </div>
-                        <span>Foco Intenso</span>
                     </div>
                 </div>
 
