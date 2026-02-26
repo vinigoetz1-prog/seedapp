@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#8B5CF6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Seed">
+    
+    <!-- Ícone para iOS -->
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3233/3233997.png">
+    
+    <!-- Link para o Manifesto -->
+    <link rel="manifest" href="manifest.json">
+
+    <title>Seed: Project Life</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8B5CF6;
+            --primary-dark: #6D28D9;
+            --bg: transparent; /* Alterado para suportar fundos */
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: #e5e7eb;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .theme-purple { --primary: #8B5CF6; --primary-dark: #6D28D9; }
+        .theme-emerald { --primary: #10B981; --primary-dark: #059669; }
+        .theme-blue { --primary: #3B82F6; --primary-dark: #1D4ED8; }
+        .theme-rose { --primary: #F43F5E; --primary-dark: #BE123C; }
+
+        .glass {
+            background: var(--card-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--card-border);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #fff 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.05);
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, var(--primary-dark), var(--primary));
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .station-tab.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            opacity: 1 !important;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 10px; }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px -20px rgba(0,0,0,0.5);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-up { animation: slideUp 0.5s ease-out forwards; }
+
+        .audio-wave {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            height: 20px;
+        }
+        .audio-bar {
+            width: 2px;
+            height: 100%;
+            background: var(--primary);
+            animation: wave 1s ease-in-out infinite;
+        }
+        @keyframes wave {
+            0%, 100% { height: 20%; }
+            50% { height: 100%; }
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Ajuste para a imagem de fundo aparecer melhor nos detalhes */
+        .vision-banner {
+            mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
+            opacity: 0.6 !important;
+        }
+
+        /* Proteção para o conteúdo não colar no topo em telas pequenas */
+        #detail-view .relative, #focus-overlay .text-center {
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+        }
+
+        @keyframes timerPulse {
+            0% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(139, 92, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); }
+        }
+        .timer-active { animation: timerPulse 2s infinite; }
+    </style>
+</head>
+<body class="theme-purple custom-scrollbar min-h-screen relative">
+
+    <!-- Sistema de Fundo Dinâmico -->
+    <div id="app-bg" class="fixed inset-0 z-[-2] bg-cover bg-center transition-opacity duration-1000 opacity-0"></div>
+    <div id="app-overlay" class="fixed inset-0 z-[-1] bg-[#0a0a0c] transition-colors duration-1000"></div>
+
+    <!-- Navegação -->
+    <nav class="p-6 flex justify-between items-center border-b border-white/5 sticky top-0 bg-black/40 backdrop-blur-xl z-50 transition-colors">
+        <div class="flex items-center gap-3 cursor-pointer group" onclick="closeDetails(); closeFocusMode(); closeStats(); closeMentor()">
+            <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] flex items-center justify-center shadow-lg shadow-[var(--primary)]/30 group-hover:rotate-12 transition-transform">
+                <i data-lucide="leaf" class="text-white w-6 h-6"></i>
+            </div>
+            <h1 class="text-2xl font-black tracking-tighter gradient-text">SEED</h1>
+        </div>
+        
+        <div class="flex items-center gap-2 md:gap-4">
+            <button onclick="linkDevice()" class="glass p-3 rounded-xl hover:text-emerald-400 transition-all text-emerald-500/50" title="Sincronizar Celular">
+                <i data-lucide="smartphone" class="w-5 h-5"></i>
+            </button>
+            <button onclick="cycleBackground()" class="glass p-3 rounded-xl hover:text-[var(--primary)] transition-all" title="Mudar Cenário">
+                <i data-lucide="image" class="w-5 h-5"></i>
+            </button>
+            <button onclick="openStats()" class="glass p-3 rounded-xl hover:text-[var(--primary)] transition-all">
+                <i data-lucide="pie-chart" class="w-5 h-5"></i>
+            </button>
+            <div class="hidden md:flex items-center gap-3 glass p-2 rounded-2xl px-5">
+                <button onclick="changeTheme('theme-purple')" class="w-4 h-4 rounded-full bg-violet-500 hover:scale-125 transition-transform"></button>
+                <button onclick="changeTheme('theme-emerald')" class="w-4 h-4 rounded-full bg-emerald-500 hover:scale-125 transition-transform"></button>
+                <button onclick="changeTheme('theme-blue')" class="w-4 h-4 rounded-full bg-blue-500 hover:scale-125 transition-transform"></button>
+                <button onclick="changeTheme('theme-rose')" class="w-4 h-4 rounded-full bg-rose-500 hover:scale-125 transition-transform"></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Visão Geral -->
+    <main id="main-view" class="max-w-6xl mx-auto p-4 md:p-6 space-y-12 pb-32">
+        <section class="py-8 md:py-12 text-center space-y-5 animate-slide-up">
+            <h2 class="text-4xl md:text-7xl font-black leading-none tracking-tight">O equilíbrio da <br><span class="text-[var(--primary)]">sua jornada.</span></h2>
+            <p class="text-zinc-400 max-w-xl mx-auto text-base md:text-lg font-medium drop-shadow-md">Plante ideias, foque no agora e cultive hábitos diários.</p>
+        </section>
+
+        <section class="flex justify-center gap-6 md:gap-10 border-b border-white/5 pb-2 overflow-x-auto no-scrollbar">
+            <button onclick="setStation('now')" id="tab-now" class="station-tab active px-4 py-3 font-bold text-xs tracking-widest uppercase transition-all whitespace-nowrap drop-shadow-md">Agora</button>
+            <button onclick="setStation('next')" id="tab-next" class="station-tab px-4 py-3 font-bold text-xs tracking-widest uppercase transition-all opacity-40 whitespace-nowrap drop-shadow-md">Próximos</button>
+            <button onclick="setStation('someday')" id="tab-someday" class="station-tab px-4 py-3 font-bold text-xs tracking-widest uppercase transition-all opacity-40 whitespace-nowrap drop-shadow-md">Algum dia</button>
+            <button onclick="setStation('archive')" id="tab-archive" class="station-tab px-4 py-3 font-bold text-xs tracking-widest uppercase transition-all opacity-40 whitespace-nowrap flex items-center gap-2 drop-shadow-md">
+                <i data-lucide="award" class="w-4 h-4"></i> Jardim
+            </button>
+        </section>
+
+        <section id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <!-- Projetos aqui -->
+        </section>
+    </main>
+
+    <!-- Detalhes do Projeto -->
+    <section id="detail-view" class="fixed inset-0 bg-black/80 backdrop-blur-2xl z-[60] overflow-y-auto hidden">
+        <div id="vision-banner-container" class="absolute top-0 left-0 w-full h-80 opacity-40 vision-banner"></div>
+        <div class="relative max-w-4xl mx-auto p-6 py-12 space-y-12">
+            <div class="flex justify-between items-center">
+                <button onclick="closeDetails()" class="flex items-center gap-2 text-zinc-300 hover:text-[var(--primary)] transition-colors font-bold uppercase tracking-widest text-xs drop-shadow-md">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Seed
+                </button>
+                <div id="save-status" class="text-[10px] font-black text-emerald-500 uppercase tracking-widest opacity-0 transition-opacity">Salvo</div>
+            </div>
+            <div id="detail-content" class="space-y-12"></div>
+        </div>
+    </section>
+
+    <!-- Visão de Stats -->
+    <div id="stats-overlay" class="fixed inset-0 bg-black/80 z-[70] hidden items-start justify-center p-4 md:p-6 backdrop-blur-3xl animate-slide-up overflow-y-auto custom-scrollbar">
+        <div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-8 shadow-2xl my-auto">
+            <div class="flex justify-between items-center">
+                <h3 class="text-3xl font-black">Termômetro</h3>
+                <button onclick="closeStats()" class="text-zinc-500 hover:text-white"><i data-lucide="x"></i></button>
+            </div>
+            <div id="stats-chart" class="space-y-4">
+                <!-- Conteúdo dos stats gerado via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal do Mentor IA -->
+    <div id="mentor-overlay" class="fixed inset-0 bg-black/90 z-[110] hidden items-center justify-center p-6 backdrop-blur-md animate-slide-up">
+        <div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-6 flex flex-col max-h-[85vh]">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+                        <i data-lucide="sparkles" class="text-white w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-2xl font-black tracking-tight">Mentor IA</h3>
+                </div>
+                <button onclick="closeMentor()" class="text-zinc-500 hover:text-white"><i data-lucide="x"></i></button>
+            </div>
+            <div id="mentor-response" class="flex-1 overflow-y-auto text-zinc-300 leading-relaxed text-lg space-y-4 custom-scrollbar">
+                <!-- Resposta da IA -->
+            </div>
+            <button onclick="closeMentor()" class="w-full py-4 glass rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-white/5 transition-colors">Fechar</button>
+        </div>
+    </div>
+
+    <!-- Modo Foco -->
+    <div id="focus-overlay" class="fixed inset-0 z-[100] hidden animate-slide-up">
+        <!-- Fundos dinâmicos do Foco -->
+        <div id="focus-bg" class="absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-1000 z-0"></div>
+        <div id="focus-darken" class="absolute inset-0 bg-black/95 backdrop-blur-3xl transition-all duration-1000 z-10"></div>
+        
+        <!-- Botão para trocar o GIF de fundo -->
+        <button id="btn-cycle-gif" onclick="cycleFocusGif()" class="absolute top-6 right-6 md:top-8 md:right-8 p-3 rounded-2xl glass hover:text-[var(--primary)] transition-all z-30 text-zinc-400 opacity-0 pointer-events-none" title="Mudar Animação">
+            <i data-lucide="image" class="w-5 h-5"></i>
+        </button>
+
+        <!-- Conteúdo Rolável -->
+        <div class="absolute inset-0 z-20 flex items-start justify-center p-4 md:p-6 overflow-y-auto custom-scrollbar">
+            <div class="text-center space-y-10 w-full max-w-lg my-auto py-12">
+                <div class="space-y-2">
+                    <h4 id="focus-project-name" class="text-sm font-black text-[var(--primary)] uppercase tracking-[0.4em] drop-shadow-md">Foco Ativo</h4>
+                    <h3 id="focus-task-name" class="text-xl md:text-2xl font-bold text-zinc-300 line-clamp-2 drop-shadow-md">Marco Atual</h3>
+                </div>
+
+                <div id="focus-time-selector" class="flex justify-center gap-3 transition-opacity duration-500">
+                    <button onclick="setFocusTime(15)" id="btn-time-15" class="px-5 py-2 rounded-2xl glass font-bold text-xs transition-all hover:bg-white/5">15m</button>
+                    <button onclick="setFocusTime(25)" id="btn-time-25" class="px-5 py-2 rounded-2xl glass font-bold text-xs transition-all text-[var(--primary)] border-[var(--primary)]">25m</button>
+                    <button onclick="setFocusTime(45)" id="btn-time-45" class="px-5 py-2 rounded-2xl glass font-bold text-xs transition-all hover:bg-white/5">45m</button>
+                    <button onclick="setFocusTime(60)" id="btn-time-60" class="px-5 py-2 rounded-2xl glass font-bold text-xs transition-all hover:bg-white/5">60m</button>
+                </div>
+                
+                <div class="relative flex items-center justify-center">
+                    <div id="timer-ring" class="w-64 h-64 md:w-72 md:h-72 rounded-full border-4 border-white/5 flex flex-col items-center justify-center transition-all relative glass">
+                        <span id="timer-display" class="text-7xl md:text-8xl font-black tracking-tighter drop-shadow-lg">25:00</span>
+                        <div id="focus-sound-indicator" class="mt-4 flex items-center gap-2 text-[10px] font-black uppercase text-zinc-400 hidden">
+                            <div class="audio-wave"><div class="audio-bar"></div><div class="audio-bar"></div><div class="audio-bar"></div></div>
+                            Som Ativo
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controlos de Áudio -->
+                <div class="flex flex-col gap-3 mt-8 max-w-xs mx-auto">
+                    <!-- Chuva -->
+                    <div class="glass p-3 rounded-2xl flex items-center gap-4">
+                        <button id="btn-sound-rain" onclick="toggleSound('rain')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-zinc-400" title="Ligar/Desligar Chuva">
+                            <i data-lucide="cloud-rain" class="w-5 h-5"></i>
+                        </button>
+                        <input type="range" id="vol-rain" min="0" max="1" step="0.01" value="0.5" oninput="changeVolume('rain', this.value)" class="w-full accent-[var(--primary)] bg-white/10 rounded-lg appearance-none h-1 cursor-pointer">
+                    </div>
+                    <!-- Tempestade / Trovões -->
+                    <div class="glass p-3 rounded-2xl flex items-center gap-4">
+                        <button id="btn-sound-thunder" onclick="toggleSound('thunder')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-zinc-400" title="Ligar/Desligar Trovões">
+                            <i data-lucide="cloud-lightning" class="w-5 h-5"></i>
+                        </button>
+                        <input type="range" id="vol-thunder" min="0" max="1" step="0.01" value="0.5" oninput="changeVolume('thunder', this.value)" class="w-full accent-[var(--primary)] bg-white/10 rounded-lg appearance-none h-1 cursor-pointer">
+                    </div>
+                </div>
+
+                <div class="flex justify-center gap-4 mt-8">
+                    <button id="timer-btn" onclick="toggleTimer()" class="bg-[var(--primary)] px-8 md:px-12 py-4 md:py-5 rounded-3xl font-black uppercase tracking-widest shadow-xl shadow-[var(--primary)]/20 active:scale-95 transition-all">Iniciar</button>
+                    <button onclick="closeFocusMode()" class="bg-white/5 border border-white/10 glass px-6 md:px-8 py-4 md:py-5 rounded-3xl font-black uppercase tracking-widest transition-all hover:bg-white/10">Sair</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botão de Ação -->
+    <button onclick="openModal()" class="fixed bottom-8 right-8 w-16 h-16 rounded-3xl bg-[var(--primary)] text-white shadow-2xl shadow-[var(--primary)]/40 flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+        <i data-lucide="plus" class="w-8 h-8"></i>
+    </button>
+
+    <!-- Modal Novo -->
+    <div id="modal" class="fixed inset-0 bg-black/95 z-[100] hidden items-center justify-center p-4 md:p-6 backdrop-blur-md">
+        <div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-8 max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div class="flex justify-between items-center">
+                <h3 class="text-3xl font-black tracking-tight">Novo Plantio</h3>
+                <button onclick="closeModal()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x" class="w-7 h-7"></i></button>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Título da Ideia</label>
+                    <input id="proj-title" type="text" placeholder="Ex: Criar um RPG Épico" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:border-[var(--primary)] outline-none text-lg font-bold transition-colors">
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <select id="proj-icon" class="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none font-bold text-gray-300">
+                        <option value="zap" class="bg-[#0a0a0c]">Energia</option>
+                        <option value="palette" class="bg-[#0a0a0c]">Arte</option>
+                        <option value="plane" class="bg-[#0a0a0c]">Aventura</option>
+                        <option value="target" class="bg-[#0a0a0c]">Foco</option>
+                        <option value="dices" class="bg-[#0a0a0c]">Lazer</option>
+                    </select>
+                    <select id="proj-station" class="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none font-bold text-gray-300">
+                        <option value="now" class="bg-[#0a0a0c]">Agora</option>
+                        <option value="next" class="bg-[#0a0a0c]">Próximo</option>
+                        <option value="someday" class="bg-[#0a0a0c]">Algum dia</option>
+                    </select>
+                </div>
+                <input id="proj-habit" type="text" placeholder="Hábito Diário opcional (Ex: Beber 2L água)" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium transition-colors focus:border-[var(--primary)]">
+                <textarea id="proj-milestones" placeholder="Marcos ou Tarefas (Separados por vírgula)" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 outline-none min-h-[100px] transition-colors focus:border-[var(--primary)]"></textarea>
+            </div>
+            <button onclick="addProject()" class="w-full bg-[var(--primary)] py-5 rounded-[2rem] font-black text-white shadow-2xl shadow-[var(--primary)]/30 uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all">Plantar Semente</button>
+        </div>
+    </div>
+
+    <audio id="audio-rain" loop></audio>
+    <audio id="audio-thunder" loop></audio>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Chave API Vazia - O ambiente injeta no runtime se disponível
+        const apiKey = "";
+        
+        // --- CHAVES DO BANCO DE DADOS DO VINICIUS ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyCReE2nGwS6i3ZCAwphTykSL5g-VbDP07k",
+            authDomain: "projectseed-b4af5.firebaseapp.com",
+            projectId: "projectseed-b4af5",
+            storageBucket: "projectseed-b4af5.firebasestorage.app",
+            messagingSenderId: "353667479355",
+            appId: "1:353667479355:web:3b043f0c92444652ae691e",
+            measurementId: "G-X5W5K3VH72"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'seed-app';
+
+        let projects = [];
+        let currentUser = null;
+        let unsubscribeSnapshot = null;
+
+        // --- SISTEMA DE SINCRONIZAÇÃO PC <-> CELULAR ---
+        window.syncId = localStorage.getItem('seed_sync_id');
+        if (!window.syncId) {
+            window.syncId = 'jardim_' + Math.floor(Math.random() * 90000 + 10000); 
+            localStorage.setItem('seed_sync_id', window.syncId);
+        }
+
+        window.initCloud = () => {
+            if (!currentUser) return;
+            if (unsubscribeSnapshot) unsubscribeSnapshot();
+
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'sync_data', window.syncId);
+            unsubscribeSnapshot = onSnapshot(docRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    projects = snapshot.data().projects || [];
+                } else {
+                    const oldData = JSON.parse(localStorage.getItem('seed_master_v1')) || JSON.parse(localStorage.getItem('horizon_master_v5')) || [];
+                    projects = oldData;
+                    if(oldData.length > 0) window.save();
+                }
+                if(typeof renderProjects === 'function') renderProjects();
+                
+                if (typeof activeProjectId !== 'undefined' && activeProjectId && !document.getElementById('detail-view').classList.contains('hidden')) {
+                    const p = projects.find(proj => proj.id === activeProjectId);
+                    if(p && typeof window.openDetails === 'function') window.openDetails(activeProjectId);
+                }
+            }, (err) => {
+                // Erros silenciosos para não atrapalhar a experiência se a conexão cair
+                console.log("Desconectado da nuvem em tempo real.");
+            });
+        };
+
+        const handleAuthError = (error) => {
+            console.log("🌱 Modo offline ativado. Para usar a nuvem, ative o provedor 'Anônimo' no painel Authentication do Firebase.");
+            const oldData = JSON.parse(localStorage.getItem('seed_master_v1')) || JSON.parse(localStorage.getItem('horizon_master_v5')) || [];
+            projects = oldData;
+            if(typeof renderProjects === 'function') renderProjects();
+        };
+
+        const initAuth = () => {
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                signInWithCustomToken(auth, __initial_auth_token).catch(() => {
+                    signInAnonymously(auth).catch(handleAuthError);
+                });
+            } else {
+                signInAnonymously(auth).catch(handleAuthError);
+            }
+        };
+        
+        initAuth();
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+                window.initCloud();
+            }
+        });
+
+        window.save = async () => {
+            if (currentUser) {
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'sync_data', window.syncId);
+                try { 
+                    await setDoc(docRef, { projects: projects }); 
+                    localStorage.setItem('seed_master_v1', JSON.stringify(projects));
+                } catch(e) { console.log("Salvo apenas localmente."); }
+            } else {
+                localStorage.setItem('seed_master_v1', JSON.stringify(projects));
+            }
+            const s = document.getElementById('save-status');
+            if(s) { s.style.opacity = '1'; setTimeout(() => s.style.opacity = '0', 1000); }
+        };
+        const save = window.save;
+
+        window.linkDevice = () => {
+            const code = prompt("📱 SINCRONIZAR CELULAR E PC\n\nAbra o app no outro dispositivo, clique no ícone do Celular e digite o SEU CÓDIGO abaixo:\n\n👉 " + window.syncId + " 👈\n\n(Ou se você quiser puxar os dados de outro aparelho para cá, digite o código dele na caixa abaixo):");
+            if(code && code.trim() !== "" && code.trim() !== window.syncId) {
+                window.syncId = code.trim();
+                localStorage.setItem('seed_sync_id', window.syncId);
+                window.initCloud();
+                alert("✅ Jardim sincronizado com sucesso! As duas telas agora compartilham as mesmas sementes.");
+            }
+        };
+
+        const VIBE_IMAGES = {
+            zap: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1000',
+            palette: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=1000',
+            plane: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1000',
+            target: 'https://images.unsplash.com/photo-1484417894907-623942c8ee29?auto=format&fit=crop&q=80&w=1000',
+            dices: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1000'
+        };
+
+        // Áudios atualizados: Servidores públicos permanentes da Wikimedia (Não expiram)
+        const SOUNDS = {
+            rain: 'https://upload.wikimedia.org/wikipedia/commons/transcoded/4/47/Sound_of_rain.ogg/Sound_of_rain.ogg.mp3',
+            thunder: 'https://upload.wikimedia.org/wikipedia/commons/transcoded/1/1a/Thunder_storm.ogg/Thunder_storm.ogg.mp3'
+        };
+
+        // Gifs animados para o Modo Foco
+        const FOCUS_GIFS = [
+            'https://i.pinimg.com/originals/ff/34/3a/ff343aa8819c2573ad3409baf4af5e3e.gif',
+            'https://i.pinimg.com/originals/92/9f/98/929f9811fba2f931a0f4b3581976695b.gif',
+            'https://i.pinimg.com/originals/49/cd/d8/49cdd838e8c6d7fe5e2dd55deead5567.gif',
+            'https://i.pinimg.com/originals/81/81/90/81819033e7242c1d826af87e2fb4975d.gif'
+        ];
+
+        let currentFocusGifIndex = 0;
+        window.cycleFocusGif = () => {
+            currentFocusGifIndex = (currentFocusGifIndex + 1) % FOCUS_GIFS.length;
+            document.getElementById('focus-bg').style.backgroundImage = `url('${FOCUS_GIFS[currentFocusGifIndex]}')`;
+        };
+
+        // Mapeamento de Plantas para o Jardim Visual
+        const PLANT_ICONS = {
+            zap: 'tree-pine',       // Energia vira um Pinheiro forte
+            palette: 'flower-2',    // Arte vira uma Flor detalhada
+            plane: 'tree-deciduous',// Aventura vira uma Árvore frondosa
+            target: 'sprout',       // Foco vira Broto robusto
+            dices: 'clover'         // Lazer vira um Trevo da sorte
+        };
+
+        // Sistema de Cenários Lo-Fi
+        const BG_SCENES = [
+            { id: 'dark', url: '' },
+            { id: 'lofi_room', url: 'https://images.unsplash.com/photo-1635394931710-ea145d797335?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+            { id: 'rainy', url: 'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?q=80&w=1920&auto=format&fit=crop' }, 
+            { id: 'japan', url: 'https://i.pinimg.com/736x/a8/ef/3c/a8ef3c2d67a14e4c0439bfb7548ecd25.jpg' },
+            { id: 'japani', url: 'https://i.pinimg.com/736x/88/cd/21/88cd216810a2be6669f35bea9c98293c.jpg' }
+        ];
+        let currentBgIndex = 0;
+
+        const applyBackground = (index) => {
+            const bgEl = document.getElementById('app-bg');
+            const overlayEl = document.getElementById('app-overlay');
+            const scene = BG_SCENES[index];
+            
+            if(scene.id === 'dark') {
+                bgEl.style.opacity = '0';
+                overlayEl.className = 'fixed inset-0 z-[-1] bg-[#0a0a0c] transition-colors duration-1000';
+            } else {
+                bgEl.style.backgroundImage = `url('${scene.url}')`;
+                bgEl.style.opacity = '1';
+                overlayEl.className = 'fixed inset-0 z-[-1] bg-black/60 transition-colors duration-1000';
+            }
+        };
+
+        window.cycleBackground = () => {
+            currentBgIndex = (currentBgIndex + 1) % BG_SCENES.length;
+            localStorage.setItem('seed_bg_index', currentBgIndex);
+            applyBackground(currentBgIndex);
+        };
+
+        let currentStation = 'now';
+        let activeProjectId = null;
+        let timerInterval = null;
+        let timeLeft = 25 * 60;
+        let isTimerRunning = false;
+
+        window.changeTheme = (theme) => {
+            document.body.className = `custom-scrollbar min-h-screen relative ${theme}`;
+            localStorage.setItem('seed_theme', theme);
+            lucide.createIcons();
+        };
+
+        window.setStation = (station) => {
+            currentStation = station;
+            document.querySelectorAll('.station-tab').forEach(t => {
+                t.classList.remove('active', 'opacity-100');
+                t.classList.add('opacity-40');
+            });
+            const activeTab = document.getElementById(`tab-${station}`);
+            activeTab.classList.remove('opacity-40');
+            activeTab.classList.add('active', 'opacity-100');
+            renderProjects();
+        };
+
+        const renderProjects = () => {
+            const grid = document.getElementById('project-grid');
+            const filtered = projects.filter(p => p.station === currentStation);
+            
+            if (currentStation === 'archive') {
+                // Layout Exclusivo do Jardim Visual
+                grid.className = "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6";
+                grid.innerHTML = filtered.length ? filtered.map(p => `
+                    <div onclick="openDetails(${p.id})" class="glass p-6 rounded-[2.5rem] flex flex-col items-center justify-center text-center cursor-pointer hover:-translate-y-2 hover:shadow-2xl hover:shadow-[var(--primary)]/20 transition-all group relative overflow-hidden min-h-[200px] border-b-4 border-b-[var(--primary)]/30">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[var(--primary)]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <i data-lucide="${PLANT_ICONS[p.icon] || 'flower-2'}" class="w-16 h-16 text-[var(--primary)] mb-4 drop-shadow-[0_0_15px_rgba(139,92,246,0.3)] group-hover:scale-110 transition-transform duration-500"></i>
+                        <h4 class="font-black text-sm line-clamp-2 px-2 text-zinc-200">${p.title}</h4>
+                        <span class="text-[8px] font-bold text-emerald-400 uppercase mt-3 tracking-widest bg-emerald-400/10 px-3 py-1 rounded-full">${p.archivedAt || 'Floresceu'}</span>
+                    </div>
+                `).join('') : `<div class="col-span-full py-24 text-center opacity-40 animate-slide-up"><i data-lucide="flower" class="w-16 h-16 mx-auto mb-6 text-emerald-500 drop-shadow-[0_0_15px_rgba(16,185,129,0.3)]"></i><p class="font-black uppercase tracking-widest text-sm">Seu jardim ainda está vazio.<br>Cultive sementes para vê-las florescer aqui.</p></div>`;
+            } else {
+                // Layout Padrão de Sementes
+                grid.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8";
+                grid.innerHTML = filtered.length ? filtered.map(p => {
+                    const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0;
+                    return `<div onclick="openDetails(${p.id})" class="glass p-8 rounded-[3rem] space-y-6 project-card cursor-pointer animate-slide-up relative overflow-hidden group">
+                        <img src="${VIBE_IMAGES[p.icon]}" class="absolute top-0 left-0 w-full h-full object-cover opacity-[0.05]">
+                        <div class="relative z-10 space-y-6">
+                            <div class="flex justify-between items-start">
+                                <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/5"><i data-lucide="${p.icon}" class="text-[var(--primary)] w-7 h-7"></i></div>
+                                <div class="text-right"><div class="text-2xl font-black">${prog}%</div><span class="text-[8px] font-black uppercase text-zinc-400">Progresso</span></div>
+                            </div>
+                            <h4 class="text-xl font-black mb-1 line-clamp-1">${p.title}</h4>
+                            <div class="h-2 w-full progress-bar rounded-full"><div class="progress-fill h-full rounded-full" style="width: ${prog}%"></div></div>
+                            ${p.habit ? `<div class="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Streak: ${p.habit.streak}d</div>` : ''}
+                        </div>
+                    </div>`;
+                }).join('') : `<div class="col-span-full py-24 text-center opacity-40 animate-slide-up"><i data-lucide="leaf" class="w-16 h-16 mx-auto mb-6"></i><p class="font-black uppercase tracking-widest text-sm">Terra pronta para o plantio</p></div>`;
+            }
+            lucide.createIcons();
+        };
+
+        window.openDetails = (id) => {
+            activeProjectId = id;
+            const p = projects.find(p => p.id === id);
+            const isArchived = p.station === 'archive';
+            document.getElementById('vision-banner-container').innerHTML = `<img src="${VIBE_IMAGES[p.icon]}" class="w-full h-full object-cover">`;
+            const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0;
+            const isHabitDone = p.habit && p.habit.lastCheck === new Date().toISOString().split('T')[0];
+
+            document.getElementById('detail-content').innerHTML = `
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div class="space-y-4">
+                        <div class="inline-flex gap-2 px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-widest text-[var(--primary)] drop-shadow-md">
+                            ${isArchived ? '<i data-lucide="award" class="w-3 h-3"></i> JARDIM (CONGELADO)' : p.station.toUpperCase()}
+                        </div>
+                        <h2 class="text-3xl md:text-5xl font-black tracking-tighter drop-shadow-lg">${p.title}</h2>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        ${!isArchived ? `
+                            <button onclick="askMentor()" class="bg-indigo-600/80 backdrop-blur-md px-4 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:bg-indigo-500 transition-colors"><i data-lucide="sparkles" class="w-4 h-4"></i> Mentor</button>
+                            ${prog === 100 ? `<button onclick="archiveProject(${p.id})" class="bg-emerald-500/80 backdrop-blur-md px-4 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-emerald-400 transition-colors">Ao Jardim</button>` : ''}
+                            <button onclick="startFocusMode()" class="bg-[var(--primary)] px-4 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:brightness-110 transition-all"><i data-lucide="timer" class="w-4 h-4"></i> Foco</button>
+                        ` : ''}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                    <div class="lg:col-span-7 space-y-10">
+                        ${p.habit ? `
+                            <div class="glass p-6 rounded-[2rem] border-l-4 border-emerald-500 ${isArchived ? 'opacity-50' : ''}">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Hábito Diário</div>
+                                    <div class="text-xs font-black text-emerald-400">${p.habit.streak} DIAS</div>
+                                </div>
+                                <div class="flex items-center justify-between font-bold text-lg">
+                                    <span>${p.habit.title}</span>
+                                    ${!isArchived ? `<button onclick="checkHabit()" class="hover:scale-110 transition-transform"><i data-lucide="${isHabitDone ? 'check-circle-2' : 'circle'}" class="w-8 h-8 ${isHabitDone ? 'text-emerald-400' : 'text-zinc-400'}"></i></button>` : '<i data-lucide="lock" class="w-5 h-5 opacity-30"></i>'}
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <div class="space-y-4">
+                            <div class="flex justify-between font-black uppercase text-[10px] tracking-widest text-zinc-300"><span>Evolução</span><span>${prog}%</span></div>
+                            <div class="h-4 w-full progress-bar rounded-full"><div class="progress-fill h-full rounded-full" style="width: ${prog}%"></div></div>
+                            <div class="space-y-3 mt-6">
+                                ${p.milestones.map((m, i) => `
+                                    <div ${!isArchived ? `onclick="toggleMilestone(${i})"` : ''} class="glass p-5 rounded-2xl flex items-center justify-between ${!isArchived ? 'cursor-pointer group hover:bg-white/5 transition-colors' : 'cursor-default opacity-80'}">
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-6 h-6 rounded-lg border-2 border-white/10 flex items-center justify-center ${m.completed ? 'bg-[var(--primary)] border-[var(--primary)]' : ''} transition-colors">
+                                                ${m.completed ? '<i data-lucide="check" class="w-4 h-4 text-white"></i>' : ''}
+                                            </div>
+                                            <span class="font-bold ${m.completed ? 'line-through text-zinc-500' : 'text-zinc-200'} transition-all">${m.text}</span>
+                                        </div>
+                                        ${!isArchived ? `<button onclick="event.stopPropagation(); removeMilestone(${i})"><i data-lucide="trash-2" class="w-4 h-4 text-rose-500/30 hover:text-rose-500 transition-colors"></i></button>` : ''}
+                                    </div>`).join('')}
+                                
+                                ${!isArchived ? `<div class="relative mt-4"><input id="new-m" type="text" placeholder="Adicionar novo marco (Pressione Enter)..." class="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 outline-none font-bold focus:border-[var(--primary)] transition-colors" onkeydown="if(event.key==='Enter') addMilestone()"></div>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="glass p-8 rounded-[2.5rem] space-y-4 h-full flex flex-col">
+                            <h3 class="text-[10px] font-black uppercase text-zinc-400">Notas & Ideias</h3>
+                            <textarea ${isArchived ? 'readonly' : ''} oninput="updateNotes(this.value)" class="w-full flex-1 min-h-[250px] bg-transparent outline-none resize-none font-medium text-zinc-200 leading-relaxed custom-scrollbar" placeholder="Escreva aqui ideias, links ou contatos para esta semente...">${p.notes || ''}</textarea>
+                        </div>
+                        <button onclick="deleteProject(${p.id}, this)" class="w-full py-5 text-rose-400/60 hover:text-rose-400 hover:bg-rose-500/10 text-[10px] font-black uppercase tracking-widest transition-all border border-rose-500/10 rounded-2xl">Remover Ideia</button>
+                    </div>
+                </div>`;
+            document.getElementById('detail-view').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+        };
+
+        window.addProject = () => {
+            const title = document.getElementById('proj-title').value; if(!title) return;
+            const ms = document.getElementById('proj-milestones').value.split(',').filter(x => x.trim()).map(x => ({ text: x.trim(), completed: false }));
+            const habit = document.getElementById('proj-habit').value;
+            projects.unshift({ id: Date.now(), title, icon: document.getElementById('proj-icon').value, station: document.getElementById('proj-station').value, notes: '', habit: habit ? { title: habit, streak: 0, lastCheck: '' } : null, milestones: ms.length ? ms : [{text: 'Dar o primeiro passo', completed: false}] });
+            
+            document.getElementById('proj-title').value = '';
+            document.getElementById('proj-habit').value = '';
+            document.getElementById('proj-milestones').value = '';
+            
+            save(); closeModal(); renderProjects();
+        };
+
+        window.archiveProject = (id) => { 
+            const p = projects.find(p => p.id === id);
+            p.station = 'archive'; 
+            p.archivedAt = new Date().toLocaleDateString('pt-BR'); // Salva a data de conclusão
+            confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 } }); 
+            save(); 
+            window.closeDetails(); 
+        };
+        
+        window.toggleMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; p.milestones[i].completed = !p.milestones[i].completed; if(p.milestones[i].completed) confetti(); save(); openDetails(activeProjectId); };
+        window.addMilestone = () => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; const v = document.getElementById('new-m').value; if(!v) return; p.milestones.push({text: v, completed: false}); save(); openDetails(activeProjectId); };
+        window.removeMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; p.milestones.splice(i,1); save(); openDetails(activeProjectId); };
+        window.updateNotes = (v) => { const p = projects.find(p => p.id === activeProjectId); if(p.station!=='archive') { p.notes = v; save(); } };
+        
+        window.checkHabit = () => { 
+            const p = projects.find(p => p.id === activeProjectId); 
+            const today = new Date().toISOString().split('T')[0]; 
+            
+            if(p.habit.lastCheck === today) { 
+                p.habit.lastCheck = p.habit.previousCheck || ''; 
+                p.habit.streak = Math.max(0, p.habit.streak - 1); 
+            } else { 
+                if (p.habit.lastCheck) {
+                    const diffTime = Math.abs(new Date(today) - new Date(p.habit.lastCheck));
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                    if (diffDays > 1) p.habit.streak = 0; 
+                }
+                p.habit.previousCheck = p.habit.lastCheck;
+                p.habit.lastCheck = today; 
+                p.habit.streak++; 
+                confetti(); 
+            } 
+            save(); 
+            openDetails(activeProjectId); 
+        };
+
+        window.deleteProject = (id, btn) => { 
+            if(btn.innerText.includes("CERTEZA")) { 
+                projects = projects.filter(p => p.id !== id); 
+                save(); 
+                window.closeDetails(); 
+            } else { 
+                btn.innerText = "CERTEZA? CLIQUE NOVAMENTE"; 
+                btn.classList.add('bg-rose-500/20', 'text-rose-500'); 
+                setTimeout(() => {
+                    if(document.body.contains(btn)) {
+                        btn.innerText = "REMOVER IDEIA"; 
+                        btn.classList.remove('bg-rose-500/20', 'text-rose-500');
+                    }
+                }, 3000); 
+            } 
+        };
+
+        window.openModal = () => document.getElementById('modal').classList.replace('hidden', 'flex');
+        window.closeModal = () => document.getElementById('modal').classList.replace('flex', 'hidden');
+        window.closeDetails = () => { document.getElementById('detail-view').classList.add('hidden'); document.body.style.overflow = 'auto'; renderProjects(); };
+        
+        window.startFocusMode = () => { 
+            const p = projects.find(p => p.id === activeProjectId); 
+            document.getElementById('focus-project-name').innerText = p.title; 
+            document.getElementById('focus-task-name').innerText = p.milestones.find(m=>!m.completed)?.text || "Sessão de Foco Livre"; 
+            document.getElementById('focus-overlay').classList.replace('hidden', 'block'); 
+        };
+
+        let selectedFocusTime = 25;
+        window.setFocusTime = (minutes) => {
+            if (isTimerRunning) return;
+            selectedFocusTime = minutes;
+            timeLeft = minutes * 60;
+            updateTimerDisplay();
+
+            [15, 25, 45, 60].forEach(m => {
+                const btn = document.getElementById(`btn-time-${m}`);
+                if (btn) {
+                    if (m === minutes) {
+                        btn.classList.add('text-[var(--primary)]', 'border-[var(--primary)]');
+                    } else {
+                        btn.classList.remove('text-[var(--primary)]', 'border-[var(--primary)]');
+                    }
+                }
+            });
+        };
+        
+        window.closeFocusMode = () => { 
+            clearInterval(timerInterval); 
+            isTimerRunning = false; 
+            timeLeft = selectedFocusTime * 60; 
+            updateTimerDisplay();
+            document.getElementById('timer-ring').classList.remove('timer-active'); 
+            document.getElementById('timer-btn').innerText = "Iniciar"; 
+            document.getElementById('focus-time-selector').style.opacity = '1';
+            document.getElementById('focus-time-selector').style.pointerEvents = 'auto';
+            
+            document.getElementById('btn-cycle-gif').style.opacity = '0';
+            document.getElementById('btn-cycle-gif').style.pointerEvents = 'none';
+            
+            // Pausar som ao sair
+            if(typeof soundStates !== 'undefined') {
+                if(soundStates.rain) toggleSound('rain');
+                if(soundStates.thunder) toggleSound('thunder');
+            }
+            
+            // Reseta os fundos do modo foco
+            document.getElementById('focus-bg').style.opacity = '0';
+            document.getElementById('focus-darken').className = 'absolute inset-0 bg-black/95 backdrop-blur-3xl transition-all duration-1000 z-10';
+
+            document.getElementById('focus-overlay').classList.replace('block', 'hidden'); 
+        };
+
+        // Estado dos sons
+        let soundStates = { rain: false, thunder: false };
+
+        window.toggleSound = (type) => {
+            const audio = document.getElementById(`audio-${type}`);
+            const btn = document.getElementById(`btn-sound-${type}`);
+            const indicator = document.getElementById('focus-sound-indicator');
+            
+            if (soundStates[type]) {
+                audio.pause();
+                soundStates[type] = false;
+                btn.classList.remove('text-[var(--primary)]', 'bg-[var(--primary)]/20');
+                btn.classList.add('text-zinc-400', 'bg-white/5');
+            } else {
+                if(!audio.src || audio.src === window.location.href) {
+                     audio.src = SOUNDS[type];
+                     audio.volume = document.getElementById(`vol-${type}`).value;
+                }
+                audio.play().catch(e => console.log("Erro ao tocar áudio", e));
+                soundStates[type] = true;
+                btn.classList.remove('text-zinc-400', 'bg-white/5');
+                btn.classList.add('text-[var(--primary)]', 'bg-[var(--primary)]/20');
+            }
+            
+            if (soundStates.rain || soundStates.thunder) {
+                indicator.classList.remove('hidden');
+            } else {
+                indicator.classList.add('hidden');
+            }
+        };
+
+        window.changeVolume = (type, value) => {
+            const audio = document.getElementById(`audio-${type}`);
+            if(audio) audio.volume = value;
+        };
+
+        window.toggleTimer = () => {
+            const btn = document.getElementById('timer-btn');
+            const ring = document.getElementById('timer-ring');
+            const focusBg = document.getElementById('focus-bg');
+            const focusDarken = document.getElementById('focus-darken');
+            const timeSelector = document.getElementById('focus-time-selector');
+            const btnCycleGif = document.getElementById('btn-cycle-gif');
+
+            if(isTimerRunning) { 
+                clearInterval(timerInterval); 
+                btn.innerText = "Retomar"; 
+                ring.classList.remove('timer-active');
+                timeSelector.style.opacity = '1';
+                timeSelector.style.pointerEvents = 'auto';
+                
+                btnCycleGif.style.opacity = '0';
+                btnCycleGif.style.pointerEvents = 'none';
+                
+                // Pausado: Esconde o GIF e volta o desfoque
+                focusBg.style.opacity = '0';
+                focusDarken.className = 'absolute inset-0 bg-black/95 backdrop-blur-3xl transition-all duration-1000 z-10';
+            } else { 
+                timeSelector.style.opacity = '0';
+                timeSelector.style.pointerEvents = 'none';
+                
+                btnCycleGif.style.opacity = '1';
+                btnCycleGif.style.pointerEvents = 'auto';
+
+                // Iniciar: Revela o GIF atual e diminui o escurecimento/desfoque
+                currentFocusGifIndex = Math.floor(Math.random() * FOCUS_GIFS.length);
+                focusBg.style.backgroundImage = `url('${FOCUS_GIFS[currentFocusGifIndex]}')`;
+                focusBg.style.opacity = '1';
+                focusDarken.className = 'absolute inset-0 bg-black/60 backdrop-blur-sm transition-all duration-1000 z-10';
+
+                timerInterval = setInterval(() => { 
+                    timeLeft--; 
+                    updateTimerDisplay(); 
+                    if(timeLeft<=0) { 
+                        clearInterval(timerInterval); 
+                        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); 
+                        closeFocusMode(); 
+                    } 
+                }, 1000); 
+                btn.innerText = "Pausar"; 
+                ring.classList.add('timer-active');
+            }
+            isTimerRunning = !isTimerRunning;
+        };
+        const updateTimerDisplay = () => { document.getElementById('timer-display').innerText = `${Math.floor(timeLeft/60).toString().padStart(2,'0')}:${(timeLeft%60).toString().padStart(2,'0')}`; };
+
+        // IMPLEMENTAÇÃO DAS ESTATÍSTICAS
+        window.openStats = () => {
+            const total = projects.length;
+            const archived = projects.filter(p => p.station === 'archive').length;
+            const inProgress = projects.filter(p => p.station === 'now').length;
+            const planning = projects.filter(p => p.station === 'next' || p.station === 'someday').length;
+            
+            let totalMilestones = 0;
+            let completedMilestones = 0;
+            projects.forEach(p => {
+                totalMilestones += p.milestones.length;
+                completedMilestones += p.milestones.filter(m => m.completed).length;
+            });
+            const overallProgress = totalMilestones === 0 ? 0 : Math.round((completedMilestones / totalMilestones) * 100);
+
+            document.getElementById('stats-chart').innerHTML = `
+                <div class="glass p-6 rounded-2xl flex justify-between items-center mb-4 border border-[var(--primary)]">
+                    <span class="font-bold text-lg">Evolução Geral da Vida</span>
+                    <span class="font-black text-3xl text-[var(--primary)]">${overallProgress}%</span>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors">
+                        <i data-lucide="layers" class="w-8 h-8 text-indigo-400"></i>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Ideias Totais</span>
+                        <span class="font-black text-3xl">${total}</span>
+                    </div>
+                    <div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors">
+                        <i data-lucide="award" class="w-8 h-8 text-emerald-400"></i>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">No Jardim (Fim)</span>
+                        <span class="font-black text-3xl text-emerald-400">${archived}</span>
+                    </div>
+                    <div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors">
+                        <i data-lucide="zap" class="w-8 h-8 text-[var(--primary)]"></i>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Ativos Agora</span>
+                        <span class="font-black text-3xl text-[var(--primary)]">${inProgress}</span>
+                    </div>
+                    <div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors">
+                        <i data-lucide="calendar" class="w-8 h-8 text-blue-400"></i>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Planejamento</span>
+                        <span class="font-black text-3xl text-blue-400">${planning}</span>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+            document.getElementById('stats-overlay').classList.replace('hidden', 'flex');
+        };
+        window.closeStats = () => document.getElementById('stats-overlay').classList.replace('flex', 'hidden');
+
+        // IMPLEMENTAÇÃO DO MENTOR IA
+        window.closeMentor = () => document.getElementById('mentor-overlay').classList.replace('flex', 'hidden');
+        window.askMentor = async () => {
+            const p = projects.find(p => p.id === activeProjectId);
+            if(!p) return;
+            
+            document.getElementById('mentor-overlay').classList.replace('hidden', 'flex');
+            const responseDiv = document.getElementById('mentor-response');
+            
+            responseDiv.innerHTML = `
+                <div class="animate-pulse space-y-4 pt-4">
+                    <div class="h-4 bg-white/20 rounded w-3/4"></div>
+                    <div class="h-4 bg-white/20 rounded w-full"></div>
+                    <div class="h-4 bg-white/20 rounded w-5/6"></div>
+                    <div class="h-4 bg-white/20 rounded w-1/2"></div>
+                </div>
+            `;
+
+            try {
+                const prompt = `Atue como um mentor de produtividade e foco extremamente encorajador, sábio e direto ao ponto. Meu projeto atual se chama "${p.title}". As tarefas/marcos que tenho para esse projeto são: ${p.milestones.map(m=>m.text).join(', ')}. O que já completei: ${p.milestones.filter(m=>m.completed).map(m=>m.text).join(', ') || 'Nenhum ainda'}. Escreva um conselho rápido, de 2 a 3 parágrafos curtos, me motivando a continuar e dando uma dica de como focar melhor no próximo passo. Use uma linguagem moderna e amigável.`;
+
+                const result = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+
+                if (!result.ok) throw new Error("API Indisponível");
+                
+                const data = await result.json();
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "Acredite no processo! Você está indo muito bem. O segredo é manter a constância e dar um passo de cada vez.";
+                
+                responseDiv.innerHTML = text.replace(/\n/g, '<br><br>');
+
+            } catch(e) {
+                responseDiv.innerHTML = `
+                    <p class="font-bold text-xl text-white">Sua jornada está só começando!</p><br>
+                    <p>No momento, estou recarregando minhas energias (API não configurada), mas analisando a semente <strong>"${p.title}"</strong>, vejo muito potencial.</p><br>
+                    <p>O segredo para avançar não é a velocidade, mas sim a constância. Foque no próximo marco que está incompleto e coloque 25 minutos de atenção total nele. Você consegue!</p>
+                `;
+            }
+        };
+
+        window.onload = () => { 
+            changeTheme(localStorage.getItem('seed_theme') || 'theme-purple'); 
+            const savedBg = parseInt(localStorage.getItem('seed_bg_index')) || 0;
+            currentBgIndex = savedBg;
+            applyBackground(currentBgIndex);
+            renderProjects(); 
+            
+            // Pré-carregar fontes de áudio
+            document.getElementById('audio-rain').src = SOUNDS.rain;
+            document.getElementById('audio-thunder').src = SOUNDS.thunder;
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "name": "Seed: Project Life",
+  "short_name": "Seed",
+  "description": "Cultive suas ideias e conquistas.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0c",
+  "theme_color": "#8B5CF6",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3233/3233997.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3233/3233997.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
