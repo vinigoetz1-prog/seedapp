@@ -889,8 +889,12 @@
                                     <div class="text-xs font-black text-emerald-400">${p.habit.streak} DIAS</div>
                                 </div>
                                 <div class="flex items-center justify-between font-bold text-lg">
-                                    <span>${p.habit.title}</span>
-                                    ${!isArchived ? `<button onclick="checkHabit()" class="hover:scale-110 transition-transform"><i data-lucide="${isHabitDone ? 'check-circle-2' : 'circle'}" class="w-8 h-8 ${isHabitDone ? 'text-emerald-400' : 'text-zinc-400'}"></i></button>` : '<i data-lucide="lock" class="w-5 h-5 opacity-30"></i>'}
+                                    <div class="flex items-center gap-3 flex-1">
+                                        <span id="habit-text">${p.habit.title}</span>
+                                        ${!isArchived ? `<button id="btn-edit-habit" onclick="editHabit()" title="Editar Hábito"><i data-lucide="edit-2" class="w-4 h-4 text-blue-400/50 hover:text-blue-400 transition-colors"></i></button>` : ''}
+                                        <input id="habit-input" type="text" class="hidden flex-1 max-w-[200px] bg-white/10 border border-[var(--primary)] rounded-lg px-3 py-1 outline-none text-white font-bold text-base" value="${p.habit.title}" onblur="saveHabitEdit(this.value)" onkeydown="if(event.key==='Enter') this.blur()">
+                                    </div>
+                                    ${!isArchived ? `<button onclick="checkHabit()" class="hover:scale-110 transition-transform ml-4 shrink-0"><i data-lucide="${isHabitDone ? 'check-circle-2' : 'circle'}" class="w-8 h-8 ${isHabitDone ? 'text-emerald-400' : 'text-zinc-400'}"></i></button>` : '<i data-lucide="lock" class="w-5 h-5 opacity-30"></i>'}
                                 </div>
                             </div>
                         ` : ''}
@@ -900,14 +904,19 @@
                             <div class="h-4 w-full progress-bar rounded-full"><div class="progress-fill h-full rounded-full" style="width: ${prog}%"></div></div>
                             <div class="space-y-3 mt-6">
                                 ${p.milestones.map((m, i) => `
-                                    <div ${!isArchived ? `onclick="toggleMilestone(${i})"` : ''} class="glass p-5 rounded-2xl flex items-center justify-between ${!isArchived ? 'cursor-pointer group hover:bg-white/5 transition-colors' : 'cursor-default opacity-80'}">
-                                        <div class="flex items-center gap-4">
-                                            <div class="w-6 h-6 rounded-lg border-2 border-white/10 flex items-center justify-center ${m.completed ? 'bg-[var(--primary)] border-[var(--primary)]' : ''} transition-colors">
+                                    <div class="glass p-5 rounded-2xl flex items-center justify-between ${!isArchived ? 'group hover:bg-white/5 transition-colors' : 'opacity-80'}">
+                                        <div class="flex items-center gap-4 flex-1">
+                                            <div ${!isArchived ? `onclick="toggleMilestone(${i})"` : ''} class="${!isArchived ? 'cursor-pointer' : ''} w-6 h-6 shrink-0 rounded-lg border-2 border-white/10 flex items-center justify-center ${m.completed ? 'bg-[var(--primary)] border-[var(--primary)]' : ''} transition-colors">
                                                 ${m.completed ? '<i data-lucide="check" class="w-4 h-4 text-white"></i>' : ''}
                                             </div>
-                                            <span class="font-bold ${m.completed ? 'line-through text-zinc-500' : 'text-zinc-200'} transition-all">${m.text}</span>
+                                            <span id="milestone-text-${i}" ${!isArchived ? `onclick="toggleMilestone(${i})"` : ''} class="font-bold flex-1 ${!isArchived ? 'cursor-pointer' : ''} ${m.completed ? 'line-through text-zinc-500' : 'text-zinc-200'} transition-all">${m.text}</span>
+                                            <input id="milestone-input-${i}" type="text" class="hidden flex-1 w-full bg-white/10 border border-[var(--primary)] rounded-lg px-3 py-1 outline-none text-white font-bold" value="${m.text}" onblur="saveMilestoneEdit(${i}, this.value)" onkeydown="if(event.key==='Enter') this.blur()">
                                         </div>
-                                        ${!isArchived ? `<button onclick="event.stopPropagation(); removeMilestone(${i})"><i data-lucide="trash-2" class="w-4 h-4 text-rose-500/30 hover:text-rose-500 transition-colors"></i></button>` : ''}
+                                        ${!isArchived ? `
+                                        <div class="flex items-center gap-3 shrink-0 ml-4 opacity-50 group-hover:opacity-100 transition-opacity">
+                                            <button onclick="editMilestone(${i})" title="Editar Marco"><i data-lucide="edit-2" class="w-4 h-4 text-blue-400 hover:text-blue-300 transition-colors"></i></button>
+                                            <button onclick="removeMilestone(${i})" title="Remover Marco"><i data-lucide="trash-2" class="w-4 h-4 text-rose-500 hover:text-rose-400 transition-colors"></i></button>
+                                        </div>` : ''}
                                     </div>`).join('')}
                                 
                                 ${!isArchived ? `<div class="relative mt-4"><input id="new-m" type="text" placeholder="Adicionar novo marco (Pressione Enter)..." class="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 outline-none font-bold focus:border-[var(--primary)] transition-colors" onkeydown="if(event.key==='Enter') addMilestone()"></div>` : ''}
@@ -953,6 +962,43 @@
         window.removeMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; p.milestones.splice(i,1); save(); openDetails(activeProjectId); };
         window.updateNotes = (v) => { const p = projects.find(p => p.id === activeProjectId); if(p.station!=='archive') { p.notes = v; save(); window.checkAchievements(); } };
         
+        window.editMilestone = (i) => {
+            document.getElementById(`milestone-text-${i}`).classList.add('hidden');
+            const input = document.getElementById(`milestone-input-${i}`);
+            input.classList.remove('hidden');
+            input.focus();
+            input.setSelectionRange(input.value.length, input.value.length);
+        };
+
+        window.saveMilestoneEdit = (i, val) => {
+            const newText = val.trim();
+            const p = projects.find(p => p.id === activeProjectId);
+            if (newText && p.milestones[i].text !== newText) {
+                p.milestones[i].text = newText;
+                save();
+            }
+            openDetails(activeProjectId); // Atualiza a tela para voltar ao normal
+        };
+
+        window.editHabit = () => {
+            document.getElementById('habit-text').classList.add('hidden');
+            document.getElementById('btn-edit-habit').classList.add('hidden');
+            const input = document.getElementById('habit-input');
+            input.classList.remove('hidden');
+            input.focus();
+            input.setSelectionRange(input.value.length, input.value.length);
+        };
+
+        window.saveHabitEdit = (val) => {
+            const newTitle = val.trim();
+            const p = projects.find(p => p.id === activeProjectId);
+            if (newTitle && p.habit.title !== newTitle) {
+                p.habit.title = newTitle;
+                save();
+            }
+            openDetails(activeProjectId);
+        };
+
         window.checkHabit = () => { 
             const p = projects.find(p => p.id === activeProjectId); 
             const today = new Date().toISOString().split('T')[0]; 
