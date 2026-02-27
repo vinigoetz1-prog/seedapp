@@ -657,26 +657,31 @@
         window.closeSettings = () => document.getElementById('settings-overlay').classList.replace('flex', 'hidden');
 
         window.logout = async () => {
-            const wasLoggedIn = !!currentUser;
-            
-            if (currentUser) {
-                await signOut(auth);
+            // CORREÇÃO DO BUG DO FANTASMA: Cortar a ligação com a nuvem Imediatamente
+            if (unsubscribeSnapshot) {
+                unsubscribeSnapshot();
+                unsubscribeSnapshot = null;
             }
             
+            // Destruir todo e qualquer vestígio de memória local antes de deslogar
+            localStorage.removeItem('seed_master_v1');
+            localStorage.removeItem('seed_achievements_v1');
+            localStorage.removeItem('seed_activity_v1');
+            localStorage.removeItem('horizon_master_v5'); // Limpar versões muito antigas
+            
+            // Resetar variáveis locais e a interface
             projects = []; 
             achievements = [];
             isOfflineMode = false;
             
-            // CORREÇÃO DO BUG: Limpar a memória local (cache) ao sair da conta
-            // Isso impede que os projetos de uma pessoa vazem para outra num computador partilhado.
-            if (wasLoggedIn) {
-                localStorage.removeItem('seed_master_v1');
-                localStorage.removeItem('seed_achievements_v1');
-                localStorage.removeItem('seed_activity_v1');
-            }
-
             renderProjects();
             closeSettings();
+
+            // Agora sim, desconectar da conta Firebase com segurança
+            if (currentUser) {
+                await signOut(auth);
+            }
+            
             document.getElementById('auth-overlay').classList.remove('hidden');
             window.showToast("🌱 Saiu do seu Jardim.");
         };
@@ -684,22 +689,27 @@
         window.deleteAccount = async (btn) => {
             if (btn.innerText.includes("CERTEZA")) {
                 try {
+                    // Cortar ligação primeiro para evitar regravar dados mortos
+                    if (unsubscribeSnapshot) {
+                        unsubscribeSnapshot();
+                        unsubscribeSnapshot = null;
+                    }
+
                     if (currentUser) {
-                        // 1. Apagar documentos do banco de dados primeiro
                         const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'seed_data', 'main');
                         await deleteDoc(docRef);
-                        // 2. Apagar credenciais de autenticação
                         await deleteUser(currentUser);
                     }
                     
-                    // 3. Limpar memória local do aparelho
+                    // Limpar memória local do aparelho
                     projects = [];
                     achievements = [];
                     localStorage.removeItem('seed_master_v1');
                     localStorage.removeItem('seed_activity_v1');
                     localStorage.removeItem('seed_achievements_v1');
-                    renderProjects();
+                    localStorage.removeItem('horizon_master_v5');
                     
+                    renderProjects();
                     closeSettings();
                     isOfflineMode = false;
                     document.getElementById('auth-overlay').classList.remove('hidden');
@@ -1006,7 +1016,6 @@
             const title = document.getElementById('proj-title').value; if(!title) return;
             const ms = document.getElementById('proj-milestones').value.split(',').filter(x => x.trim()).map(x => ({ text: x.trim(), completed: false }));
             const habit = document.getElementById('proj-habit').value;
-            // Adicionado o array de links []
             projects.unshift({ id: Date.now(), title, icon: document.getElementById('proj-icon').value, station: document.getElementById('proj-station').value, notes: '', links: [], habit: habit ? { title: habit, streak: 0, lastCheck: '' } : null, milestones: ms.length ? ms : [{text: 'Dar o primeiro passo', completed: false}] });
             
             document.getElementById('proj-title').value = '';
