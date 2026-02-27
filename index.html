@@ -441,7 +441,7 @@
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, deleteUser } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        const apiKey = "";
+        const apiKey = "AIzaSyCxuA8nmsV5mQrhT9T-eZguSVKOIxi-uXg";
         
         // --- CHAVES DO BANCO DE DADOS ---
         const firebaseConfig = {
@@ -904,9 +904,10 @@
                             <div class="h-4 w-full progress-bar rounded-full"><div class="progress-fill h-full rounded-full" style="width: ${prog}%"></div></div>
                             <div class="space-y-3 mt-6">
                                 ${p.milestones.map((m, i) => `
-                                    <div class="glass p-5 rounded-2xl flex items-center justify-between ${!isArchived ? 'group hover:bg-white/5 transition-colors' : 'opacity-80'}">
+                                    <div id="milestone-row-${i}" ${!isArchived ? `draggable="true" ondragstart="handleDragStart(event, ${i})" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, ${i})" ondragend="handleDragEnd(event)"` : ''} class="glass p-5 rounded-2xl flex items-center justify-between ${!isArchived ? 'group hover:bg-white/5 transition-all cursor-grab active:cursor-grabbing border border-transparent' : 'opacity-80 border border-transparent'}">
                                         <div class="flex items-center gap-4 flex-1">
-                                            <div ${!isArchived ? `onclick="toggleMilestone(${i})"` : ''} class="${!isArchived ? 'cursor-pointer' : ''} w-6 h-6 shrink-0 rounded-lg border-2 border-white/10 flex items-center justify-center ${m.completed ? 'bg-[var(--primary)] border-[var(--primary)]' : ''} transition-colors">
+                                            ${!isArchived ? `<i data-lucide="grip-vertical" class="w-4 h-4 text-white/20 group-hover:text-white/50 shrink-0"></i>` : ''}
+                                            <div ${!isArchived ? `onclick="toggleMilestone(${i})"` : ''} class="${!isArchived ? 'cursor-pointer hover:scale-110' : ''} w-6 h-6 shrink-0 rounded-lg border-2 border-white/10 flex items-center justify-center ${m.completed ? 'bg-[var(--primary)] border-[var(--primary)]' : ''} transition-all">
                                                 ${m.completed ? '<i data-lucide="check" class="w-4 h-4 text-white"></i>' : ''}
                                             </div>
                                             <span id="milestone-text-${i}" ${!isArchived ? `onclick="toggleMilestone(${i})"` : ''} class="font-bold flex-1 ${!isArchived ? 'cursor-pointer' : ''} ${m.completed ? 'line-through text-zinc-500' : 'text-zinc-200'} transition-all">${m.text}</span>
@@ -962,6 +963,53 @@
         window.removeMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; p.milestones.splice(i,1); save(); openDetails(activeProjectId); };
         window.updateNotes = (v) => { const p = projects.find(p => p.id === activeProjectId); if(p.station!=='archive') { p.notes = v; save(); window.checkAchievements(); } };
         
+        // --- SISTEMA DE DRAG AND DROP (ARRASTAR MARCOS) ---
+        let draggedMilestoneIndex = null;
+
+        window.handleDragStart = (e, i) => {
+            draggedMilestoneIndex = i;
+            e.target.style.opacity = '0.4';
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', i);
+        };
+
+        window.handleDragOver = (e) => {
+            e.preventDefault(); // Necessário para permitir largar o elemento
+            e.dataTransfer.dropEffect = 'move';
+            const row = e.currentTarget;
+            row.classList.add('border-[var(--primary)]', 'bg-white/5');
+        };
+
+        window.handleDragLeave = (e) => {
+            const row = e.currentTarget;
+            row.classList.remove('border-[var(--primary)]', 'bg-white/5');
+        };
+
+        window.handleDrop = (e, targetIndex) => {
+            e.preventDefault();
+            const row = e.currentTarget;
+            row.classList.remove('border-[var(--primary)]', 'bg-white/5');
+            
+            if (draggedMilestoneIndex === null || draggedMilestoneIndex === targetIndex) return;
+            
+            const p = projects.find(proj => proj.id === activeProjectId);
+            if(!p || p.station === 'archive') return;
+
+            // Retira o item da posição antiga e insere na nova posição
+            const draggedItem = p.milestones.splice(draggedMilestoneIndex, 1)[0];
+            p.milestones.splice(targetIndex, 0, draggedItem);
+            
+            save(); // Guarda a nova ordem
+            openDetails(activeProjectId); // Recarrega o ecrã com a ordem atualizada
+        };
+
+        window.handleDragEnd = (e) => {
+            e.target.style.opacity = '1';
+            draggedMilestoneIndex = null;
+            // Limpa as bordas caso o drop tenha sido cancelado fora da zona
+            document.querySelectorAll('[id^="milestone-row-"]').forEach(el => el.classList.remove('border-[var(--primary)]', 'bg-white/5'));
+        };
+
         window.editMilestone = (i) => {
             document.getElementById(`milestone-text-${i}`).classList.add('hidden');
             const input = document.getElementById(`milestone-input-${i}`);
