@@ -431,10 +431,10 @@
         </div>
     </div>
 
-    <!-- Elementos de Áudio - Caminhos corrigidos para evitar erro no console -->
-    <audio id="audio-lessrain" src="lessrain.mp3.mp3" loop preload="auto"></audio>
-    <audio id="audio-midnight" src="midnight.mp3" loop preload="auto"></audio>
-    <audio id="audio-adventure" src="adventure.mp3" loop preload="auto"></audio>
+    <!-- Elementos de Áudio -->
+    <audio id="audio-lessrain" src="./lessrain.mp3.mp3" loop preload="auto"></audio>
+    <audio id="audio-midnight" src="./midnight.mp3" loop preload="auto"></audio>
+    <audio id="audio-adventure" src="./adventure.mp3" loop preload="auto"></audio>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -659,8 +659,15 @@
             if (soundStates[type]) { audio.pause(); soundStates[type] = false; btn.classList.remove('text-[var(--primary)]', 'bg-[var(--primary)]/20'); btn.classList.add('text-zinc-400', 'bg-white/5');
             } else {
                 audio.volume = document.getElementById(`vol-${type}`).value;
-                audio.play().then(() => { soundStates[type] = true; btn.classList.remove('text-zinc-400', 'bg-white/5'); btn.classList.add('text-[var(--primary)]', 'bg-[var(--primary)]/20'); if (Object.values(soundStates).some(state => state === true)) { indicator.classList.remove('hidden'); }
-                }).catch(e => { console.log("Erro ao tocar áudio:", e); window.showToast("❌ Áudio a sincronizar no servidor. Aguarde 1 min e atualize a página (Ctrl+F5).", "error"); });
+                // Tratamento caso o Netlify ainda não tenha sincronizado o áudio
+                audio.play().then(() => { 
+                    soundStates[type] = true; btn.classList.remove('text-zinc-400', 'bg-white/5'); btn.classList.add('text-[var(--primary)]', 'bg-[var(--primary)]/20'); 
+                    if (Object.values(soundStates).some(state => state === true)) { indicator.classList.remove('hidden'); }
+                }).catch(e => { 
+                    console.log("Servidor carregando o áudio...", e); 
+                    window.showToast("⏳ Áudio ainda sincronizando no servidor. Tente novamente em instantes.", "error"); 
+                    audio.load(); // Força o navegador a tentar buscar de novo
+                });
             }
             if (Object.values(soundStates).some(state => state === true)) { indicator.classList.remove('hidden'); } else { indicator.classList.add('hidden'); }
         };
@@ -719,7 +726,7 @@
         };
         window.closeStats = () => document.getElementById('stats-overlay').classList.replace('flex', 'hidden');
 
-        // --- SISTEMA MENTOR IA (CAMINHO 2 - SUPER CONTEXTO) ---
+        // --- SISTEMA MENTOR IA COM FALLBACK INTELIGENTE ---
         window.closeMentor = () => document.getElementById('mentor-overlay').classList.replace('flex', 'hidden');
         window.askMentor = async () => {
             const p = projects.find(p => p.id === activeProjectId); if(!p) return;
@@ -728,18 +735,28 @@
             try {
                 const prompt = `Atue como um mentor de produtividade e foco extremamente encorajador, sábio e direto ao ponto. Meu projeto atual se chama "${p.title}". As tarefas/marcos que tenho para esse projeto são: ${p.milestones.map(m=>m.text).join(', ')}. O que já completei: ${p.milestones.filter(m=>m.completed).map(m=>m.text).join(', ') || 'Nenhum ainda'}. MUITO IMPORTANTE - Aqui estão os meus pensamentos, ideias e anotações sobre este projeto até agora: "${p.notes || 'Ainda não escrevi nenhuma anotação.'}". Escreva um conselho rápido, de 2 a 3 parágrafos curtos, me motivando a continuar e dando uma dica prática focada no meu próximo passo, levando em consideração também as minhas anotações pessoais. Use uma linguagem moderna e amigável.`;
                 
-                // CORREÇÃO APLICADA AQUI: Voltámos para o modelo exato suportado pela API
-                const result = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
+                let model = 'gemini-1.5-flash'; // Tentativa 1 (Mais rápido e estável)
+                let result = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
                 
+                // Se a Google bloquear e disser que não encontrou o modelo, tentamos o backup universal
                 if (!result.ok) {
-                    const errorData = await result.json();
-                    throw new Error(errorData.error?.message || `Erro de Servidor: ${result.status}`);
+                    const errData = await result.json();
+                    if(errData.error?.message?.includes("not found")) {
+                        model = 'gemini-pro'; // Fallback 2: Versão estável antiga
+                        result = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
+                        if(!result.ok) {
+                            const errData2 = await result.json();
+                            throw new Error(errData2.error?.message || `Erro de Servidor: ${result.status}`);
+                        }
+                    } else {
+                        throw new Error(errData.error?.message || `Erro de Servidor: ${result.status}`);
+                    }
                 }
                 
                 const data = await result.json(); const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "Acredite no processo! Você está indo muito bem.";
                 responseDiv.innerHTML = text.replace(/\n/g, '<br><br>');
             } catch(e) { 
-                responseDiv.innerHTML = `<p class="font-bold text-xl text-rose-400">Mensagem da Google (Debug)</p><br><p>A Google bloqueou o nosso pedido. Veja o motivo exato abaixo para podermos corrigir:</p><br><p class="font-mono text-sm bg-black/50 p-4 rounded-xl text-zinc-300 border border-white/10 break-words">${e.message}</p>`; 
+                responseDiv.innerHTML = `<p class="font-bold text-xl text-rose-400">Aviso do Sistema (Debug)</p><br><p>Vinicius, a chave ainda está sendo rejeitada. Para o Mentor funcionar, garanta que gerou a chave no <b>Google AI Studio (aistudio.google.com/app/apikey)</b> e não diretamente no Cloud Console.</p><br><p class="font-mono text-[10px] bg-black/50 p-4 rounded-xl text-zinc-300 border border-white/10 break-words">${e.message}</p>`; 
             }
         };
 
