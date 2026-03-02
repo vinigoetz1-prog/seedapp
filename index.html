@@ -442,7 +442,7 @@
         import { getFirestore, doc, setDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // COLOQUE A SUA NOVA CHAVE DO AI STUDIO AQUI DENTRO DAS ASPAS:
-        const apiKey = "AIzaSyAEl0u3D_65viGwha7m3wJDDRWZ_fqy5BY";
+        const apiKey = "AIzaSyBJQ2OMRclDkC32npd12ADPfWrIDjyiAio";
         
         const firebaseConfig = { apiKey: "AIzaSyCReE2nGwS6i3ZCAwphTykSL5g-VbDP07k", authDomain: "projectseed-b4af5.firebaseapp.com", projectId: "projectseed-b4af5", storageBucket: "projectseed-b4af5.firebasestorage.app", messagingSenderId: "353667479355", appId: "1:353667479355:web:3b043f0c92444652ae691e", measurementId: "G-X5W5K3VH72" };
 
@@ -725,29 +725,28 @@
         };
         window.closeStats = () => document.getElementById('stats-overlay').classList.replace('flex', 'hidden');
 
-        // --- SISTEMA MENTOR IA ---
+        // --- SISTEMA MENTOR IA (EM BREVE) ---
         window.closeMentor = () => document.getElementById('mentor-overlay').classList.replace('flex', 'hidden');
         window.askMentor = async () => {
             const p = projects.find(p => p.id === activeProjectId); if(!p) return;
-            document.getElementById('mentor-overlay').classList.replace('hidden', 'flex'); const responseDiv = document.getElementById('mentor-response');
-            responseDiv.innerHTML = `<div class="animate-pulse space-y-4 pt-4"><div class="h-4 bg-white/20 rounded w-3/4"></div><div class="h-4 bg-white/20 rounded w-full"></div><div class="h-4 bg-white/20 rounded w-5/6"></div><div class="h-4 bg-white/20 rounded w-1/2"></div></div>`;
-            try {
-                const prompt = `Atue como um mentor de produtividade e foco extremamente encorajador, sábio e direto ao ponto. Meu projeto atual se chama "${p.title}". As tarefas/marcos que tenho para esse projeto são: ${p.milestones.map(m=>m.text).join(', ')}. O que já completei: ${p.milestones.filter(m=>m.completed).map(m=>m.text).join(', ') || 'Nenhum ainda'}. MUITO IMPORTANTE - Aqui estão os meus pensamentos, ideias e anotações sobre este projeto até agora: "${p.notes || 'Ainda não escrevi nenhuma anotação.'}". Escreva um conselho rápido, de 2 a 3 parágrafos curtos, me motivando a continuar e dando uma dica prática focada no meu próximo passo, levando em consideração também as minhas anotações pessoais. Use uma linguagem moderna e amigável.`;
-                
-                // Agora o código tentará apenas o modelo mais robusto e estável
-                const model = 'gemini-1.5-flash';
-                const result = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
-                
-                if (!result.ok) {
-                    const errData = await result.json();
-                    throw new Error(errData.error?.message || `Erro de Servidor: ${result.status}`);
-                }
-                
-                const data = await result.json(); const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "Acredite no processo! Você está indo muito bem.";
-                responseDiv.innerHTML = text.replace(/\n/g, '<br><br>');
-            } catch(e) { 
-                responseDiv.innerHTML = `<p class="font-bold text-xl text-rose-400">Aviso do Sistema (Debug)</p><br><p>Vinicius, a chave atual não tem os modelos corretos ativados. Siga estes passos:</p><br><p>1. Vá a <b>aistudio.google.com</b><br>2. Crie uma chave escolhendo <b>Create API key in new project</b><br>3. Cole a nova chave no código fonte.</p><br><p class="font-mono text-[10px] bg-black/50 p-4 rounded-xl text-zinc-300 border border-white/10 break-words">${e.message}</p>`; 
-            }
+            document.getElementById('mentor-overlay').classList.replace('hidden', 'flex'); 
+            const responseDiv = document.getElementById('mentor-response');
+            
+            responseDiv.innerHTML = `
+                <div class="text-center space-y-4 py-8">
+                    <div class="w-16 h-16 bg-[var(--primary)]/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-[var(--primary)]/30">
+                        <i data-lucide="sparkles" class="w-8 h-8 text-[var(--primary)]"></i>
+                    </div>
+                    <h4 class="text-2xl md:text-3xl font-black text-white tracking-tight">Mentor IA em breve!</h4>
+                    <p class="text-zinc-400 text-sm md:text-base leading-relaxed max-w-md mx-auto">
+                        A inteligência artificial do seu jardim está a ser treinada neste momento. Muito em breve, você terá conselhos ultra-personalizados baseados nos seus marcos e anotações.
+                    </p>
+                    <div class="inline-block mt-6 px-4 py-2 rounded-full border border-[var(--primary)]/30 bg-[var(--primary)]/10 text-[var(--primary)] text-[10px] font-black uppercase tracking-widest shadow-[0_0_15px_rgba(139,92,246,0.2)]">
+                        Em Construção 🚧
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
         };
 
         window.onload = () => { 
@@ -757,4 +756,3 @@
     </script>
 </body>
 </html>
-
