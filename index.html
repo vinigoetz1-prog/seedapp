@@ -307,7 +307,7 @@
         </div>
     </div>
 
-    <!-- NOVO: Modal Galeria de Cenários (Gifs) -->
+    <!-- Modal Galeria de Cenários (Gifs) -->
     <div id="gif-overlay" class="fixed inset-0 bg-black/90 z-[200] hidden items-center justify-center p-4 md:p-6 backdrop-blur-xl animate-slide-up">
         <div class="glass w-full max-w-4xl rounded-[3rem] p-8 md:p-10 flex flex-col max-h-[90vh] relative overflow-hidden shadow-2xl">
             <div class="flex justify-between items-center relative z-10 border-b border-white/5 pb-6 mb-6">
@@ -441,7 +441,9 @@
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, deleteUser } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        const apiKey = "AIzaSyCxuA8nmsV5mQrhT9T-eZguSVKOIxi-uXg";
+        // A SUA NOVA CHAVE MESTRA BLINDADA
+        const apiKey = "AIzaSyCjdU0m8kZxorLApm6HENV6a4Ztv3DKdXE";
+        
         const firebaseConfig = { apiKey: "AIzaSyCReE2nGwS6i3ZCAwphTykSL5g-VbDP07k", authDomain: "projectseed-b4af5.firebaseapp.com", projectId: "projectseed-b4af5", storageBucket: "projectseed-b4af5.firebasestorage.app", messagingSenderId: "353667479355", appId: "1:353667479355:web:3b043f0c92444652ae691e", measurementId: "G-X5W5K3VH72" };
 
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app); const appId = typeof __app_id !== 'undefined' ? __app_id : 'seed-app';
@@ -521,7 +523,6 @@
         const VIBE_IMAGES = { zap: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1000', palette: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=1000', plane: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1000', target: 'https://images.unsplash.com/photo-1484417894907-623942c8ee29?auto=format&fit=crop&q=80&w=1000', dices: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1000' };
         const PLANT_ICONS = { zap: 'tree-pine', palette: 'flower-2', plane: 'tree-deciduous', target: 'sprout', dices: 'clover' };
 
-        // --- SISTEMA DE GALERIA DE CENÁRIOS (GIFS) ---
         const FOCUS_SCENES = [
             { name: 'Quarto Lo-Fi', url: 'https://i.pinimg.com/originals/ff/34/3a/ff343aa8819c2573ad3409baf4af5e3e.gif' },
             { name: 'Viagem de Trem', url: 'https://i.pinimg.com/originals/92/9f/98/929f9811fba2f931a0f4b3581976695b.gif' },
@@ -677,7 +678,6 @@
             } else { 
                 timeSelector.style.opacity = '0'; timeSelector.style.pointerEvents = 'none'; topButtons.style.opacity = '1'; topButtons.style.pointerEvents = 'auto';
                 
-                // NOVO: Usa o cenário escolhido na galeria em vez de aleatório
                 focusBg.style.backgroundImage = `url('${FOCUS_SCENES[currentSceneIndex].url}')`; 
                 focusBg.style.opacity = '1'; focusDarken.className = 'absolute inset-0 bg-black/60 backdrop-blur-sm transition-all duration-1000 z-10';
 
@@ -719,18 +719,22 @@
         };
         window.closeStats = () => document.getElementById('stats-overlay').classList.replace('flex', 'hidden');
 
+        // --- SISTEMA MENTOR IA (CAMINHO 2 - SUPER CONTEXTO) ---
         window.closeMentor = () => document.getElementById('mentor-overlay').classList.replace('flex', 'hidden');
         window.askMentor = async () => {
             const p = projects.find(p => p.id === activeProjectId); if(!p) return;
             document.getElementById('mentor-overlay').classList.replace('hidden', 'flex'); const responseDiv = document.getElementById('mentor-response');
             responseDiv.innerHTML = `<div class="animate-pulse space-y-4 pt-4"><div class="h-4 bg-white/20 rounded w-3/4"></div><div class="h-4 bg-white/20 rounded w-full"></div><div class="h-4 bg-white/20 rounded w-5/6"></div><div class="h-4 bg-white/20 rounded w-1/2"></div></div>`;
             try {
-                const prompt = `Atue como um mentor de produtividade e foco extremamente encorajador, sábio e direto ao ponto. Meu projeto atual se chama "${p.title}". As tarefas/marcos que tenho para esse projeto são: ${p.milestones.map(m=>m.text).join(', ')}. O que já completei: ${p.milestones.filter(m=>m.completed).map(m=>m.text).join(', ') || 'Nenhum ainda'}. Escreva um conselho rápido, de 2 a 3 parágrafos curtos, me motivando a continuar e dando uma dica de como focar melhor no próximo passo. Use uma linguagem moderna e amigável.`;
-                const result = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
+                // NOVO PROMPT: Agora ele lê as suas "Notas & Ideias" para dar conselhos cirúrgicos
+                const prompt = `Atue como um mentor de produtividade e foco extremamente encorajador, sábio e direto ao ponto. Meu projeto atual se chama "${p.title}". As tarefas/marcos que tenho para esse projeto são: ${p.milestones.map(m=>m.text).join(', ')}. O que já completei: ${p.milestones.filter(m=>m.completed).map(m=>m.text).join(', ') || 'Nenhum ainda'}. MUITO IMPORTANTE - Aqui estão os meus pensamentos, ideias e anotações sobre este projeto até agora: "${p.notes || 'Ainda não escrevi nenhuma anotação.'}". Escreva um conselho rápido, de 2 a 3 parágrafos curtos, me motivando a continuar e dando uma dica prática focada no meu próximo passo, levando em consideração também as minhas anotações pessoais. Use uma linguagem moderna e amigável.`;
+                
+                // Mudei para o modelo gemini-1.5-flash para garantir 100% de estabilidade com a sua nova chave pública
+                const result = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
                 if (!result.ok) throw new Error("API Indisponível");
                 const data = await result.json(); const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "Acredite no processo! Você está indo muito bem.";
                 responseDiv.innerHTML = text.replace(/\n/g, '<br><br>');
-            } catch(e) { responseDiv.innerHTML = `<p class="font-bold text-xl text-white">A sua jornada está apenas a começar!</p><br><p>Neste momento, estou a recarregar as minhas energias, mas analisando a semente <strong>"${p.title}"</strong>, vejo muito potencial.</p><br><p>O segredo para avançar não é a velocidade, mas sim a constância. Foque-se no próximo marco incompleto. Você consegue!</p>`; }
+            } catch(e) { responseDiv.innerHTML = `<p class="font-bold text-xl text-rose-400">Falha na Conexão com o Mentor</p><br><p>Não consegui aceder à sua chave de IA. Verifique se o seu domínio (seedidea.netlify.app) está correto nas restrições do Google Cloud ou tente remover as restrições temporariamente para testar.</p><br><p>Erro técnico: ${e.message}</p>`; }
         };
 
         window.onload = () => { 
