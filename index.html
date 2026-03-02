@@ -8,13 +8,9 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Seed">
     
-    <!-- Ícone para abas do navegador (Favicon em SVG Embutido - Roxo Seed) -->
+    <!-- Ícone para abas do navegador -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%238B5CF6'/%3E%3Cg transform='translate(3, 3) scale(0.75)' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 20A7 7 0 0 1 14 6h5a2 2 0 0 1 2 2v5a7 7 0 0 1-7 7H9a2 2 0 0 1-2-2V8a7 7 0 0 1 7-7h5'/%3E%3Cpath d='M11 20V10'/%3E%3C/g%3E%3C/svg%3E">
-    
-    <!-- Ícone para iOS -->
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%238B5CF6'/%3E%3Cg transform='translate(3, 3) scale(0.75)' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 20A7 7 0 0 1 14 6h5a2 2 0 0 1 2 2v5a7 7 0 0 1-7 7H9a2 2 0 0 1-2-2V8a7 7 0 0 1 7-7h5'/%3E%3Cpath d='M11 20V10'/%3E%3C/g%3E%3C/svg%3E">
-    
-    <!-- Link para o Manifesto -->
     <link rel="manifest" href="manifest.json">
 
     <title>Seed: Project Life</title>
@@ -27,7 +23,7 @@
         :root {
             --primary: #8B5CF6;
             --primary-dark: #6D28D9;
-            --bg: transparent; /* Alterado para suportar fundos */
+            --bg: transparent; 
             --card-bg: rgba(255, 255, 255, 0.03);
             --card-border: rgba(255, 255, 255, 0.08);
         }
@@ -110,14 +106,12 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Ajuste para a imagem de fundo aparecer melhor nos detalhes */
         .vision-banner {
             mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
             -webkit-mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
             opacity: 0.6 !important;
         }
 
-        /* Proteção para o conteúdo não colar no topo em ecrãs pequenos */
         #detail-view .relative, #focus-overlay .text-center {
             padding-top: 4rem;
             padding-bottom: 4rem;
@@ -157,7 +151,6 @@
                         <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Palavra-passe Secreta</label>
                         <div class="relative">
                             <input id="auth-pass" type="password" placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-2xl pl-5 pr-12 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors">
-                            <!-- Botão do Olhinho da Senha -->
                             <button type="button" onclick="togglePasswordVisibility()" class="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors" title="Mostrar Palavra-passe">
                                 <i data-lucide="eye" id="icon-eye" class="w-5 h-5 block"></i>
                                 <i data-lucide="eye-off" id="icon-eye-off" class="w-5 h-5 hidden"></i>
@@ -224,7 +217,7 @@
             <!-- Projetos aqui -->
         </section>
 
-        <!-- Assinatura do Criador (Rodapé) -->
+        <!-- Assinatura do Criador -->
         <footer class="mt-24 text-center opacity-40 hover:opacity-100 transition-opacity duration-500">
             <p class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">
                 &copy; 2026 Seed App
@@ -278,7 +271,6 @@
                     <i data-lucide="log-out" class="w-4 h-4"></i> Sair do Jardim
                 </button>
                 
-                <!-- Botão da Lixeira -->
                 <button onclick="openTrash()" class="w-full glass py-4 rounded-2xl font-black text-zinc-300 hover:bg-white/10 active:scale-95 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2">
                     <i data-lucide="trash-2" class="w-4 h-4"></i> Lixeira de Ideias
                 </button>
@@ -290,7 +282,6 @@
                     </button>
                 </div>
 
-                <!-- Assinatura nas Configurações -->
                 <div class="pt-6 mt-6 border-t border-white/5 text-center opacity-50">
                     <p class="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400">&copy; 2026 Seed App</p>
                     <p class="text-[8px] font-bold uppercase tracking-[0.1em] text-zinc-500 mt-1">Criado por Vinicius Goetz</p>
@@ -342,11 +333,9 @@
 
     <!-- Modo Foco -->
     <div id="focus-overlay" class="fixed inset-0 z-[100] hidden animate-slide-up">
-        <!-- Fundos dinâmicos do Foco -->
         <div id="focus-bg" class="absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-1000 z-0"></div>
         <div id="focus-darken" class="absolute inset-0 bg-black/95 backdrop-blur-3xl transition-all duration-1000 z-10"></div>
         
-        <!-- Botões do Canto Superior Direito -->
         <div class="absolute top-6 right-6 md:top-8 md:right-8 flex gap-3 z-30 opacity-0 pointer-events-none transition-opacity duration-500" id="focus-top-buttons">
             <button onclick="toggleFocusNotes()" class="p-3 rounded-2xl glass hover:text-[var(--primary)] transition-all text-zinc-400" title="Bloco de Notas">
                 <i data-lucide="pen-tool" class="w-5 h-5"></i>
@@ -356,7 +345,6 @@
             </button>
         </div>
 
-        <!-- Painel Lateral de Notas do Modo Foco (Brain Dump) -->
         <div id="focus-notes-panel" class="fixed top-0 right-0 w-full md:w-[400px] h-full bg-black/60 backdrop-blur-3xl border-l border-white/10 transform translate-x-full transition-transform duration-500 z-[200] flex flex-col shadow-2xl">
             <div class="p-6 border-b border-white/10 flex justify-between items-center">
                 <div class="flex items-center gap-3">
@@ -395,21 +383,32 @@
                     </div>
                 </div>
 
-                <!-- Controlos de Áudio -->
-                <div class="flex flex-col gap-3 mt-8 max-w-xs mx-auto">
-                    <!-- Chuva -->
-                    <div class="glass p-3 rounded-2xl flex items-center gap-4">
-                        <button id="btn-sound-rain" onclick="toggleSound('rain')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-zinc-400" title="Ligar/Desligar Chuva">
-                            <i data-lucide="cloud-rain" class="w-5 h-5"></i>
+                <!-- NOVO MIXER DE ÁUDIO -->
+                <div class="flex flex-col gap-3 mt-8 max-w-xs mx-auto glass p-5 rounded-[2rem]">
+                    <h4 class="text-[9px] font-black uppercase text-zinc-500 tracking-widest text-left ml-2 mb-1">Mixer de Ambiente</h4>
+                    
+                    <!-- Áudio 1: Chuva (lessrain.mp3.mp3) -->
+                    <div class="flex items-center gap-4">
+                        <button id="btn-sound-lessrain" onclick="toggleSound('lessrain')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-zinc-400 shrink-0" title="Chuva Suave">
+                            <i data-lucide="cloud-drizzle" class="w-5 h-5"></i>
                         </button>
-                        <input type="range" id="vol-rain" min="0" max="1" step="0.01" value="0.5" oninput="changeVolume('rain', this.value)" class="w-full accent-[var(--primary)] bg-white/10 rounded-lg appearance-none h-1 cursor-pointer">
+                        <input type="range" id="vol-lessrain" min="0" max="1" step="0.01" value="0.5" oninput="changeVolume('lessrain', this.value)" class="w-full accent-[var(--primary)] bg-white/10 rounded-lg appearance-none h-1 cursor-pointer">
                     </div>
-                    <!-- Tempestade / Trovões -->
-                    <div class="glass p-3 rounded-2xl flex items-center gap-4">
-                        <button id="btn-sound-thunder" onclick="toggleSound('thunder')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-zinc-400" title="Ligar/Desligar Trovões">
-                            <i data-lucide="cloud-lightning" class="w-5 h-5"></i>
+
+                    <!-- Áudio 2: Lo-Fi (midnight.mp3) -->
+                    <div class="flex items-center gap-4">
+                        <button id="btn-sound-midnight" onclick="toggleSound('midnight')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-zinc-400 shrink-0" title="Lo-Fi: Meia-Noite">
+                            <i data-lucide="moon" class="w-5 h-5"></i>
                         </button>
-                        <input type="range" id="vol-thunder" min="0" max="1" step="0.01" value="0.5" oninput="changeVolume('thunder', this.value)" class="w-full accent-[var(--primary)] bg-white/10 rounded-lg appearance-none h-1 cursor-pointer">
+                        <input type="range" id="vol-midnight" min="0" max="1" step="0.01" value="0.5" oninput="changeVolume('midnight', this.value)" class="w-full accent-[var(--primary)] bg-white/10 rounded-lg appearance-none h-1 cursor-pointer">
+                    </div>
+
+                    <!-- Áudio 3: Aventura (adventure.mp3) -->
+                    <div class="flex items-center gap-4">
+                        <button id="btn-sound-adventure" onclick="toggleSound('adventure')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-zinc-400 shrink-0" title="Música: Aventura">
+                            <i data-lucide="flame" class="w-5 h-5"></i>
+                        </button>
+                        <input type="range" id="vol-adventure" min="0" max="1" step="0.01" value="0.5" oninput="changeVolume('adventure', this.value)" class="w-full accent-[var(--primary)] bg-white/10 rounded-lg appearance-none h-1 cursor-pointer">
                     </div>
                 </div>
 
@@ -460,8 +459,10 @@
         </div>
     </div>
 
-    <audio id="audio-rain" loop></audio>
-    <audio id="audio-thunder" loop></audio>
+    <!-- Elementos de Áudio Ocultos (Agora mapeados com caminhos fixos à prova de falhas) -->
+    <audio id="audio-lessrain" src="./lessrain.mp3.mp3" loop preload="auto"></audio>
+    <audio id="audio-midnight" src="./midnight.mp3" loop preload="auto"></audio>
+    <audio id="audio-adventure" src="./adventure.mp3" loop preload="auto"></audio>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -493,7 +494,6 @@
         let isOfflineMode = false; 
         let currentAuthMode = 'login'; 
 
-        // --- FUNÇÃO AUXILIAR: FORMATAR TEMPO ---
         const formatFocusTime = (mins) => {
             if (!mins) return '';
             const h = Math.floor(mins / 60);
@@ -501,7 +501,6 @@
             return (h > 0 ? `${h}H ` : '') + (m > 0 || h === 0 ? `${m}M` : '');
         };
 
-        // --- SISTEMA DE NOTIFICAÇÕES ---
         window.showToast = (message, type = 'success') => {
             const toast = document.createElement('div');
             const bgClass = type === 'error' ? 'bg-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.6)]' : 'bg-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.6)]';
@@ -511,7 +510,6 @@
             setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 4000);
         };
 
-        // --- SISTEMA DE BOAS-VINDAS ---
         const updateHeroName = () => {
             const heroTitle = document.getElementById('main-hero-title');
             if(currentUser && currentUser.displayName && heroTitle) {
@@ -562,154 +560,83 @@
             }
         });
 
-        // Alternar visualização da Senha (O Olhinho)
         window.togglePasswordVisibility = () => {
             const passInput = document.getElementById('auth-pass');
             const iconEye = document.getElementById('icon-eye');
             const iconEyeOff = document.getElementById('icon-eye-off');
-            
-            if (passInput.type === 'password') {
-                passInput.type = 'text';
-                iconEye.classList.replace('block', 'hidden');
-                iconEyeOff.classList.replace('hidden', 'block');
-            } else {
-                passInput.type = 'password';
-                iconEye.classList.replace('hidden', 'block');
-                iconEyeOff.classList.replace('block', 'hidden');
-            }
+            if (passInput.type === 'password') { passInput.type = 'text'; iconEye.classList.replace('block', 'hidden'); iconEyeOff.classList.replace('hidden', 'block');
+            } else { passInput.type = 'password'; iconEye.classList.replace('hidden', 'block'); iconEyeOff.classList.replace('block', 'hidden'); }
         };
 
         window.toggleAuthMode = () => {
             currentAuthMode = currentAuthMode === 'login' ? 'register' : 'login';
-            
-            const nameGroup = document.getElementById('auth-name-group');
-            const title = document.getElementById('auth-title');
-            const subtitle = document.getElementById('auth-subtitle');
-            const btnMain = document.getElementById('btn-auth-main');
+            const nameGroup = document.getElementById('auth-name-group'); const title = document.getElementById('auth-title');
+            const subtitle = document.getElementById('auth-subtitle'); const btnMain = document.getElementById('btn-auth-main');
             const btnToggle = document.getElementById('btn-auth-toggle');
-
-            if (currentAuthMode === 'register') {
-                nameGroup.classList.remove('hidden');
-                title.innerText = "Nova Semente";
-                subtitle.innerText = "Crie a sua conta para começar";
-                btnMain.innerText = "Criar Minha Conta";
-                btnToggle.innerText = "Já tenho conta";
-            } else {
-                nameGroup.classList.add('hidden');
-                title.innerText = "O seu Jardim";
-                subtitle.innerText = "Entre para cultivar as suas ideias";
-                btnMain.innerText = "Entrar no Seed";
-                btnToggle.innerText = "Criar Nova Conta";
-            }
+            if (currentAuthMode === 'register') { nameGroup.classList.remove('hidden'); title.innerText = "Nova Semente"; subtitle.innerText = "Crie a sua conta para começar"; btnMain.innerText = "Criar Minha Conta"; btnToggle.innerText = "Já tenho conta";
+            } else { nameGroup.classList.add('hidden'); title.innerText = "O seu Jardim"; subtitle.innerText = "Entre para cultivar as suas ideias"; btnMain.innerText = "Entrar no Seed"; btnToggle.innerText = "Criar Nova Conta"; }
         };
 
         window.executeAuth = async () => {
-            const email = document.getElementById('auth-email').value;
-            const pass = document.getElementById('auth-pass').value;
-            const name = document.getElementById('auth-name').value;
-            
-            if(!email || !pass) {
-                window.showToast("❌ Preencha o seu email e palavra-passe.", "error");
-                return;
-            }
-
-            if (currentAuthMode === 'register' && !name.trim()) {
-                window.showToast("❌ Diga-nos como quer ser chamado.", "error");
-                return;
-            }
-
-            if (pass.length < 6) {
-                window.showToast("❌ A palavra-passe precisa de ter 6 caracteres.", "error");
-                return;
-            }
-
+            const email = document.getElementById('auth-email').value; const pass = document.getElementById('auth-pass').value; const name = document.getElementById('auth-name').value;
+            if(!email || !pass) { window.showToast("❌ Preencha o seu email e palavra-passe.", "error"); return; }
+            if (currentAuthMode === 'register' && !name.trim()) { window.showToast("❌ Diga-nos como quer ser chamado.", "error"); return; }
+            if (pass.length < 6) { window.showToast("❌ A palavra-passe precisa de ter 6 caracteres.", "error"); return; }
             try {
-                if(currentAuthMode === 'login') {
-                    await signInWithEmailAndPassword(auth, email, pass);
-                    window.showToast("✅ Login realizado com sucesso!");
+                if(currentAuthMode === 'login') { await signInWithEmailAndPassword(auth, email, pass); window.showToast("✅ Login realizado com sucesso!");
                 } else {
                     const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
                     await updateProfile(userCredential.user, { displayName: name.trim() });
-                    currentUser = userCredential.user;
-                    window.showToast("🎉 Bem-vindo ao Seed!");
+                    currentUser = userCredential.user; window.showToast("🎉 Bem-vindo ao Seed!");
                 }
-                document.getElementById('auth-overlay').classList.add('hidden');
-                updateHeroName();
+                document.getElementById('auth-overlay').classList.add('hidden'); updateHeroName();
             } catch(error) {
-                console.error(error);
-                if(error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
-                    window.showToast("❌ Email ou palavra-passe incorretos.", "error");
-                } else if(error.code === 'auth/email-already-in-use') {
-                    window.showToast("❌ Este email já está em uso.", "error");
-                } else if(error.code === 'auth/weak-password') {
-                    window.showToast("❌ A palavra-passe precisa de ter 6 caracteres.", "error");
-                } else {
-                    window.showToast("❌ Erro ao aceder à conta.", "error");
-                }
+                if(error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') { window.showToast("❌ Email ou palavra-passe incorretos.", "error");
+                } else if(error.code === 'auth/email-already-in-use') { window.showToast("❌ Este email já está em uso.", "error");
+                } else if(error.code === 'auth/weak-password') { window.showToast("❌ A palavra-passe precisa de ter 6 caracteres.", "error");
+                } else { window.showToast("❌ Erro ao aceder à conta.", "error"); }
             }
         };
 
         window.continueOffline = () => {
-            isOfflineMode = true;
-            document.getElementById('auth-overlay').classList.add('hidden');
-            const oldData = JSON.parse(localStorage.getItem('seed_master_v1')) || [];
-            projects = oldData;
-            achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || [];
-            updateHeroName();
-            if(typeof renderProjects === 'function') renderProjects();
-            window.showToast("🌱 A Iniciar Modo Offline");
+            isOfflineMode = true; document.getElementById('auth-overlay').classList.add('hidden');
+            const oldData = JSON.parse(localStorage.getItem('seed_master_v1')) || []; projects = oldData; achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || [];
+            updateHeroName(); if(typeof renderProjects === 'function') renderProjects(); window.showToast("🌱 A Iniciar Modo Offline");
         };
 
-        // --- SISTEMA DE CONFIGURAÇÕES E CONTA ---
         window.openSettings = () => document.getElementById('settings-overlay').classList.replace('hidden', 'flex');
         window.closeSettings = () => document.getElementById('settings-overlay').classList.replace('flex', 'hidden');
 
         window.logout = async () => {
             if (unsubscribeSnapshot) { unsubscribeSnapshot(); unsubscribeSnapshot = null; }
-            
-            localStorage.removeItem('seed_master_v1');
-            localStorage.removeItem('seed_achievements_v1');
-            localStorage.removeItem('seed_activity_v1');
-            localStorage.removeItem('horizon_master_v5');
-            
-            projects = []; achievements = []; isOfflineMode = false;
-            renderProjects(); closeSettings();
-
+            localStorage.removeItem('seed_master_v1'); localStorage.removeItem('seed_achievements_v1');
+            localStorage.removeItem('seed_activity_v1'); localStorage.removeItem('horizon_master_v5');
+            projects = []; achievements = []; isOfflineMode = false; renderProjects(); closeSettings();
             if (currentUser) { await signOut(auth); }
-            
-            document.getElementById('auth-overlay').classList.remove('hidden');
-            window.showToast("🌱 Saiu do seu Jardim.");
+            document.getElementById('auth-overlay').classList.remove('hidden'); window.showToast("🌱 Saiu do seu Jardim.");
         };
 
         window.deleteAccount = async (btn) => {
             if (btn.innerText.includes("CERTEZA")) {
                 try {
                     if (unsubscribeSnapshot) { unsubscribeSnapshot(); unsubscribeSnapshot = null; }
-                    if (currentUser) {
-                        const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'seed_data', 'main');
-                        await deleteDoc(docRef); await deleteUser(currentUser);
-                    }
-                    
+                    if (currentUser) { const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'seed_data', 'main'); await deleteDoc(docRef); await deleteUser(currentUser); }
                     projects = []; achievements = [];
                     localStorage.removeItem('seed_master_v1'); localStorage.removeItem('seed_activity_v1');
                     localStorage.removeItem('seed_achievements_v1'); localStorage.removeItem('horizon_master_v5');
-                    
                     renderProjects(); closeSettings(); isOfflineMode = false;
                     document.getElementById('auth-overlay').classList.remove('hidden');
                     window.showToast("🗑️ Conta e dados apagados com sucesso.", "success");
                 } catch (error) {
                     if (error.code === 'auth/requires-recent-login') { window.showToast("❌ Por segurança, saia da conta, faça login novamente e tente excluir.", "error");
                     } else { window.showToast("❌ Erro ao excluir conta. Tente novamente.", "error"); }
-                    btn.innerHTML = `<i data-lucide="trash-2" class="w-4 h-4"></i> <span id="delete-btn-text">Excluir Conta e Dados</span>`;
-                    btn.classList.remove('bg-rose-600', 'text-white'); lucide.createIcons();
+                    btn.innerHTML = `<i data-lucide="trash-2" class="w-4 h-4"></i> <span id="delete-btn-text">Excluir Conta e Dados</span>`; btn.classList.remove('bg-rose-600', 'text-white'); lucide.createIcons();
                 }
             } else {
-                btn.innerHTML = `<i data-lucide="alert-triangle" class="w-4 h-4"></i> <span id="delete-btn-text">Certeza? Clique para apagar</span>`;
-                btn.classList.add('bg-rose-600', 'text-white'); lucide.createIcons();
+                btn.innerHTML = `<i data-lucide="alert-triangle" class="w-4 h-4"></i> <span id="delete-btn-text">Certeza? Clique para apagar</span>`; btn.classList.add('bg-rose-600', 'text-white'); lucide.createIcons();
                 setTimeout(() => {
                     if(document.body.contains(btn) && btn.innerText.includes("Certeza")) {
-                        btn.innerHTML = `<i data-lucide="trash-2" class="w-4 h-4"></i> <span id="delete-btn-text">Excluir Conta e Dados</span>`;
-                        btn.classList.remove('bg-rose-600', 'text-white'); lucide.createIcons();
+                        btn.innerHTML = `<i data-lucide="trash-2" class="w-4 h-4"></i> <span id="delete-btn-text">Excluir Conta e Dados</span>`; btn.classList.remove('bg-rose-600', 'text-white'); lucide.createIcons();
                     }
                 }, 4000);
             }
@@ -718,21 +645,16 @@
         window.save = async () => {
             if (currentUser) {
                 const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'seed_data', 'main');
-                try { 
-                    await setDoc(docRef, { projects: projects, achievements: achievements }); 
-                    localStorage.setItem('seed_master_v1', JSON.stringify(projects));
-                    localStorage.setItem('seed_achievements_v1', JSON.stringify(achievements));
+                try { await setDoc(docRef, { projects: projects, achievements: achievements }); 
+                    localStorage.setItem('seed_master_v1', JSON.stringify(projects)); localStorage.setItem('seed_achievements_v1', JSON.stringify(achievements));
                 } catch(e) { console.log("Guardado apenas localmente."); }
             } else {
-                localStorage.setItem('seed_master_v1', JSON.stringify(projects));
-                localStorage.setItem('seed_achievements_v1', JSON.stringify(achievements));
+                localStorage.setItem('seed_master_v1', JSON.stringify(projects)); localStorage.setItem('seed_achievements_v1', JSON.stringify(achievements));
             }
-            const s = document.getElementById('save-status');
-            if(s) { s.style.opacity = '1'; setTimeout(() => s.style.opacity = '0', 1000); }
+            const s = document.getElementById('save-status'); if(s) { s.style.opacity = '1'; setTimeout(() => s.style.opacity = '0', 1000); }
         };
         const save = window.save;
 
-        // --- SISTEMA DE MEDALHAS ---
         const MEDALS = {
             explorador: { id: 'explorador', icon: '🥇', title: 'Explorador', desc: 'Criou 10 projetos' },
             foco: { id: 'foco', icon: '🔥', title: 'Inabalável', desc: 'Sessão de 60m' },
@@ -757,11 +679,6 @@
             dices: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1000'
         };
 
-        const SOUNDS = {
-            rain: 'https://assets.mixkit.co/active_storage/sfx/2431/2431-preview.mp3',
-            thunder: 'https://assets.mixkit.co/active_storage/sfx/2391/2391-preview.mp3'
-        };
-
         const FOCUS_GIFS = [
             'https://i.pinimg.com/originals/ff/34/3a/ff343aa8819c2573ad3409baf4af5e3e.gif',
             'https://i.pinimg.com/originals/92/9f/98/929f9811fba2f931a0f4b3581976695b.gif',
@@ -775,29 +692,16 @@
             document.getElementById('focus-bg').style.backgroundImage = `url('${FOCUS_GIFS[currentFocusGifIndex]}')`;
         };
 
-        const PLANT_ICONS = {
-            zap: 'tree-pine', palette: 'flower-2', plane: 'tree-deciduous', target: 'sprout', dices: 'clover'
-        };
+        const PLANT_ICONS = { zap: 'tree-pine', palette: 'flower-2', plane: 'tree-deciduous', target: 'sprout', dices: 'clover' };
 
-        let currentStation = 'now';
-        let activeProjectId = null;
-        let timerInterval = null;
-        let timeLeft = 25 * 60;
-        let isTimerRunning = false;
+        let currentStation = 'now'; let activeProjectId = null; let timerInterval = null; let timeLeft = 25 * 60; let isTimerRunning = false;
 
-        window.changeTheme = (theme) => {
-            document.body.className = `custom-scrollbar min-h-screen relative ${theme}`;
-            localStorage.setItem('seed_theme', theme);
-            lucide.createIcons();
-        };
+        window.changeTheme = (theme) => { document.body.className = `custom-scrollbar min-h-screen relative ${theme}`; localStorage.setItem('seed_theme', theme); lucide.createIcons(); };
 
         window.setStation = (station) => {
             currentStation = station;
-            document.querySelectorAll('.station-tab').forEach(t => {
-                t.classList.remove('active', 'opacity-100'); t.classList.add('opacity-40');
-            });
-            const activeTab = document.getElementById(`tab-${station}`);
-            activeTab.classList.remove('opacity-40'); activeTab.classList.add('active', 'opacity-100');
+            document.querySelectorAll('.station-tab').forEach(t => { t.classList.remove('active', 'opacity-100'); t.classList.add('opacity-40'); });
+            const activeTab = document.getElementById(`tab-${station}`); activeTab.classList.remove('opacity-40'); activeTab.classList.add('active', 'opacity-100');
             renderProjects();
         };
 
@@ -808,13 +712,9 @@
             if (currentStation === 'archive') {
                 grid.className = "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6";
                 grid.innerHTML = filtered.length ? filtered.map(p => {
-                    let rarity = 'Comum'; let cardClass = 'border-white/5 hover:border-white/10';
-                    let bgGradient = 'from-white/5 to-transparent'; let badgeClass = 'bg-white/5 text-zinc-500 border border-white/5';
-                    let iconClass = 'text-white/20 group-hover:text-[var(--primary)]';
-
+                    let rarity = 'Comum'; let cardClass = 'border-white/5 hover:border-white/10'; let bgGradient = 'from-white/5 to-transparent'; let badgeClass = 'bg-white/5 text-zinc-500 border border-white/5'; let iconClass = 'text-white/20 group-hover:text-[var(--primary)]';
                     if (p.milestones.length >= 5) { rarity = 'Lendária'; cardClass = 'border-amber-900/30 hover:border-amber-700/50 hover:shadow-[0_10px_30px_-15px_rgba(245,158,11,0.2)]'; bgGradient = 'from-amber-900/20 to-transparent'; badgeClass = 'bg-amber-900/40 text-amber-300/80 border border-amber-700/50'; iconClass = 'text-amber-500/40 group-hover:text-amber-400'; } 
                     else if (p.milestones.length >= 3) { rarity = 'Rara'; cardClass = 'border-indigo-900/30 hover:border-indigo-700/50 hover:shadow-[0_10px_30px_-15px_rgba(79,70,229,0.2)]'; bgGradient = 'from-indigo-900/20 to-transparent'; badgeClass = 'bg-indigo-900/40 text-indigo-300/80 border border-indigo-700/50'; iconClass = 'text-indigo-400/40 group-hover:text-indigo-300'; }
-
                     return `
                     <div onclick="openDetails(${p.id})" class="glass p-6 rounded-[2.5rem] flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-500 group relative overflow-hidden min-h-[200px] border ${cardClass}">
                         <div class="absolute inset-0 bg-gradient-to-t opacity-30 group-hover:opacity-100 transition-opacity ${bgGradient}"></div>
@@ -850,9 +750,7 @@
         };
 
         window.openDetails = (id) => {
-            activeProjectId = id;
-            const p = projects.find(p => p.id === id);
-            const isArchived = p.station === 'archive';
+            activeProjectId = id; const p = projects.find(p => p.id === id); const isArchived = p.station === 'archive';
             document.getElementById('vision-banner-container').innerHTML = `<img src="${VIBE_IMAGES[p.icon]}" class="w-full h-full object-cover">`;
             const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0;
             const isHabitDone = p.habit && p.habit.lastCheck === new Date().toISOString().split('T')[0];
@@ -927,7 +825,6 @@
                             <h3 class="text-[10px] font-black uppercase text-zinc-400">Notas & Ideias</h3>
                             <textarea ${isArchived ? 'readonly' : ''} onchange="updateNotes(this.value)" class="w-full flex-1 min-h-[150px] bg-transparent outline-none resize-none font-medium text-zinc-200 leading-relaxed custom-scrollbar" placeholder="Escreva aqui ideias ou pensamentos para esta semente...">${p.notes || ''}</textarea>
                             
-                            <!-- Área: Links Rápidos -->
                             <div class="space-y-2 pt-3 border-t border-white/5 shrink-0">
                                 <h4 class="text-[9px] font-black uppercase text-zinc-400">Links Úteis</h4>
                                 <div class="flex flex-wrap gap-1.5 max-h-[70px] overflow-y-auto custom-scrollbar pr-1">
@@ -953,238 +850,96 @@
                     </div>
 
                 </div>`;
-            document.getElementById('detail-view').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-            lucide.createIcons();
+            document.getElementById('detail-view').classList.remove('hidden'); document.body.style.overflow = 'hidden'; lucide.createIcons();
         };
 
         window.addProject = () => {
             const title = document.getElementById('proj-title').value; if(!title) return;
-            const ms = document.getElementById('proj-milestones').value.split(',').filter(x => x.trim()).map(x => ({ text: x.trim(), completed: false }));
-            const habit = document.getElementById('proj-habit').value;
-            // focusTime inicializado a 0
+            const ms = document.getElementById('proj-milestones').value.split(',').filter(x => x.trim()).map(x => ({ text: x.trim(), completed: false })); const habit = document.getElementById('proj-habit').value;
             projects.unshift({ id: Date.now(), title, icon: document.getElementById('proj-icon').value, station: document.getElementById('proj-station').value, notes: '', links: [], focusTime: 0, habit: habit ? { title: habit, streak: 0, lastCheck: '' } : null, milestones: ms.length ? ms : [{text: 'Dar o primeiro passo', completed: false}] });
-            
-            document.getElementById('proj-title').value = '';
-            document.getElementById('proj-habit').value = '';
-            document.getElementById('proj-milestones').value = '';
-            
+            document.getElementById('proj-title').value = ''; document.getElementById('proj-habit').value = ''; document.getElementById('proj-milestones').value = '';
             save(); window.checkAchievements(); closeModal(); renderProjects();
         };
 
-        window.archiveProject = (id) => { 
-            const p = projects.find(p => p.id === id);
-            p.station = 'archive'; 
-            p.archivedAt = new Date().toLocaleDateString('pt-BR'); // Salva a data de conclusão
-            save(); window.checkAchievements();
-            window.closeDetails(); 
-        };
-        
+        window.archiveProject = (id) => { const p = projects.find(p => p.id === id); p.station = 'archive'; p.archivedAt = new Date().toLocaleDateString('pt-BR'); save(); window.checkAchievements(); window.closeDetails(); };
         window.toggleMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; p.milestones[i].completed = !p.milestones[i].completed; save(); openDetails(activeProjectId); };
         window.addMilestone = () => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; const v = document.getElementById('new-m').value; if(!v) return; p.milestones.push({text: v, completed: false}); save(); openDetails(activeProjectId); };
         window.removeMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; p.milestones.splice(i,1); save(); openDetails(activeProjectId); };
         window.updateNotes = (v) => { const p = projects.find(p => p.id === activeProjectId); if(p.station!=='archive') { p.notes = v; save(); window.checkAchievements(); } };
         
-        // --- SISTEMA DE DRAG AND DROP (ARRASTAR MARCOS) ---
         let draggedMilestoneIndex = null;
-
-        window.handleDragStart = (e, i) => {
-            draggedMilestoneIndex = i;
-            e.target.style.opacity = '0.4';
-            e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('text/plain', i);
-        };
-
-        window.handleDragOver = (e) => {
-            e.preventDefault(); // Necessário para permitir largar o elemento
-            e.dataTransfer.dropEffect = 'move';
-            const row = e.currentTarget;
-            row.classList.add('border-[var(--primary)]', 'bg-white/5');
-        };
-
-        window.handleDragLeave = (e) => {
-            const row = e.currentTarget;
-            row.classList.remove('border-[var(--primary)]', 'bg-white/5');
-        };
-
+        window.handleDragStart = (e, i) => { draggedMilestoneIndex = i; e.target.style.opacity = '0.4'; e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', i); };
+        window.handleDragOver = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; e.currentTarget.classList.add('border-[var(--primary)]', 'bg-white/5'); };
+        window.handleDragLeave = (e) => { e.currentTarget.classList.remove('border-[var(--primary)]', 'bg-white/5'); };
         window.handleDrop = (e, targetIndex) => {
-            e.preventDefault();
-            const row = e.currentTarget;
-            row.classList.remove('border-[var(--primary)]', 'bg-white/5');
-            
+            e.preventDefault(); e.currentTarget.classList.remove('border-[var(--primary)]', 'bg-white/5');
             if (draggedMilestoneIndex === null || draggedMilestoneIndex === targetIndex) return;
-            
-            const p = projects.find(proj => proj.id === activeProjectId);
-            if(!p || p.station === 'archive') return;
-
-            // Retira o item da posição antiga e insere na nova posição
-            const draggedItem = p.milestones.splice(draggedMilestoneIndex, 1)[0];
-            p.milestones.splice(targetIndex, 0, draggedItem);
-            
-            save(); // Guarda a nova ordem
-            openDetails(activeProjectId); // Recarrega o ecrã com a ordem atualizada
+            const p = projects.find(proj => proj.id === activeProjectId); if(!p || p.station === 'archive') return;
+            const draggedItem = p.milestones.splice(draggedMilestoneIndex, 1)[0]; p.milestones.splice(targetIndex, 0, draggedItem);
+            save(); openDetails(activeProjectId);
         };
-
-        window.handleDragEnd = (e) => {
-            e.target.style.opacity = '1';
-            draggedMilestoneIndex = null;
-            // Limpa as bordas caso o drop tenha sido cancelado fora da zona
-            document.querySelectorAll('[id^="milestone-row-"]').forEach(el => el.classList.remove('border-[var(--primary)]', 'bg-white/5'));
-        };
+        window.handleDragEnd = (e) => { e.target.style.opacity = '1'; draggedMilestoneIndex = null; document.querySelectorAll('[id^="milestone-row-"]').forEach(el => el.classList.remove('border-[var(--primary)]', 'bg-white/5')); };
 
         window.editMilestone = (i) => {
-            document.getElementById(`milestone-text-${i}`).classList.add('hidden');
-            const input = document.getElementById(`milestone-input-${i}`);
-            input.classList.remove('hidden');
-            input.focus();
-            input.setSelectionRange(input.value.length, input.value.length);
+            document.getElementById(`milestone-text-${i}`).classList.add('hidden'); const input = document.getElementById(`milestone-input-${i}`);
+            input.classList.remove('hidden'); input.focus(); input.setSelectionRange(input.value.length, input.value.length);
         };
-
         window.saveMilestoneEdit = (i, val) => {
-            const newText = val.trim();
-            const p = projects.find(p => p.id === activeProjectId);
-            if (newText && p.milestones[i].text !== newText) {
-                p.milestones[i].text = newText;
-                save();
-            }
-            openDetails(activeProjectId); // Atualiza a tela para voltar ao normal
+            const newText = val.trim(); const p = projects.find(p => p.id === activeProjectId);
+            if (newText && p.milestones[i].text !== newText) { p.milestones[i].text = newText; save(); } openDetails(activeProjectId);
         };
-
         window.editHabit = () => {
-            document.getElementById('habit-text').classList.add('hidden');
-            document.getElementById('btn-edit-habit').classList.add('hidden');
-            const input = document.getElementById('habit-input');
-            input.classList.remove('hidden');
-            input.focus();
-            input.setSelectionRange(input.value.length, input.value.length);
+            document.getElementById('habit-text').classList.add('hidden'); document.getElementById('btn-edit-habit').classList.add('hidden');
+            const input = document.getElementById('habit-input'); input.classList.remove('hidden'); input.focus(); input.setSelectionRange(input.value.length, input.value.length);
         };
-
         window.saveHabitEdit = (val) => {
-            const newTitle = val.trim();
-            const p = projects.find(p => p.id === activeProjectId);
-            if (newTitle && p.habit.title !== newTitle) {
-                p.habit.title = newTitle;
-                save();
-            }
-            openDetails(activeProjectId);
+            const newTitle = val.trim(); const p = projects.find(p => p.id === activeProjectId);
+            if (newTitle && p.habit.title !== newTitle) { p.habit.title = newTitle; save(); } openDetails(activeProjectId);
         };
 
         window.checkHabit = () => { 
-            const p = projects.find(p => p.id === activeProjectId); 
-            const today = new Date().toISOString().split('T')[0]; 
-            
-            if(p.habit.lastCheck === today) { 
-                p.habit.lastCheck = p.habit.previousCheck || ''; 
-                p.habit.streak = Math.max(0, p.habit.streak - 1); 
+            const p = projects.find(p => p.id === activeProjectId); const today = new Date().toISOString().split('T')[0]; 
+            if(p.habit.lastCheck === today) { p.habit.lastCheck = p.habit.previousCheck || ''; p.habit.streak = Math.max(0, p.habit.streak - 1); 
             } else { 
-                if (p.habit.lastCheck) {
-                    const diffTime = Math.abs(new Date(today) - new Date(p.habit.lastCheck));
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-                    if (diffDays > 1) p.habit.streak = 0; 
-                }
-                p.habit.previousCheck = p.habit.lastCheck;
-                p.habit.lastCheck = today; 
-                p.habit.streak++; 
-            } 
-            save(); 
-            openDetails(activeProjectId); 
+                if (p.habit.lastCheck) { const diffDays = Math.ceil(Math.abs(new Date(today) - new Date(p.habit.lastCheck)) / (1000 * 60 * 60 * 24)); if (diffDays > 1) p.habit.streak = 0; }
+                p.habit.previousCheck = p.habit.lastCheck; p.habit.lastCheck = today; p.habit.streak++; 
+            } save(); openDetails(activeProjectId); 
         };
 
-        // --- SISTEMA DE LINKS RÁPIDOS ---
         window.addLink = async () => {
-            const input = document.getElementById('new-link-input');
-            const btn = document.getElementById('btn-add-link');
-            let url = input.value.trim();
-            if (!url) return;
-            if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
-            
+            const input = document.getElementById('new-link-input'); const btn = document.getElementById('btn-add-link');
+            let url = input.value.trim(); if (!url) return; if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
             try {
-                const urlObj = new URL(url);
-                let domain = urlObj.hostname.replace('www.', '');
-                
-                // Animação de carregamento no botão
-                btn.innerHTML = '<i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i>';
-                btn.disabled = true;
-                lucide.createIcons();
-
-                let pageTitle = domain; // Título padrão é o domínio
-                
-                // Tenta buscar o título real do site (Bypass de CORS gratuito)
+                const urlObj = new URL(url); let domain = urlObj.hostname.replace('www.', '');
+                btn.innerHTML = '<i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i>'; btn.disabled = true; lucide.createIcons();
+                let pageTitle = domain;
                 try {
                     const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
-                    if (response.ok) {
-                        const data = await response.json();
-                        const doc = new DOMParser().parseFromString(data.contents, "text/html");
-                        const titleTag = doc.querySelector('title');
-                        if (titleTag && titleTag.innerText) {
-                            pageTitle = titleTag.innerText.trim();
-                        }
-                    }
-                } catch(err) {
-                    console.log("Aviso: Não foi possível buscar o título exato da página.");
-                }
-
-                const p = projects.find(proj => proj.id === activeProjectId);
-                if (!p.links) p.links = [];
-                p.links.push({ url: url, domain: domain, title: pageTitle });
-                save();
-                openDetails(activeProjectId);
-            } catch(e) { 
-                window.showToast("❌ Endereço de link inválido.", "error"); 
-                btn.innerText = "ADICIONAR";
-                btn.disabled = false;
-            }
+                    if (response.ok) { const data = await response.json(); const doc = new DOMParser().parseFromString(data.contents, "text/html"); const titleTag = doc.querySelector('title'); if (titleTag && titleTag.innerText) { pageTitle = titleTag.innerText.trim(); } }
+                } catch(err) { console.log("Aviso: Não foi possível buscar o título."); }
+                const p = projects.find(proj => proj.id === activeProjectId); if (!p.links) p.links = [];
+                p.links.push({ url: url, domain: domain, title: pageTitle }); save(); openDetails(activeProjectId);
+            } catch(e) { window.showToast("❌ Endereço de link inválido.", "error"); btn.innerText = "ADICIONAR"; btn.disabled = false; }
         };
+        window.removeLink = (index) => { const p = projects.find(proj => proj.id === activeProjectId); if (p && p.links) { p.links.splice(index, 1); save(); openDetails(activeProjectId); } };
 
-        window.removeLink = (index) => {
-            const p = projects.find(proj => proj.id === activeProjectId);
-            if (p && p.links) { p.links.splice(index, 1); save(); openDetails(activeProjectId); }
-        };
-
-        // --- SISTEMA DE LIXEIRA ---
         window.deleteProject = (id, btn) => { 
-            if(btn.innerText.includes("CERTEZA")) { 
-                const p = projects.find(proj => proj.id === id);
-                if(p) p.station = 'trash'; // Em vez de deletar de vez, vai para a lixeira
-                save(); 
-                window.closeDetails(); 
-                window.showToast("🗑️ Ideia movida para a Lixeira.");
-            } else { 
-                btn.innerText = "CERTEZA? CLIQUE NOVAMENTE"; 
-                btn.classList.add('bg-rose-500/20', 'text-rose-500'); 
-                setTimeout(() => {
-                    if(document.body.contains(btn)) {
-                        btn.innerText = "REMOVER IDEIA"; 
-                        btn.classList.remove('bg-rose-500/20', 'text-rose-500');
-                    }
-                }, 3000); 
-            } 
+            if(btn.innerText.includes("CERTEZA")) { const p = projects.find(proj => proj.id === id); if(p) p.station = 'trash'; save(); window.closeDetails(); window.showToast("🗑️ Ideia movida para a Lixeira.");
+            } else { btn.innerText = "CERTEZA? CLIQUE NOVAMENTE"; btn.classList.add('bg-rose-500/20', 'text-rose-500'); setTimeout(() => { if(document.body.contains(btn)) { btn.innerText = "REMOVER IDEIA"; btn.classList.remove('bg-rose-500/20', 'text-rose-500'); } }, 3000); } 
         };
 
-        window.openTrash = () => {
-            closeSettings();
-            document.getElementById('trash-overlay').classList.replace('hidden', 'flex');
-            renderTrash();
-        };
+        window.openTrash = () => { closeSettings(); document.getElementById('trash-overlay').classList.replace('hidden', 'flex'); renderTrash(); };
         window.closeTrash = () => document.getElementById('trash-overlay').classList.replace('flex', 'hidden');
 
         window.renderTrash = () => {
-            const trashList = document.getElementById('trash-list');
-            const trashProjects = projects.filter(p => p.station === 'trash');
-            
-            if (trashProjects.length === 0) {
-                trashList.innerHTML = `<div class="py-16 text-center opacity-30"><i data-lucide="wind" class="w-16 h-16 mx-auto mb-4 text-zinc-500"></i><p class="font-black uppercase tracking-widest text-xs">Lixeira limpa e vazia.</p></div>`;
+            const trashList = document.getElementById('trash-list'); const trashProjects = projects.filter(p => p.station === 'trash');
+            if (trashProjects.length === 0) { trashList.innerHTML = `<div class="py-16 text-center opacity-30"><i data-lucide="wind" class="w-16 h-16 mx-auto mb-4 text-zinc-500"></i><p class="font-black uppercase tracking-widest text-xs">Lixeira limpa e vazia.</p></div>`;
             } else {
                 trashList.innerHTML = trashProjects.map(p => `
                     <div class="glass p-5 rounded-3xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border border-rose-500/10 hover:border-rose-500/30 transition-colors">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 border border-white/5">
-                                <i data-lucide="${p.icon || 'leaf'}" class="w-6 h-6 text-zinc-500"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-white text-base line-clamp-1">${p.title}</h4>
-                                <p class="text-[10px] font-black uppercase tracking-widest text-rose-500 mt-1">Descartada</p>
-                            </div>
+                            <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 border border-white/5"><i data-lucide="${p.icon || 'leaf'}" class="w-6 h-6 text-zinc-500"></i></div>
+                            <div><h4 class="font-bold text-white text-base line-clamp-1">${p.title}</h4><p class="text-[10px] font-black uppercase tracking-widest text-rose-500 mt-1">Descartada</p></div>
                         </div>
                         <div class="flex items-center gap-3 w-full md:w-auto">
                             <button onclick="restoreProject(${p.id})" class="flex-1 md:flex-none px-5 py-3 rounded-2xl bg-white/5 hover:bg-emerald-500/20 hover:text-emerald-400 text-[10px] font-black uppercase tracking-widest transition-all text-zinc-300">Restaurar</button>
@@ -1192,31 +947,14 @@
                         </div>
                     </div>
                 `).join('');
-            }
-            lucide.createIcons();
+            } lucide.createIcons();
         };
 
-        window.restoreProject = (id) => {
-            const p = projects.find(proj => proj.id === id);
-            if(p) { p.station = 'now'; save(); renderTrash(); renderProjects(); window.showToast("🌱 Ideia restaurada com sucesso!"); }
-        };
-
+        window.restoreProject = (id) => { const p = projects.find(proj => proj.id === id); if(p) { p.station = 'now'; save(); renderTrash(); renderProjects(); window.showToast("🌱 Ideia restaurada com sucesso!"); } };
         window.permanentDeleteProject = (id, btn) => {
-            if(btn.innerText.includes("CERTEZA")) {
-                projects = projects.filter(proj => proj.id !== id);
-                save(); renderTrash(); renderProjects();
-                window.showToast("🔥 Ideia pulverizada para sempre.");
-            } else {
-                btn.innerText = "CERTEZA? CLIQUE NOVAMENTE";
-                btn.classList.add('bg-rose-600', 'text-white');
-                btn.classList.remove('text-rose-500');
-                setTimeout(() => {
-                    if(document.body.contains(btn) && btn.innerText.includes("CERTEZA")) {
-                        btn.innerText = "EXCLUIR DEFINITIVAMENTE";
-                        btn.classList.remove('bg-rose-600', 'text-white');
-                        btn.classList.add('text-rose-500');
-                    }
-                }, 3000);
+            if(btn.innerText.includes("CERTEZA")) { projects = projects.filter(proj => proj.id !== id); save(); renderTrash(); renderProjects(); window.showToast("🔥 Ideia pulverizada para sempre.");
+            } else { btn.innerText = "CERTEZA? CLIQUE NOVAMENTE"; btn.classList.add('bg-rose-600', 'text-white'); btn.classList.remove('text-rose-500');
+                setTimeout(() => { if(document.body.contains(btn) && btn.innerText.includes("CERTEZA")) { btn.innerText = "EXCLUIR DEFINITIVAMENTE"; btn.classList.remove('bg-rose-600', 'text-white'); btn.classList.add('text-rose-500'); } }, 3000);
             }
         };
 
@@ -1234,75 +972,40 @@
         let selectedFocusTime = 25;
         window.setFocusTime = (minutes) => {
             if (isTimerRunning) return;
-            selectedFocusTime = minutes;
-            timeLeft = minutes * 60;
-            updateTimerDisplay();
-
+            selectedFocusTime = minutes; timeLeft = minutes * 60; updateTimerDisplay();
             [15, 25, 45, 60].forEach(m => {
                 const btn = document.getElementById(`btn-time-${m}`);
-                if (btn) {
-                    if (m === minutes) {
-                        btn.classList.add('text-[var(--primary)]', 'border-[var(--primary)]');
-                    } else {
-                        btn.classList.remove('text-[var(--primary)]', 'border-[var(--primary)]');
-                    }
-                }
+                if (btn) { if (m === minutes) { btn.classList.add('text-[var(--primary)]', 'border-[var(--primary)]'); } else { btn.classList.remove('text-[var(--primary)]', 'border-[var(--primary)]'); } }
             });
         };
         
         window.closeFocusMode = () => { 
-            clearInterval(timerInterval); 
-            isTimerRunning = false; 
-            timeLeft = selectedFocusTime * 60; 
-            updateTimerDisplay();
-            document.getElementById('timer-ring').classList.remove('timer-active'); 
-            document.getElementById('timer-btn').innerText = "Iniciar"; 
-            document.getElementById('focus-time-selector').style.opacity = '1';
-            document.getElementById('focus-time-selector').style.pointerEvents = 'auto';
+            clearInterval(timerInterval); isTimerRunning = false; timeLeft = selectedFocusTime * 60; updateTimerDisplay();
+            document.getElementById('timer-ring').classList.remove('timer-active'); document.getElementById('timer-btn').innerText = "Iniciar"; 
+            document.getElementById('focus-time-selector').style.opacity = '1'; document.getElementById('focus-time-selector').style.pointerEvents = 'auto';
+            document.getElementById('focus-top-buttons').style.opacity = '0'; document.getElementById('focus-top-buttons').style.pointerEvents = 'none';
             
-            document.getElementById('focus-top-buttons').style.opacity = '0';
-            document.getElementById('focus-top-buttons').style.pointerEvents = 'none';
-            
-            // Pausar som ao sair
             if(typeof soundStates !== 'undefined') {
-                if(soundStates.rain) toggleSound('rain');
-                if(soundStates.thunder) toggleSound('thunder');
+                if(soundStates.lessrain) toggleSound('lessrain');
+                if(soundStates.midnight) toggleSound('midnight');
+                if(soundStates.adventure) toggleSound('adventure');
             }
             
-            // Reseta os fundos do modo foco
-            document.getElementById('focus-bg').style.opacity = '0';
-            document.getElementById('focus-darken').className = 'absolute inset-0 bg-black/95 backdrop-blur-3xl transition-all duration-1000 z-10';
-
-            // Fecha o painel de notas se estiver aberto
+            document.getElementById('focus-bg').style.opacity = '0'; document.getElementById('focus-darken').className = 'absolute inset-0 bg-black/95 backdrop-blur-3xl transition-all duration-1000 z-10';
             document.getElementById('focus-notes-panel').classList.add('translate-x-full');
-
             document.getElementById('focus-overlay').classList.replace('block', 'hidden'); 
         };
 
-        // --- SISTEMA DO BLOCO DE NOTAS NO MODO FOCO ---
         window.toggleFocusNotes = () => {
-            const panel = document.getElementById('focus-notes-panel');
-            const isClosed = panel.classList.contains('translate-x-full');
-            if (isClosed) {
-                // Ao abrir, carrega as notas atuais daquele projeto
-                const p = projects.find(proj => proj.id === activeProjectId);
-                document.getElementById('focus-notes-input').value = p.notes || '';
-                panel.classList.remove('translate-x-full');
-            } else {
-                panel.classList.add('translate-x-full');
-            }
+            const panel = document.getElementById('focus-notes-panel'); const isClosed = panel.classList.contains('translate-x-full');
+            if (isClosed) { const p = projects.find(proj => proj.id === activeProjectId); document.getElementById('focus-notes-input').value = p.notes || ''; panel.classList.remove('translate-x-full');
+            } else { panel.classList.add('translate-x-full'); }
         };
 
-        window.updateFocusNotes = (val) => {
-            const p = projects.find(proj => proj.id === activeProjectId);
-            if(p && p.station !== 'archive') {
-                p.notes = val;
-                save(); // Guarda na nuvem sem fechar a tela
-            }
-        };
+        window.updateFocusNotes = (val) => { const p = projects.find(proj => proj.id === activeProjectId); if(p && p.station !== 'archive') { p.notes = val; save(); } };
 
-        // Estado dos sons
-        let soundStates = { rain: false, thunder: false };
+        // ESTADOS DO NOVO MIXER DE ÁUDIO
+        let soundStates = { lessrain: false, midnight: false, adventure: false };
 
         window.toggleSound = (type) => {
             const audio = document.getElementById(`audio-${type}`);
@@ -1315,205 +1018,104 @@
                 btn.classList.remove('text-[var(--primary)]', 'bg-[var(--primary)]/20');
                 btn.classList.add('text-zinc-400', 'bg-white/5');
             } else {
-                if(!audio.src || audio.src === window.location.href) {
-                     audio.src = SOUNDS[type];
-                     audio.volume = document.getElementById(`vol-${type}`).value;
-                }
-                audio.play().catch(e => console.log("Erro ao tocar áudio", e));
-                soundStates[type] = true;
-                btn.classList.remove('text-zinc-400', 'bg-white/5');
-                btn.classList.add('text-[var(--primary)]', 'bg-[var(--primary)]/20');
+                audio.volume = document.getElementById(`vol-${type}`).value;
+                audio.play().then(() => {
+                    soundStates[type] = true;
+                    btn.classList.remove('text-zinc-400', 'bg-white/5');
+                    btn.classList.add('text-[var(--primary)]', 'bg-[var(--primary)]/20');
+                    if (Object.values(soundStates).some(state => state === true)) {
+                        indicator.classList.remove('hidden');
+                    }
+                }).catch(e => {
+                    console.log("Erro ao tocar áudio:", e);
+                    window.showToast("❌ Áudio a sincronizar no servidor. Aguarde 1 min e atualize a página (Ctrl+F5).", "error");
+                });
             }
             
-            if (soundStates.rain || soundStates.thunder) {
+            if (Object.values(soundStates).some(state => state === true)) {
                 indicator.classList.remove('hidden');
             } else {
                 indicator.classList.add('hidden');
             }
         };
 
-        window.changeVolume = (type, value) => {
-            const audio = document.getElementById(`audio-${type}`);
-            if(audio) audio.volume = value;
-        };
+        window.changeVolume = (type, value) => { const audio = document.getElementById(`audio-${type}`); if(audio) audio.volume = value; };
 
         window.toggleTimer = () => {
-            const btn = document.getElementById('timer-btn');
-            const ring = document.getElementById('timer-ring');
-            const focusBg = document.getElementById('focus-bg');
-            const focusDarken = document.getElementById('focus-darken');
-            const timeSelector = document.getElementById('focus-time-selector');
-            const topButtons = document.getElementById('focus-top-buttons');
+            const btn = document.getElementById('timer-btn'); const ring = document.getElementById('timer-ring');
+            const focusBg = document.getElementById('focus-bg'); const focusDarken = document.getElementById('focus-darken');
+            const timeSelector = document.getElementById('focus-time-selector'); const topButtons = document.getElementById('focus-top-buttons');
 
             if(isTimerRunning) { 
-                clearInterval(timerInterval); 
-                btn.innerText = "Retomar"; 
-                ring.classList.remove('timer-active');
-                timeSelector.style.opacity = '1';
-                timeSelector.style.pointerEvents = 'auto';
-                
-                topButtons.style.opacity = '0';
-                topButtons.style.pointerEvents = 'none';
-                
-                // Pausado: Esconde o GIF e volta o desfoque
-                focusBg.style.opacity = '0';
-                focusDarken.className = 'absolute inset-0 bg-black/95 backdrop-blur-3xl transition-all duration-1000 z-10';
+                clearInterval(timerInterval); btn.innerText = "Retomar"; ring.classList.remove('timer-active');
+                timeSelector.style.opacity = '1'; timeSelector.style.pointerEvents = 'auto'; topButtons.style.opacity = '0'; topButtons.style.pointerEvents = 'none';
+                focusBg.style.opacity = '0'; focusDarken.className = 'absolute inset-0 bg-black/95 backdrop-blur-3xl transition-all duration-1000 z-10';
             } else { 
-                timeSelector.style.opacity = '0';
-                timeSelector.style.pointerEvents = 'none';
-                
-                topButtons.style.opacity = '1';
-                topButtons.style.pointerEvents = 'auto';
-
-                // Iniciar: Revela o GIF atual e diminui o escurecimento/desfoque
-                currentFocusGifIndex = Math.floor(Math.random() * FOCUS_GIFS.length);
-                focusBg.style.backgroundImage = `url('${FOCUS_GIFS[currentFocusGifIndex]}')`;
-                focusBg.style.opacity = '1';
-                focusDarken.className = 'absolute inset-0 bg-black/60 backdrop-blur-sm transition-all duration-1000 z-10';
+                timeSelector.style.opacity = '0'; timeSelector.style.pointerEvents = 'none'; topButtons.style.opacity = '1'; topButtons.style.pointerEvents = 'auto';
+                currentFocusGifIndex = Math.floor(Math.random() * FOCUS_GIFS.length); focusBg.style.backgroundImage = `url('${FOCUS_GIFS[currentFocusGifIndex]}')`; focusBg.style.opacity = '1'; focusDarken.className = 'absolute inset-0 bg-black/60 backdrop-blur-sm transition-all duration-1000 z-10';
 
                 timerInterval = setInterval(() => { 
-                    timeLeft--; 
-                    updateTimerDisplay(); 
+                    timeLeft--; updateTimerDisplay(); 
                     if(timeLeft<=0) { 
                         clearInterval(timerInterval); 
-                        
-                        // CORREÇÃO: Adiciona o tempo focado na semente!
-                        const p = projects.find(proj => proj.id === activeProjectId);
-                        if(p) {
-                            p.focusTime = (p.focusTime || 0) + selectedFocusTime;
-                        }
-
-                        if (selectedFocusTime === 60 && !achievements.includes('foco')) {
-                            achievements.push('foco');
-                            window.showToast('🏆 Conquista: Foco Inabalável!');
-                        }
-                        
-                        save();
-                        closeFocusMode(); 
-                        window.showToast(`✅ Sessão de ${selectedFocusTime}m concluída!`);
+                        const p = projects.find(proj => proj.id === activeProjectId); if(p) { p.focusTime = (p.focusTime || 0) + selectedFocusTime; }
+                        if (selectedFocusTime === 60 && !achievements.includes('foco')) { achievements.push('foco'); window.showToast('🏆 Conquista: Foco Inabalável!'); }
+                        save(); closeFocusMode(); window.showToast(`✅ Sessão de ${selectedFocusTime}m concluída!`);
                     } 
                 }, 1000); 
-                btn.innerText = "Pausar"; 
-                ring.classList.add('timer-active');
+                btn.innerText = "Pausar"; ring.classList.add('timer-active');
             }
             isTimerRunning = !isTimerRunning;
         };
         const updateTimerDisplay = () => { document.getElementById('timer-display').innerText = `${Math.floor(timeLeft/60).toString().padStart(2,'0')}:${(timeLeft%60).toString().padStart(2,'0')}`; };
 
-        // IMPLEMENTAÇÃO DAS ESTATÍSTICAS
         window.openStats = () => {
-            // Ignorar as ideias que estão na Lixeira para as estatísticas ficarem precisas!
             const validProjects = projects.filter(p => p.station !== 'trash');
-            const total = validProjects.length;
-            const archived = validProjects.filter(p => p.station === 'archive').length;
-            const inProgress = validProjects.filter(p => p.station === 'now').length;
-            const planning = validProjects.filter(p => p.station === 'next' || p.station === 'someday').length;
-            
-            let totalMilestones = 0;
-            let completedMilestones = 0;
-            validProjects.forEach(p => {
-                totalMilestones += p.milestones.length;
-                completedMilestones += p.milestones.filter(m => m.completed).length;
-            });
+            const total = validProjects.length; const archived = validProjects.filter(p => p.station === 'archive').length;
+            const inProgress = validProjects.filter(p => p.station === 'now').length; const planning = validProjects.filter(p => p.station === 'next' || p.station === 'someday').length;
+            let totalMilestones = 0; let completedMilestones = 0;
+            validProjects.forEach(p => { totalMilestones += p.milestones.length; completedMilestones += p.milestones.filter(m => m.completed).length; });
             const overallProgress = totalMilestones === 0 ? 0 : Math.round((completedMilestones / totalMilestones) * 100);
 
             document.getElementById('stats-chart').innerHTML = `
                 <div class="glass p-6 rounded-2xl flex justify-between items-center mb-4 border border-[var(--primary)]">
-                    <span class="font-bold text-lg">Evolução Geral da Vida</span>
-                    <span class="font-black text-3xl text-[var(--primary)]">${overallProgress}%</span>
+                    <span class="font-bold text-lg">Evolução Geral da Vida</span><span class="font-black text-3xl text-[var(--primary)]">${overallProgress}%</span>
                 </div>
                 <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors">
-                        <i data-lucide="layers" class="w-8 h-8 text-indigo-400"></i>
-                        <span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Ideias Totais</span>
-                        <span class="font-black text-3xl">${total}</span>
-                    </div>
-                    <div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors">
-                        <i data-lucide="award" class="w-8 h-8 text-emerald-400"></i>
-                        <span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">No Jardim (Fim)</span>
-                        <span class="font-black text-3xl text-emerald-400">${archived}</span>
-                    </div>
-                    <div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors">
-                        <i data-lucide="zap" class="w-8 h-8 text-[var(--primary)]"></i>
-                        <span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Ativos Agora</span>
-                        <span class="font-black text-3xl text-[var(--primary)]">${inProgress}</span>
-                    </div>
-                    <div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors">
-                        <i data-lucide="calendar" class="w-8 h-8 text-blue-400"></i>
-                        <span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Planejamento</span>
-                        <span class="font-black text-3xl text-blue-400">${planning}</span>
-                    </div>
+                    <div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="layers" class="w-8 h-8 text-indigo-400"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Ideias Totais</span><span class="font-black text-3xl">${total}</span></div>
+                    <div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="award" class="w-8 h-8 text-emerald-400"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">No Jardim (Fim)</span><span class="font-black text-3xl text-emerald-400">${archived}</span></div>
+                    <div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="zap" class="w-8 h-8 text-[var(--primary)]"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Ativos Agora</span><span class="font-black text-3xl text-[var(--primary)]">${inProgress}</span></div>
+                    <div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="calendar" class="w-8 h-8 text-blue-400"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Planejamento</span><span class="font-black text-3xl text-blue-400">${planning}</span></div>
                 </div>
-
                 <div class="glass p-6 rounded-2xl space-y-4 mt-4">
                     <h4 class="text-[10px] font-black uppercase tracking-widest text-zinc-400 text-center">Sala de Troféus</h4>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        ${Object.values(MEDALS).map(m => {
-                            const unlocked = achievements.includes(m.id);
-                            return `<div class="glass p-4 rounded-xl text-center flex flex-col items-center justify-center gap-2 ${unlocked ? 'border border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.2)] bg-amber-500/10' : 'opacity-40 grayscale'} transition-all">
-                                <div class="text-3xl drop-shadow-md">${m.icon}</div>
-                                <div class="text-[10px] font-black uppercase text-zinc-200">${m.title}</div>
-                                <div class="text-[8px] text-zinc-400 leading-tight">${m.desc}</div>
-                            </div>`;
-                        }).join('')}
+                        ${Object.values(MEDALS).map(m => { const unlocked = achievements.includes(m.id); return `<div class="glass p-4 rounded-xl text-center flex flex-col items-center justify-center gap-2 ${unlocked ? 'border border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.2)] bg-amber-500/10' : 'opacity-40 grayscale'} transition-all"><div class="text-3xl drop-shadow-md">${m.icon}</div><div class="text-[10px] font-black uppercase text-zinc-200">${m.title}</div><div class="text-[8px] text-zinc-400 leading-tight">${m.desc}</div></div>`; }).join('')}
                     </div>
                 </div>
-            `;
-            lucide.createIcons();
-            document.getElementById('stats-overlay').classList.replace('hidden', 'flex');
+            `; lucide.createIcons(); document.getElementById('stats-overlay').classList.replace('hidden', 'flex');
         };
         window.closeStats = () => document.getElementById('stats-overlay').classList.replace('flex', 'hidden');
 
-        // IMPLEMENTAÇÃO DO MENTOR IA
         window.closeMentor = () => document.getElementById('mentor-overlay').classList.replace('flex', 'hidden');
         window.askMentor = async () => {
-            const p = projects.find(p => p.id === activeProjectId);
-            if(!p) return;
-            
-            document.getElementById('mentor-overlay').classList.replace('hidden', 'flex');
-            const responseDiv = document.getElementById('mentor-response');
-            
-            responseDiv.innerHTML = `
-                <div class="animate-pulse space-y-4 pt-4">
-                    <div class="h-4 bg-white/20 rounded w-3/4"></div>
-                    <div class="h-4 bg-white/20 rounded w-full"></div>
-                    <div class="h-4 bg-white/20 rounded w-5/6"></div>
-                    <div class="h-4 bg-white/20 rounded w-1/2"></div>
-                </div>
-            `;
-
+            const p = projects.find(p => p.id === activeProjectId); if(!p) return;
+            document.getElementById('mentor-overlay').classList.replace('hidden', 'flex'); const responseDiv = document.getElementById('mentor-response');
+            responseDiv.innerHTML = `<div class="animate-pulse space-y-4 pt-4"><div class="h-4 bg-white/20 rounded w-3/4"></div><div class="h-4 bg-white/20 rounded w-full"></div><div class="h-4 bg-white/20 rounded w-5/6"></div><div class="h-4 bg-white/20 rounded w-1/2"></div></div>`;
             try {
                 const prompt = `Atue como um mentor de produtividade e foco extremamente encorajador, sábio e direto ao ponto. Meu projeto atual se chama "${p.title}". As tarefas/marcos que tenho para esse projeto são: ${p.milestones.map(m=>m.text).join(', ')}. O que já completei: ${p.milestones.filter(m=>m.completed).map(m=>m.text).join(', ') || 'Nenhum ainda'}. Escreva um conselho rápido, de 2 a 3 parágrafos curtos, me motivando a continuar e dando uma dica de como focar melhor no próximo passo. Use uma linguagem moderna e amigável.`;
-
-                const result = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-                });
-
+                const result = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
                 if (!result.ok) throw new Error("API Indisponível");
-                
-                const data = await result.json();
-                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "Acredite no processo! Você está indo muito bem. O segredo é manter a constância e dar um passo de cada vez.";
-                
+                const data = await result.json(); const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "Acredite no processo! Você está indo muito bem.";
                 responseDiv.innerHTML = text.replace(/\n/g, '<br><br>');
-
             } catch(e) {
-                responseDiv.innerHTML = `
-                    <p class="font-bold text-xl text-white">A sua jornada está apenas a começar!</p><br>
-                    <p>Neste momento, estou a recarregar as minhas energias (API não configurada), mas analisando a semente <strong>"${p.title}"</strong>, vejo muito potencial.</p><br>
-                    <p>O segredo para avançar não é a velocidade, mas sim a constância. Foque-se no próximo marco que está incompleto e coloque 25 minutos de atenção total nele. Você consegue!</p>
-                `;
+                responseDiv.innerHTML = `<p class="font-bold text-xl text-white">A sua jornada está apenas a começar!</p><br><p>Neste momento, estou a recarregar as minhas energias, mas analisando a semente <strong>"${p.title}"</strong>, vejo muito potencial.</p><br><p>O segredo para avançar não é a velocidade, mas sim a constância. Foque-se no próximo marco incompleto. Você consegue!</p>`;
             }
         };
 
         window.onload = () => { 
             changeTheme(localStorage.getItem('seed_theme') || 'theme-purple'); 
             renderProjects(); 
-            
-            // Pré-carregar fontes de áudio
-            document.getElementById('audio-rain').src = SOUNDS.rain;
-            document.getElementById('audio-thunder').src = SOUNDS.thunder;
         };
     </script>
 </body>
