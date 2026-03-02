@@ -726,13 +726,11 @@
             document.getElementById('mentor-overlay').classList.replace('hidden', 'flex'); const responseDiv = document.getElementById('mentor-response');
             responseDiv.innerHTML = `<div class="animate-pulse space-y-4 pt-4"><div class="h-4 bg-white/20 rounded w-3/4"></div><div class="h-4 bg-white/20 rounded w-full"></div><div class="h-4 bg-white/20 rounded w-5/6"></div><div class="h-4 bg-white/20 rounded w-1/2"></div></div>`;
             try {
-                // NOVO PROMPT: Agora ele lê as suas "Notas & Ideias" para dar conselhos cirúrgicos
                 const prompt = `Atue como um mentor de produtividade e foco extremamente encorajador, sábio e direto ao ponto. Meu projeto atual se chama "${p.title}". As tarefas/marcos que tenho para esse projeto são: ${p.milestones.map(m=>m.text).join(', ')}. O que já completei: ${p.milestones.filter(m=>m.completed).map(m=>m.text).join(', ') || 'Nenhum ainda'}. MUITO IMPORTANTE - Aqui estão os meus pensamentos, ideias e anotações sobre este projeto até agora: "${p.notes || 'Ainda não escrevi nenhuma anotação.'}". Escreva um conselho rápido, de 2 a 3 parágrafos curtos, me motivando a continuar e dando uma dica prática focada no meu próximo passo, levando em consideração também as minhas anotações pessoais. Use uma linguagem moderna e amigável.`;
                 
-                // Mudei para o modelo gemini-1.5-flash para garantir 100% de estabilidade com a sua nova chave pública
-                const result = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
+                // CORREÇÃO APLICADA AQUI: Voltámos para o modelo exato suportado pela API
+                const result = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
                 
-                // NOVO: Captura o erro exato da Google para debug
                 if (!result.ok) {
                     const errorData = await result.json();
                     throw new Error(errorData.error?.message || `Erro de Servidor: ${result.status}`);
