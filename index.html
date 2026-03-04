@@ -8,12 +8,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Seed">
     
-    <!-- Ícone Real do Projeto blindado em SVG (Fundo Azul #3B82F6, Folha Branca) -->
+    <!-- Ícone Real do Projeto TOTALMENTE blindado em SVG (Fundo Azul #3B82F6, Folha Branca) -->
+    <!-- Sem requisições externas, erro 404 impossível -->
     <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%233B82F6'/%3E%3Cg transform='translate(4.5, 4.5) scale(0.625)' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 20A7 7 0 0 1 14 6h5a2 2 0 0 1 2 2v5a7 7 0 0 1-7 7H9a2 2 0 0 1-2-2V8a7 7 0 0 1 7-7h5'/%3E%3Cpath d='M11 20V10'/%3E%3C/g%3E%3C/svg%3E">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%233B82F6'/%3E%3Cg transform='translate(4.5, 4.5) scale(0.625)' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 20A7 7 0 0 1 14 6h5a2 2 0 0 1 2 2v5a7 7 0 0 1-7 7H9a2 2 0 0 1-2-2V8a7 7 0 0 1 7-7h5'/%3E%3Cpath d='M11 20V10'/%3E%3C/g%3E%3C/svg%3E">
-    
-    <!-- Chamada para o ícone do telemóvel quando instalado -->
-    <link rel="apple-touch-icon" href="icon-512.png">
+    <link rel="apple-touch-icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%233B82F6'/%3E%3Cg transform='translate(4.5, 4.5) scale(0.625)' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 20A7 7 0 0 1 14 6h5a2 2 0 0 1 2 2v5a7 7 0 0 1-7 7H9a2 2 0 0 1-2-2V8a7 7 0 0 1 7-7h5'/%3E%3Cpath d='M11 20V10'/%3E%3C/g%3E%3C/svg%3E">
     
     <!-- Chamada para o Ficheiro PWA -->
     <link rel="manifest" href="manifest.json">
@@ -484,7 +483,15 @@
             { name: 'Cidade Noturna', url: 'https://i.pinimg.com/originals/49/cd/d8/49cdd838e8c6d7fe5e2dd55deead5567.gif' },
             { name: 'Janela Chuvosa', url: 'https://i.pinimg.com/originals/81/81/90/81819033e7242c1d826af87e2fb4975d.gif' },
             { name: 'Natureza', url: 'https://i.pinimg.com/originals/08/9d/be/089dbe8f9d422e09d2e4fcae0adec609.gif' },
-            { name: 'Meia-Noite', url: 'https://i.pinimg.com/originals/13/b0/00/13b0000818cfd9cf27d39afaa051dc23.gif' }
+            { name: 'Meia-Noite', url: 'https://i.pinimg.com/originals/13/b0/00/13b0000818cfd9cf27d39afaa051dc23.gif' },
+            { name: 'Refúgio', url: 'https://i.pinimg.com/originals/d1/1a/42/d11a4231a6fd0b25c0b4b2d4634701e2.gif' },
+            { name: 'Fim de Tarde', url: 'https://i.pinimg.com/originals/49/4d/8c/494d8c14dbae01f9f90db8665edbe5f6.gif' },
+            { name: 'Metrópole', url: 'https://i.pinimg.com/originals/e4/c3/9a/e4c39a73c1d9f9d32ca69f9ea0783c66.gif' },
+            { name: 'Tranquilidade', url: 'https://i.pinimg.com/originals/91/96/32/919632d3c2d04ab12e56f886a428c528.gif' },
+            { name: 'Inspiração', url: 'https://i.pinimg.com/originals/39/38/77/3938775fa4484f170466ecfa6da4e662.gif' },
+            { name: 'Profundeza', url: 'https://i.pinimg.com/originals/ab/26/01/ab26019d6a9def8082a9d5134a9e2d74.gif' },
+            { name: 'Calmaria', url: 'https://i.pinimg.com/originals/26/d4/b6/26d4b6d862bd59f5bac487c6eb3a2af0.gif' },
+            { name: 'Retiro', url: 'https://i.pinimg.com/originals/57/3b/68/573b688fbac605dde5807bf57b725bd5.gif' }
         ];
         
         let currentSceneIndex = parseInt(localStorage.getItem('seed_focus_scene')) || 0;
@@ -617,7 +624,7 @@
 
             document.getElementById('room-bg').style.backgroundImage = `url('${FOCUS_SCENES[currentSceneIndex].url}')`; 
             document.getElementById('room-bg').style.opacity = '1'; 
-            document.getElementById('room-darken').className = 'absolute inset-0 bg-black/60 backdrop-blur-sm transition-all duration-1000 z-10';
+            document.getElementById('room-darken').className = 'absolute inset-0 bg-black/60 transition-all duration-1000 z-10';
             
             document.getElementById('room-time-selector').style.opacity = '1'; 
             document.getElementById('room-time-selector').style.pointerEvents = 'auto';
