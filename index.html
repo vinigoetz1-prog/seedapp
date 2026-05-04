@@ -161,25 +161,46 @@
                 <h2 id="auth-title" class="text-3xl font-black tracking-tighter mb-2">O seu Jardim</h2>
                 <p id="auth-subtitle" class="text-zinc-400 text-xs mb-8 font-bold uppercase tracking-widest">Entre para cultivar as suas ideias</p>
                 <div class="space-y-4 text-left">
-                    <div id="auth-name-group" class="hidden transition-all duration-300"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Como quer ser chamado?</label><input id="auth-name" type="text" placeholder="Seu Nome" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors"></div>
-                    <div><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">E-mail de Acesso</label><input id="auth-email" type="email" placeholder="seu@email.com" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors"></div>
+                    <div id="auth-name-group" class="hidden transition-all duration-300">
+                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Como quer ser chamado?</label>
+                        <input id="auth-name" type="text" placeholder="Seu Nome" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">E-mail de Acesso</label>
+                        <input id="auth-email" type="email" placeholder="seu@email.com" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors">
+                    </div>
                     <div>
                         <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Senha Secreta</label>
-                        <div class="relative"><input id="auth-pass" type="password" placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-2xl pl-5 pr-12 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors"><button type="button" onclick="togglePasswordVisibility()" class="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors" title="Mostrar Palavra-passe"><i data-lucide="eye" id="icon-eye" class="w-5 h-5 block"></i><i data-lucide="eye-off" id="icon-eye-off" class="w-5 h-5 hidden"></i></button></div>
+                        <div class="relative">
+                            <input id="auth-pass" type="password" placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-2xl pl-5 pr-12 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors">
+                            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors" title="Mostrar Palavra-passe">
+                                <i data-lucide="eye" id="icon-eye" class="w-5 h-5 block"></i>
+                                <i data-lucide="eye-off" id="icon-eye-off" class="w-5 h-5 hidden"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="mt-8 space-y-3"><button id="btn-auth-main" onclick="executeAuth()" class="w-full bg-[var(--primary)] py-4 rounded-2xl font-black text-white shadow-xl hover:opacity-90 active:scale-95 transition-all uppercase tracking-widest text-xs">Entrar no Seed</button><button id="btn-auth-toggle" onclick="toggleAuthMode()" class="w-full bg-white/5 border border-white/10 py-4 rounded-2xl font-black text-zinc-300 hover:bg-white/10 active:scale-95 transition-all uppercase tracking-widest text-xs">Criar Nova Conta</button></div>
+                <div class="mt-8 space-y-3">
+                    <button id="btn-auth-main" onclick="executeAuth()" class="w-full bg-[var(--primary)] py-4 rounded-2xl font-black text-white shadow-xl hover:opacity-90 active:scale-95 transition-all uppercase tracking-widest text-xs">Entrar no Seed</button>
+                    <button id="btn-auth-toggle" onclick="toggleAuthMode()" class="w-full bg-white/5 border border-white/10 py-4 rounded-2xl font-black text-zinc-300 hover:bg-white/10 active:scale-95 transition-all uppercase tracking-widest text-xs">Criar Nova Conta</button>
+                </div>
                 <button onclick="continueOffline()" class="mt-6 text-[10px] font-bold text-zinc-500 hover:text-zinc-300 uppercase tracking-widest underline decoration-zinc-700 underline-offset-4 transition-colors">Continuar Offline (Sem Nuvem)</button>
             </div>
         </div>
     </div>
 
-    <!-- Background Animado -->
-    <div class="fixed inset-0 z-[-2] bg-[#0a0a0c] overflow-hidden pointer-events-none">
+    <!-- SISTEMA DE BACKGROUND DINÂMICO (AURORA + WALLPAPER USER) -->
+    <!-- 1. Aurora Base (Sempre presente, z-index -3) -->
+    <div class="fixed inset-0 z-[-3] bg-[#0a0a0c] overflow-hidden pointer-events-none">
         <div class="absolute -top-[20%] -left-[10%] w-[60vw] h-[60vw] rounded-full bg-[var(--primary)] blur-[120px] opacity-20 animate-aurora-1 transition-colors duration-1000"></div>
         <div class="absolute top-[20%] -right-[20%] w-[50vw] h-[50vw] rounded-full bg-[var(--primary-dark)] blur-[120px] opacity-20 animate-aurora-2 transition-colors duration-1000"></div>
         <div class="absolute -bottom-[20%] left-[10%] w-[70vw] h-[70vw] rounded-full bg-[var(--primary)] blur-[120px] opacity-10 animate-aurora-3 transition-colors duration-1000"></div>
     </div>
+    
+    <!-- 2. Imagem de Fundo Selecionada pelo Usuário (z-index -2) -->
+    <div id="app-user-bg" class="fixed inset-0 z-[-2] bg-cover bg-center bg-no-repeat opacity-0 transition-opacity duration-1000 pointer-events-none"></div>
+    <!-- 3. Overlay Escuro para não matar a leitura dos cards (z-index -1) -->
+    <div id="app-bg-overlay" class="fixed inset-0 z-[-1] bg-black/60 opacity-0 transition-opacity duration-1000 pointer-events-none"></div>
 
     <!-- Layout com Sidebar -->
     <div class="app-layout">
@@ -232,11 +253,18 @@
                     <h1 class="text-lg font-black tracking-tighter gradient-text">SEED</h1>
                 </div>
 
-                <div class="ml-auto flex items-center gap-3 glass p-2 rounded-2xl px-4 md:px-5">
-                    <button onclick="changeTheme('theme-purple')" class="w-4 h-4 rounded-full bg-violet-500 hover:scale-125 transition-transform"></button>
-                    <button onclick="changeTheme('theme-emerald')" class="w-4 h-4 rounded-full bg-emerald-500 hover:scale-125 transition-transform"></button>
-                    <button onclick="changeTheme('theme-blue')" class="w-4 h-4 rounded-full bg-blue-500 hover:scale-125 transition-transform"></button>
-                    <button onclick="changeTheme('theme-rose')" class="w-4 h-4 rounded-full bg-rose-500 hover:scale-125 transition-transform"></button>
+                <div class="ml-auto flex items-center gap-3">
+                    <!-- Botão de Personalização do Fundo Principal -->
+                    <button onclick="openWallpaperSelector()" class="glass p-2.5 rounded-xl text-zinc-400 hover:text-white hover:border-[var(--primary)] transition-all" title="Personalizar Fundo">
+                        <i data-lucide="image" class="w-4 h-4 md:w-5 md:h-5"></i>
+                    </button>
+                    <!-- Temas -->
+                    <div class="hidden md:flex items-center gap-3 glass p-2 rounded-2xl px-4 md:px-5">
+                        <button onclick="changeTheme('theme-purple')" class="w-4 h-4 rounded-full bg-violet-500 hover:scale-125 transition-transform"></button>
+                        <button onclick="changeTheme('theme-emerald')" class="w-4 h-4 rounded-full bg-emerald-500 hover:scale-125 transition-transform"></button>
+                        <button onclick="changeTheme('theme-blue')" class="w-4 h-4 rounded-full bg-blue-500 hover:scale-125 transition-transform"></button>
+                        <button onclick="changeTheme('theme-rose')" class="w-4 h-4 rounded-full bg-rose-500 hover:scale-125 transition-transform"></button>
+                    </div>
                 </div>
             </header>
 
@@ -280,7 +308,9 @@
         </button>
     </nav>
 
-    <!-- Modal Novo/Editar Plantio -->
+    <!-- Modais e Overlays -->
+
+    <!-- 1. Modal: Novo/Editar Plantio -->
     <div id="modal" class="fixed inset-0 bg-black/95 z-[160] hidden items-center justify-center p-4 md:p-6 backdrop-blur-md">
         <div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-8 max-h-[90vh] overflow-y-auto custom-scrollbar shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10">
             <div class="flex justify-between items-center">
@@ -288,100 +318,306 @@
                 <button onclick="closeModal()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x" class="w-7 h-7"></i></button>
             </div>
             <div class="space-y-6">
-                <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Nome do Projeto</label><input id="proj-title" type="text" class="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 focus:border-[var(--primary)] outline-none text-lg font-bold transition-colors"></div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Tema Visual (Área)</label><select id="proj-icon" class="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 outline-none font-bold text-gray-300 focus:border-[var(--primary)] transition-colors cursor-pointer"><option value="briefcase" class="bg-[#0a0a0c]">💼 Trabalho & Carreira</option><option value="book" class="bg-[#0a0a0c]">📚 Estudos & Aprendizado</option><option value="heart" class="bg-[#0a0a0c]">🏋️ Saúde & Corpo (Oldschool)</option><option value="palette" class="bg-[#0a0a0c]">🎨 Arte & Criação</option><option value="coffee" class="bg-[#0a0a0c]">☕ Lazer & Pessoal (Unplug)</option></select></div>
-                    <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Prioridade</label><select id="proj-station" class="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 outline-none font-bold text-gray-300 focus:border-[var(--primary)] transition-colors cursor-pointer"><option value="now" class="bg-[#0a0a0c]">Projeto para agora</option><option value="next" class="bg-[#0a0a0c]">Projeto próximo</option><option value="someday" class="bg-[#0a0a0c]">Projeto futuro</option></select></div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Nome do Projeto</label>
+                    <input id="proj-title" type="text" class="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 focus:border-[var(--primary)] outline-none text-lg font-bold transition-colors">
                 </div>
-                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Hábito Diário (Opcional)</label><input id="proj-habit" type="text" class="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium transition-colors focus:border-[var(--primary)]"></div>
-                    <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Data de Entrega (Opcional)</label><input id="proj-deadline" type="date" class="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium text-zinc-400 transition-colors focus:border-[var(--primary)] [color-scheme:dark]"></div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Tema Visual (Área)</label>
+                        <select id="proj-icon" class="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 outline-none font-bold text-gray-300 focus:border-[var(--primary)] transition-colors cursor-pointer">
+                            <option value="briefcase" class="bg-[#0a0a0c]">💼 Trabalho & Carreira</option>
+                            <option value="book" class="bg-[#0a0a0c]">📚 Estudos & Aprendizado</option>
+                            <option value="heart" class="bg-[#0a0a0c]">🏋️ Saúde & Corpo</option>
+                            <option value="palette" class="bg-[#0a0a0c]">🎨 Arte & Criação</option>
+                            <option value="coffee" class="bg-[#0a0a0c]">☕ Lazer & Pessoal</option>
+                        </select>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Prioridade</label>
+                        <select id="proj-station" class="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 outline-none font-bold text-gray-300 focus:border-[var(--primary)] transition-colors cursor-pointer">
+                            <option value="now" class="bg-[#0a0a0c]">Projeto para agora</option>
+                            <option value="next" class="bg-[#0a0a0c]">Projeto próximo</option>
+                            <option value="someday" class="bg-[#0a0a0c]">Projeto futuro</option>
+                        </select>
+                    </div>
                 </div>
-                
-                <div id="modal-milestones-section" class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Marcos e Tarefas</label><div class="flex gap-2"><input id="new-milestone-input" type="text" placeholder="Escreva uma tarefa e pressione Enter..." class="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium transition-colors focus:border-[var(--primary)] text-sm" onkeydown="if(event.key==='Enter'){ event.preventDefault(); addTempMilestone(); }"><button type="button" onclick="addTempMilestone()" class="px-6 bg-white/10 hover:bg-[var(--primary)] rounded-2xl text-white transition-colors flex items-center justify-center"><i data-lucide="plus" class="w-5 h-5"></i></button></div><div id="temp-milestones-list" class="space-y-2 mt-3 max-h-40 overflow-y-auto custom-scrollbar"></div></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Hábito Diário (Opcional)</label>
+                        <input id="proj-habit" type="text" class="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium transition-colors focus:border-[var(--primary)]">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Data de Entrega (Opcional)</label>
+                        <input id="proj-deadline" type="date" class="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium text-zinc-400 transition-colors focus:border-[var(--primary)] [color-scheme:dark]">
+                    </div>
+                </div>
+                <div id="modal-milestones-section" class="space-y-2">
+                    <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Marcos e Tarefas</label>
+                    <div class="flex gap-2">
+                        <input id="new-milestone-input" type="text" placeholder="Escreva uma tarefa e pressione Enter..." class="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium transition-colors focus:border-[var(--primary)] text-sm" onkeydown="if(event.key==='Enter'){ event.preventDefault(); addTempMilestone(); }">
+                        <button type="button" onclick="addTempMilestone()" class="px-6 bg-white/10 hover:bg-[var(--primary)] rounded-2xl text-white transition-colors flex items-center justify-center">
+                            <i data-lucide="plus" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    <div id="temp-milestones-list" class="space-y-2 mt-3 max-h-40 overflow-y-auto custom-scrollbar"></div>
+                </div>
             </div>
             <button id="modal-main-btn" onclick="saveProject()" class="w-full bg-[var(--primary)] py-5 rounded-[2rem] font-black text-white shadow-2xl shadow-[var(--primary)]/30 uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all">Plantar Semente</button>
         </div>
     </div>
 
-    <!-- Modais (Detail, Stats, Settings, Trash, Mentor, Gif) -->
+    <!-- 2. Modal: Detalhes do Projeto -->
     <section id="detail-view" class="fixed inset-0 bg-black/85 backdrop-blur-3xl z-[150] overflow-y-auto hidden">
         <div id="vision-banner-container" class="absolute top-0 left-0 w-full h-[40vh] vision-banner pointer-events-none"></div>
         <div class="relative max-w-4xl mx-auto p-6 py-12 min-h-screen flex flex-col">
             <div class="flex justify-between items-center mb-12">
-                <button onclick="closeDetails()" class="flex items-center gap-2 text-zinc-300 hover:text-[var(--primary)] transition-colors font-bold uppercase tracking-widest text-xs drop-shadow-md"><i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar</button>
+                <button onclick="closeDetails()" class="flex items-center gap-2 text-zinc-300 hover:text-[var(--primary)] transition-colors font-bold uppercase tracking-widest text-xs drop-shadow-md">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
+                </button>
                 <div id="save-status" class="text-[10px] font-black text-emerald-500 uppercase tracking-widest opacity-0 transition-opacity">Guardado</div>
             </div>
             <div id="detail-content" class="space-y-12 flex-1 pb-24"></div>
         </div>
     </section>
 
-    <div id="stats-overlay" class="fixed inset-0 bg-black/80 z-[160] hidden items-start justify-center p-4 md:p-6 backdrop-blur-3xl animate-slide-up overflow-y-auto custom-scrollbar"><div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-8 shadow-2xl my-auto border border-white/10"><div class="flex justify-between items-center"><h3 class="text-3xl font-black">Evolução</h3><button onclick="closeStats()" class="text-zinc-500 hover:text-white"><i data-lucide="x"></i></button></div><div id="stats-chart" class="space-y-4"></div></div></div>
+    <!-- 3. Modal: Termômetro (Stats) -->
+    <div id="stats-overlay" class="fixed inset-0 bg-black/80 z-[160] hidden items-start justify-center p-4 md:p-6 backdrop-blur-3xl animate-slide-up overflow-y-auto custom-scrollbar">
+        <div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-8 shadow-2xl my-auto border border-white/10">
+            <div class="flex justify-between items-center">
+                <h3 class="text-3xl font-black">Evolução</h3>
+                <button onclick="closeStats()" class="text-zinc-500 hover:text-white"><i data-lucide="x"></i></button>
+            </div>
+            <div id="stats-chart" class="space-y-4"></div>
+        </div>
+    </div>
     
+    <!-- 4. Modal: Configurações -->
     <div id="settings-overlay" class="fixed inset-0 bg-black/80 z-[160] hidden items-center justify-center p-4 md:p-6 backdrop-blur-md animate-slide-up">
         <div class="glass w-full max-w-lg rounded-[3rem] p-8 md:p-10 space-y-8 flex flex-col max-h-[90vh] relative overflow-hidden shadow-2xl border border-white/10">
             <div class="flex justify-between items-center shrink-0">
-                <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-[var(--primary)]/20 flex items-center justify-center border border-[var(--primary)]/30"><i data-lucide="settings" class="text-[var(--primary)] w-5 h-5"></i></div><div><h3 class="text-2xl font-black tracking-tight text-white">Ajustes</h3></div></div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-[var(--primary)]/20 flex items-center justify-center border border-[var(--primary)]/30">
+                        <i data-lucide="settings" class="text-[var(--primary)] w-5 h-5"></i>
+                    </div>
+                    <div><h3 class="text-2xl font-black tracking-tight text-white">Ajustes</h3></div>
+                </div>
                 <button onclick="closeSettings()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
             <div class="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-8 pb-4">
-                <div class="space-y-3"><h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2"><i data-lucide="user" class="w-3 h-3"></i> Perfil</h4><div class="flex gap-2"><input id="settings-name" type="text" placeholder="Como quer ser chamado?" class="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 outline-none text-sm font-bold focus:border-[var(--primary)] transition-colors text-white"><button onclick="saveProfileName()" class="px-6 py-4 bg-[var(--primary)] rounded-2xl text-white text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-lg shadow-[var(--primary)]/20">Salvar</button></div></div>
-                <div class="space-y-3"><h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2"><i data-lucide="timer" class="w-3 h-3"></i> Sala de Foco</h4><div class="flex items-center justify-between bg-black/20 p-5 rounded-2xl border border-white/5"><div><span class="block text-sm font-bold text-zinc-200">Tempo Padrão (Minutos)</span><span class="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mt-1">Duração inicial</span></div><div class="flex items-center gap-2"><input id="settings-focus-time" type="number" min="1" max="120" value="25" class="w-20 bg-black/40 border border-white/10 rounded-xl px-3 py-3 outline-none text-center text-sm font-bold focus:border-[var(--primary)] transition-colors text-white"><button onclick="saveFocusSettings()" class="p-3 bg-white/10 hover:bg-[var(--primary)] rounded-xl transition-colors text-white" title="Salvar Tempo"><i data-lucide="save" class="w-5 h-5"></i></button></div></div></div>
-                <div class="space-y-3"><h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2"><i data-lucide="database" class="w-3 h-3"></i> Dados</h4><div class="flex gap-3"><button onclick="openTrash()" class="w-full bg-black/20 py-4 rounded-2xl font-bold text-zinc-300 hover:bg-white/10 active:scale-95 transition-all text-xs flex items-center justify-center gap-2 border border-white/5"><i data-lucide="trash-2" class="w-4 h-4 text-rose-400"></i> Abrir Lixeira</button></div></div>
-                <div class="space-y-3 pt-6 border-t border-white/5"><h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-rose-500/80 flex items-center gap-2"><i data-lucide="shield-alert" class="w-3 h-3"></i> Segurança</h4><div class="space-y-3"><button onclick="logout()" class="w-full bg-black/20 border border-white/5 py-4 rounded-2xl font-bold text-zinc-300 hover:bg-white/10 active:scale-95 transition-all text-xs flex items-center justify-center gap-2"><i data-lucide="log-out" class="w-4 h-4"></i> Sair do Jardim</button><button onclick="deleteAccount(this)" class="w-full bg-rose-500/10 border border-rose-500/20 py-4 rounded-2xl font-bold text-rose-500 hover:bg-rose-500 hover:text-white active:scale-95 transition-all text-xs flex items-center justify-center gap-2"><i data-lucide="user-x" class="w-4 h-4"></i> <span id="delete-btn-text">Excluir Conta</span></button></div></div>
+                <div class="space-y-3">
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2"><i data-lucide="user" class="w-3 h-3"></i> Perfil</h4>
+                    <div class="flex gap-2">
+                        <input id="settings-name" type="text" placeholder="Como quer ser chamado?" class="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 outline-none text-sm font-bold focus:border-[var(--primary)] transition-colors text-white">
+                        <button onclick="saveProfileName()" class="px-6 py-4 bg-[var(--primary)] rounded-2xl text-white text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-lg shadow-[var(--primary)]/20">Salvar</button>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2"><i data-lucide="timer" class="w-3 h-3"></i> Sala de Foco</h4>
+                    <div class="flex items-center justify-between bg-black/20 p-5 rounded-2xl border border-white/5">
+                        <div>
+                            <span class="block text-sm font-bold text-zinc-200">Tempo Padrão (Minutos)</span>
+                            <span class="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mt-1">Duração inicial</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input id="settings-focus-time" type="number" min="1" max="120" value="25" class="w-20 bg-black/40 border border-white/10 rounded-xl px-3 py-3 outline-none text-center text-sm font-bold focus:border-[var(--primary)] transition-colors text-white">
+                            <button onclick="saveFocusSettings()" class="p-3 bg-white/10 hover:bg-[var(--primary)] rounded-xl transition-colors text-white" title="Salvar Tempo"><i data-lucide="save" class="w-5 h-5"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2"><i data-lucide="database" class="w-3 h-3"></i> Dados</h4>
+                    <div class="flex gap-3">
+                        <button onclick="openTrash()" class="w-full bg-black/20 py-4 rounded-2xl font-bold text-zinc-300 hover:bg-white/10 active:scale-95 transition-all text-xs flex items-center justify-center gap-2 border border-white/5">
+                            <i data-lucide="trash-2" class="w-4 h-4 text-rose-400"></i> Abrir Lixeira
+                        </button>
+                    </div>
+                </div>
+                <div class="space-y-3 pt-6 border-t border-white/5">
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-rose-500/80 flex items-center gap-2"><i data-lucide="shield-alert" class="w-3 h-3"></i> Segurança</h4>
+                    <div class="space-y-3">
+                        <button onclick="logout()" class="w-full bg-black/20 border border-white/5 py-4 rounded-2xl font-bold text-zinc-300 hover:bg-white/10 active:scale-95 transition-all text-xs flex items-center justify-center gap-2">
+                            <i data-lucide="log-out" class="w-4 h-4"></i> Sair do Jardim
+                        </button>
+                        <button onclick="deleteAccount(this)" class="w-full bg-rose-500/10 border border-rose-500/20 py-4 rounded-2xl font-bold text-rose-500 hover:bg-rose-500 hover:text-white active:scale-95 transition-all text-xs flex items-center justify-center gap-2">
+                            <i data-lucide="user-x" class="w-4 h-4"></i> <span id="delete-btn-text">Excluir Conta</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div id="trash-overlay" class="fixed inset-0 bg-black/90 z-[170] hidden items-center justify-center p-4 md:p-6 backdrop-blur-xl animate-slide-up"><div class="glass w-full max-w-3xl rounded-[3rem] p-8 md:p-10 space-y-6 max-h-[90vh] flex flex-col relative overflow-hidden shadow-2xl border border-white/10"><div class="flex justify-between items-center relative z-10 border-b border-white/5 pb-6"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-rose-500/20 flex items-center justify-center border border-rose-500/30"><i data-lucide="trash-2" class="text-rose-500 w-5 h-5"></i></div><div><h3 class="text-2xl font-black tracking-tight text-white">Lixeira</h3><p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">Sementes descartadas</p></div></div><button onclick="closeTrash()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x"></i></button></div><div id="trash-list" class="flex-1 overflow-y-auto custom-scrollbar space-y-4 pr-2 relative z-10"></div></div></div>
+    <!-- 5. Modal: Lixeira -->
+    <div id="trash-overlay" class="fixed inset-0 bg-black/90 z-[170] hidden items-center justify-center p-4 md:p-6 backdrop-blur-xl animate-slide-up">
+        <div class="glass w-full max-w-3xl rounded-[3rem] p-8 md:p-10 space-y-6 max-h-[90vh] flex flex-col relative overflow-hidden shadow-2xl border border-white/10">
+            <div class="flex justify-between items-center relative z-10 border-b border-white/5 pb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-rose-500/20 flex items-center justify-center border border-rose-500/30">
+                        <i data-lucide="trash-2" class="text-rose-500 w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-black tracking-tight text-white">Lixeira</h3>
+                        <p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">Sementes descartadas</p>
+                    </div>
+                </div>
+                <button onclick="closeTrash()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x"></i></button>
+            </div>
+            <div id="trash-list" class="flex-1 overflow-y-auto custom-scrollbar space-y-4 pr-2 relative z-10"></div>
+        </div>
+    </div>
     
-    <div id="mentor-overlay" class="fixed inset-0 bg-black/90 z-[160] hidden items-center justify-center p-6 backdrop-blur-md animate-slide-up"><div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-6 flex flex-col max-h-[85vh] border border-white/10"><div class="flex justify-between items-center"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center"><i data-lucide="sparkles" class="text-white w-6 h-6"></i></div><h3 class="text-2xl font-black tracking-tight">Mentor IA</h3></div><button onclick="closeMentor()" class="text-zinc-500 hover:text-white"><i data-lucide="x"></i></button></div><div id="mentor-response" class="flex-1 overflow-y-auto text-zinc-300 leading-relaxed text-lg space-y-4 custom-scrollbar"></div><button onclick="closeMentor()" class="w-full py-4 bg-white/5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-white/10 transition-colors border border-white/10">Fechar</button></div></div>
+    <!-- 6. Modal: Mentor IA -->
+    <div id="mentor-overlay" class="fixed inset-0 bg-black/90 z-[160] hidden items-center justify-center p-6 backdrop-blur-md animate-slide-up">
+        <div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-6 flex flex-col max-h-[85vh] border border-white/10">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+                        <i data-lucide="sparkles" class="text-white w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-2xl font-black tracking-tight">Mentor IA</h3>
+                </div>
+                <button onclick="closeMentor()" class="text-zinc-500 hover:text-white"><i data-lucide="x"></i></button>
+            </div>
+            <div id="mentor-response" class="flex-1 overflow-y-auto text-zinc-300 leading-relaxed text-lg space-y-4 custom-scrollbar"></div>
+            <button onclick="closeMentor()" class="w-full py-4 bg-white/5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-white/10 transition-colors border border-white/10">Fechar</button>
+        </div>
+    </div>
     
-    <div id="gif-overlay" class="fixed inset-0 bg-black/90 z-[200] hidden items-center justify-center p-4 md:p-6 backdrop-blur-xl animate-slide-up"><div class="glass w-full max-w-4xl rounded-[3rem] p-8 md:p-10 flex flex-col max-h-[90vh] relative overflow-hidden shadow-2xl border border-white/10"><div class="flex justify-between items-center relative z-10 border-b border-white/5 pb-6 mb-6"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-[var(--primary)]/20 flex items-center justify-center border border-[var(--primary)]/30"><i data-lucide="image" class="text-[var(--primary)] w-5 h-5"></i></div><div><h3 class="text-2xl font-black tracking-tight text-white">Cenários de Foco</h3><p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">Escolha o seu ambiente visual</p></div></div><button onclick="closeGifSelector()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x"></i></button></div><div id="gif-grid" class="flex-1 overflow-y-auto custom-scrollbar pr-2 relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div></div></div>
+    <!-- 7. Modal: Galeria de Fundos do Jardim (Wallpapers) -->
+    <div id="wallpaper-overlay" class="fixed inset-0 bg-black/90 z-[200] hidden items-center justify-center p-4 md:p-6 backdrop-blur-xl animate-slide-up">
+        <div class="glass w-full max-w-4xl rounded-[3rem] p-8 md:p-10 flex flex-col max-h-[90vh] relative overflow-hidden shadow-2xl border border-white/10">
+            <div class="flex justify-between items-center relative z-10 border-b border-white/5 pb-6 mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-[var(--primary)]/20 flex items-center justify-center border border-[var(--primary)]/30">
+                        <i data-lucide="image" class="text-[var(--primary)] w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-black tracking-tight text-white">Fundo do Jardim</h3>
+                        <p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">Personalize o seu espaço principal</p>
+                    </div>
+                </div>
+                <button onclick="closeWallpaperSelector()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x"></i></button>
+            </div>
+            <div id="wallpaper-grid" class="flex-1 overflow-y-auto custom-scrollbar pr-2 relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
+    </div>
 
+    <!-- 8. Modal: Galeria de Cenários do Timer (Gifs) -->
+    <div id="gif-overlay" class="fixed inset-0 bg-black/90 z-[200] hidden items-center justify-center p-4 md:p-6 backdrop-blur-xl animate-slide-up">
+        <div class="glass w-full max-w-4xl rounded-[3rem] p-8 md:p-10 flex flex-col max-h-[90vh] relative overflow-hidden shadow-2xl border border-white/10">
+            <div class="flex justify-between items-center relative z-10 border-b border-white/5 pb-6 mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-[var(--primary)]/20 flex items-center justify-center border border-[var(--primary)]/30">
+                        <i data-lucide="monitor-play" class="text-[var(--primary)] w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-black tracking-tight text-white">Cenários de Foco</h3>
+                        <p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">Escolha o seu ambiente visual</p>
+                    </div>
+                </div>
+                <button onclick="closeGifSelector()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x"></i></button>
+            </div>
+            <div id="gif-grid" class="flex-1 overflow-y-auto custom-scrollbar pr-2 relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
+    </div>
+
+    <!-- 9. Modal Especial: SALA VIRTUAL HÍBRIDA -->
     <div id="virtual-room-overlay" class="fixed inset-0 z-[180] hidden animate-slide-up">
         <div id="room-bg" class="absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-1000 z-0"></div>
         <div id="room-darken" class="absolute inset-0 bg-black/60 transition-all duration-1000 z-10"></div>
         
         <div class="absolute top-6 right-6 md:top-8 md:right-8 flex gap-3 z-50 transition-opacity duration-500" id="room-top-buttons">
-            <button onclick="toggleMobileMilestones()" class="md:hidden p-3 rounded-2xl glass hover:text-[var(--primary)] transition-all text-zinc-400" title="Ver Tarefas"><i data-lucide="list-todo" class="w-5 h-5"></i></button>
-            <button onclick="toggleRoomMode()" id="btn-toggle-mode" class="p-3 rounded-2xl glass hover:text-[var(--primary)] transition-all text-zinc-400 group" title="Modo Criação / Modo Zen"><i data-lucide="pen-tool" id="icon-mode-creation" class="w-5 h-5 block group-hover:scale-110 transition-transform"></i><i data-lucide="clock" id="icon-mode-zen" class="w-5 h-5 hidden group-hover:scale-110 transition-transform"></i></button>
-            <button onclick="openGifSelector()" class="p-3 rounded-2xl glass hover:text-[var(--primary)] transition-all text-zinc-400" title="Galeria de Cenários"><i data-lucide="image" class="w-5 h-5"></i></button>
-            <button onclick="closeVirtualRoom()" class="p-3 rounded-2xl glass hover:text-rose-400 transition-all text-zinc-400"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <button onclick="toggleMobileMilestones()" class="md:hidden p-3 rounded-2xl glass hover:text-[var(--primary)] transition-all text-zinc-400" title="Ver Tarefas">
+                <i data-lucide="list-todo" class="w-5 h-5"></i>
+            </button>
+            <button onclick="toggleRoomMode()" id="btn-toggle-mode" class="p-3 rounded-2xl glass hover:text-[var(--primary)] transition-all text-zinc-400 group" title="Modo Criação / Modo Zen">
+                <i data-lucide="pen-tool" id="icon-mode-creation" class="w-5 h-5 block group-hover:scale-110 transition-transform"></i>
+                <i data-lucide="clock" id="icon-mode-zen" class="w-5 h-5 hidden group-hover:scale-110 transition-transform"></i>
+            </button>
+            <button onclick="openGifSelector()" class="p-3 rounded-2xl glass hover:text-[var(--primary)] transition-all text-zinc-400" title="Galeria de Cenários">
+                <i data-lucide="monitor-play" class="w-5 h-5"></i>
+            </button>
+            <button onclick="closeVirtualRoom()" class="p-3 rounded-2xl glass hover:text-rose-400 transition-all text-zinc-400">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
         </div>
 
         <div id="room-milestones-panel" class="absolute left-0 top-0 bottom-0 w-[85vw] md:w-80 bg-black/80 md:bg-black/20 backdrop-blur-2xl md:backdrop-blur-sm border-r border-white/5 transform -translate-x-full md:translate-x-0 transition-all duration-500 z-40 p-8 pt-24 md:pt-32 flex flex-col gap-6 overflow-y-auto custom-scrollbar md:opacity-20 hover:opacity-100">
-            <div class="flex justify-between items-center md:block"><h4 class="text-[10px] font-black uppercase text-zinc-400 tracking-[0.3em]">Marcos Ativos</h4><button onclick="toggleMobileMilestones()" class="md:hidden text-zinc-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+            <div class="flex justify-between items-center md:block">
+                <h4 class="text-[10px] font-black uppercase text-zinc-400 tracking-[0.3em]">Marcos Ativos</h4>
+                <button onclick="toggleMobileMilestones()" class="md:hidden text-zinc-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
             <div id="room-milestones-list" class="space-y-4"></div>
         </div>
 
         <div class="absolute inset-0 z-20 flex items-start justify-center p-4 overflow-y-auto custom-scrollbar">
             <div class="w-full grid place-items-center my-auto py-12 min-h-max">
+                <!-- Modo Zen -->
                 <div id="room-view-zen" class="col-start-1 row-start-1 room-visible flex flex-col items-center justify-center w-full max-w-lg transition-all duration-700">
                     <div class="text-center space-y-10 w-full">
-                        <div class="space-y-2"><h4 id="room-project-name" class="text-sm font-black text-[var(--primary)] uppercase tracking-[0.4em] drop-shadow-md">Sala de Foco</h4><h3 id="room-task-name" class="text-xl md:text-2xl font-bold text-zinc-300 line-clamp-2 drop-shadow-md">Sua Semente</h3></div>
-                        <div id="room-time-selector" class="flex justify-center gap-3 transition-opacity duration-500"><button onclick="setFocusTime(15)" id="btn-time-15" class="px-5 py-2 rounded-2xl glass font-bold text-xs transition-all hover:bg-white/5">15m</button><button onclick="setFocusTime(25)" id="btn-time-25" class="px-5 py-2 rounded-2xl glass font-bold text-xs transition-all text-[var(--primary)] border-[var(--primary)]">25m</button><button onclick="setFocusTime(45)" id="btn-time-45" class="px-5 py-2 rounded-2xl glass font-bold text-xs transition-all hover:bg-white/5">45m</button><button onclick="setFocusTime(60)" id="btn-time-60" class="px-5 py-2 rounded-2xl glass font-bold text-xs transition-all hover:bg-white/5">60m</button></div>
-                        <div class="relative flex items-center justify-center"><div id="timer-ring" class="w-64 h-64 md:w-72 md:h-72 rounded-full border-4 border-white/5 flex flex-col items-center justify-center transition-all relative glass"><span id="timer-display-zen" class="text-7xl md:text-8xl font-black tracking-tighter drop-shadow-lg">25:00</span><div id="focus-sound-indicator" class="mt-4 flex items-center gap-2 text-[10px] font-black uppercase text-zinc-400 hidden"><div class="audio-wave"><div class="audio-bar"></div><div class="audio-bar"></div><div class="audio-bar"></div></div>Som Ativo</div></div></div>
+                        <div class="space-y-2">
+                            <h4 id="room-project-name" class="text-sm font-black text-[var(--primary)] uppercase tracking-[0.4em] drop-shadow-md">Sala de Foco</h4>
+                            <h3 id="room-task-name" class="text-xl md:text-2xl font-bold text-zinc-300 line-clamp-2 drop-shadow-md">Sua Semente</h3>
+                        </div>
+                        <div id="room-time-selector" class="flex justify-center gap-3 transition-opacity duration-500">
+                            <button onclick="setFocusTime(15)" id="btn-time-15" class="px-5 py-2 rounded-2xl glass font-bold text-xs transition-all hover:bg-white/5">15m</button>
+                            <button onclick="setFocusTime(25)" id="btn-time-25" class="px-5 py-2 rounded-2xl glass font-bold text-xs transition-all text-[var(--primary)] border-[var(--primary)]">25m</button>
+                            <button onclick="setFocusTime(45)" id="btn-time-45" class="px-5 py-2 rounded-2xl glass font-bold text-xs transition-all hover:bg-white/5">45m</button>
+                            <button onclick="setFocusTime(60)" id="btn-time-60" class="px-5 py-2 rounded-2xl glass font-bold text-xs transition-all hover:bg-white/5">60m</button>
+                        </div>
+                        <div class="relative flex items-center justify-center">
+                            <div id="timer-ring" class="w-64 h-64 md:w-72 md:h-72 rounded-full border-4 border-white/5 flex flex-col items-center justify-center transition-all relative glass">
+                                <span id="timer-display-zen" class="text-7xl md:text-8xl font-black tracking-tighter drop-shadow-lg">25:00</span>
+                                <div id="focus-sound-indicator" class="mt-4 flex items-center gap-2 text-[10px] font-black uppercase text-zinc-400 hidden">
+                                    <div class="audio-wave"><div class="audio-bar"></div><div class="audio-bar"></div><div class="audio-bar"></div></div>Som Ativo
+                                </div>
+                            </div>
+                        </div>
                         <div class="flex flex-col gap-3 mt-8 max-w-xs mx-auto glass p-5 rounded-[2rem]">
                             <h4 class="text-[9px] font-black uppercase text-zinc-500 tracking-widest text-left ml-2 mb-1">Mixer de Ambiente</h4>
-                            <div class="flex items-center gap-4"><button id="btn-sound-lessrain" onclick="toggleSound('lessrain')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-zinc-400 shrink-0"><i data-lucide="cloud-drizzle" class="w-5 h-5"></i></button><input type="range" id="vol-lessrain" min="0" max="1" step="0.01" value="0.3" oninput="changeVolume('lessrain', this.value)" class="w-full accent-[var(--primary)] bg-white/10 rounded-lg appearance-none h-1 cursor-pointer"></div>
-                            <div class="flex items-center gap-4"><button id="btn-sound-midnight" onclick="toggleSound('midnight')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-zinc-400 shrink-0"><i data-lucide="moon" class="w-5 h-5"></i></button><input type="range" id="vol-midnight" min="0" max="1" step="0.01" value="0.5" oninput="changeVolume('midnight', this.value)" class="w-full accent-[var(--primary)] bg-white/10 rounded-lg appearance-none h-1 cursor-pointer"></div>
-                            <div class="flex items-center gap-4"><button id="btn-sound-adventure" onclick="toggleSound('adventure')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-zinc-400 shrink-0"><i data-lucide="flame" class="w-5 h-5"></i></button><input type="range" id="vol-adventure" min="0" max="1" step="0.01" value="0.5" oninput="changeVolume('adventure', this.value)" class="w-full accent-[var(--primary)] bg-white/10 rounded-lg appearance-none h-1 cursor-pointer"></div>
+                            <div class="flex items-center gap-4">
+                                <button id="btn-sound-lessrain" onclick="toggleSound('lessrain')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-zinc-400 shrink-0"><i data-lucide="cloud-drizzle" class="w-5 h-5"></i></button>
+                                <input type="range" id="vol-lessrain" min="0" max="1" step="0.01" value="0.3" oninput="changeVolume('lessrain', this.value)" class="w-full accent-[var(--primary)] bg-white/10 rounded-lg appearance-none h-1 cursor-pointer">
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <button id="btn-sound-midnight" onclick="toggleSound('midnight')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-zinc-400 shrink-0"><i data-lucide="moon" class="w-5 h-5"></i></button>
+                                <input type="range" id="vol-midnight" min="0" max="1" step="0.01" value="0.5" oninput="changeVolume('midnight', this.value)" class="w-full accent-[var(--primary)] bg-white/10 rounded-lg appearance-none h-1 cursor-pointer">
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <button id="btn-sound-adventure" onclick="toggleSound('adventure')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-zinc-400 shrink-0"><i data-lucide="flame" class="w-5 h-5"></i></button>
+                                <input type="range" id="vol-adventure" min="0" max="1" step="0.01" value="0.5" oninput="changeVolume('adventure', this.value)" class="w-full accent-[var(--primary)] bg-white/10 rounded-lg appearance-none h-1 cursor-pointer">
+                            </div>
                         </div>
-                        <div class="flex justify-center gap-4 mt-8"><button id="btn-timer-zen" onclick="toggleTimer()" class="bg-[var(--primary)] px-8 md:px-12 py-4 md:py-5 rounded-3xl font-black uppercase tracking-widest shadow-xl shadow-[var(--primary)]/20 active:scale-95 transition-all">Iniciar</button></div>
+                        <div class="flex justify-center gap-4 mt-8">
+                            <button id="btn-timer-zen" onclick="toggleTimer()" class="bg-[var(--primary)] px-8 md:px-12 py-4 md:py-5 rounded-3xl font-black uppercase tracking-widest shadow-xl shadow-[var(--primary)]/20 active:scale-95 transition-all">Iniciar</button>
+                        </div>
                     </div>
                 </div>
 
+                <!-- Modo Criação -->
                 <div id="room-view-creation" class="col-start-1 row-start-1 room-hidden flex flex-col items-center w-full max-w-4xl transition-all duration-700 mt-16 md:mt-0">
-                    <div class="glass px-6 py-3 rounded-full mb-6 flex items-center gap-4 border border-[var(--primary)]/30 shadow-[0_0_20px_rgba(139,92,246,0.15)] bg-black/40"><i data-lucide="timer" class="w-5 h-5 text-[var(--primary)]"></i><span id="timer-display-creation" class="font-black text-2xl tracking-widest text-white drop-shadow-md w-[80px] text-center">25:00</span><button id="btn-timer-creation" onclick="toggleTimer()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-[var(--primary)] flex items-center justify-center transition-colors text-white"><i data-lucide="play" id="icon-timer-creation-play" class="w-4 h-4 ml-0.5 block"></i><i data-lucide="pause" id="icon-timer-creation-pause" class="w-4 h-4 hidden"></i></button></div>
+                    <div class="glass px-6 py-3 rounded-full mb-6 flex items-center gap-4 border border-[var(--primary)]/30 shadow-[0_0_20px_rgba(139,92,246,0.15)] bg-black/40">
+                        <i data-lucide="timer" class="w-5 h-5 text-[var(--primary)]"></i>
+                        <span id="timer-display-creation" class="font-black text-2xl tracking-widest text-white drop-shadow-md w-[80px] text-center">25:00</span>
+                        <button id="btn-timer-creation" onclick="toggleTimer()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-[var(--primary)] flex items-center justify-center transition-colors text-white">
+                            <i data-lucide="play" id="icon-timer-creation-play" class="w-4 h-4 ml-0.5 block"></i>
+                            <i data-lucide="pause" id="icon-timer-creation-pause" class="w-4 h-4 hidden"></i>
+                        </button>
+                    </div>
                     <div class="glass flex-1 w-full min-h-[75vh] md:min-h-[85vh] rounded-[3rem] p-6 md:p-10 flex flex-col gap-6 relative overflow-hidden shadow-2xl border border-white/10">
-                        <div class="flex items-center gap-3 shrink-0 opacity-50"><i data-lucide="book-open" class="w-5 h-5 text-[var(--primary)]"></i><h3 class="text-[10px] font-black uppercase text-zinc-300 tracking-[0.3em]">O seu Estúdio de Criação</h3></div>
+                        <div class="flex items-center gap-3 shrink-0 opacity-50">
+                            <i data-lucide="book-open" class="w-5 h-5 text-[var(--primary)]"></i>
+                            <h3 class="text-[10px] font-black uppercase text-zinc-300 tracking-[0.3em]">O seu Estúdio de Criação</h3>
+                        </div>
                         <textarea id="room-notes-input" onchange="updateRoomNotes(this.value)" class="w-full flex-1 bg-transparent outline-none resize-none font-medium text-zinc-200 text-lg leading-relaxed custom-scrollbar placeholder:text-zinc-600" placeholder="A sua mesa está limpa. Comece a escrever a sua história, pensamentos ou anotações de estudo aqui..."></textarea>
                         <div class="pt-6 border-t border-white/10 shrink-0">
                             <h4 class="text-[9px] font-black uppercase text-zinc-500 tracking-widest mb-3 flex items-center gap-2"><i data-lucide="link" class="w-3 h-3"></i> Links e Referências</h4>
                             <div id="room-links-container" class="flex flex-wrap gap-2 max-h-[80px] overflow-y-auto custom-scrollbar mb-4"></div>
-                            <div class="flex gap-2"><input id="room-new-link" type="url" placeholder="Cole aqui o link..." class="w-full bg-black/40 border border-white/5 rounded-xl px-5 py-3 outline-none text-xs font-bold focus:border-[var(--primary)] transition-colors" onkeydown="if(event.key==='Enter') addRoomLink()"><button id="btn-add-room-link" onclick="addRoomLink()" class="px-6 py-3 bg-white/10 hover:bg-[var(--primary)] border border-white/5 hover:border-[var(--primary)] rounded-xl text-white text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all whitespace-nowrap">Adicionar</button></div>
+                            <div class="flex gap-2">
+                                <input id="room-new-link" type="url" placeholder="Cole aqui o link..." class="w-full bg-black/40 border border-white/5 rounded-xl px-5 py-3 outline-none text-xs font-bold focus:border-[var(--primary)] transition-colors" onkeydown="if(event.key==='Enter') addRoomLink()">
+                                <button id="btn-add-room-link" onclick="addRoomLink()" class="px-6 py-3 bg-white/10 hover:bg-[var(--primary)] border border-white/5 hover:border-[var(--primary)] rounded-xl text-white text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all whitespace-nowrap">Adicionar</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -389,42 +625,121 @@
         </div>
     </div>
 
-    <!-- Áudio -->
+    <!-- Áudios Internos -->
     <audio id="audio-lessrain" src="rainynigth.mp3" loop preload="auto"></audio>
     <audio id="audio-midnight" src="midnight.mp3" loop preload="auto"></audio>
     <audio id="audio-adventure" src="adventure.mp3" loop preload="auto"></audio>
 
+    <!-- JAVASCRIPT: Arquitetura Limpa e Refatorada (V1.5) -->
     <script type="module">
+        // 1. IMPORTAÇÕES E CONFIGURAÇÃO FIREBASE
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, deleteUser } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const apiKey = "AIzaSyCjdU0m8kZxorLApm6HENV6a4Ztv3DKdXE";
-        const firebaseConfig = { apiKey: "AIzaSyCReE2nGwS6i3ZCAwphTykSL5g-VbDP07k", authDomain: "projectseed-b4af5.firebaseapp.com", projectId: "projectseed-b4af5", storageBucket: "projectseed-b4af5.firebasestorage.app", messagingSenderId: "353667479355", appId: "1:353667479355:web:3b043f0c92444652ae691e", measurementId: "G-X5W5K3VH72" };
-
-        const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app); const appId = typeof __app_id !== 'undefined' ? __app_id : 'seed-app';
-
-        let projects = []; let currentUser = null; let unsubscribeSnapshot = null;
-        let achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || []; 
-        let isOfflineMode = false; let currentAuthMode = 'login'; 
-        let tempMilestones = []; let selectedFocusTime = parseInt(localStorage.getItem('seed_default_focus')) || 25;
-        let draggedProjectId = null;
-        let editingProjectId = null;
-
-        const formatFocusTime = (mins) => { if (!mins) return ''; const h = Math.floor(mins / 60); const m = mins % 60; return (h > 0 ? `${h}H ` : '') + (m > 0 || h === 0 ? `${m}M` : ''); };
-
-        window.showToast = (message, type = 'success') => {
-            const toast = document.createElement('div'); const bgClass = type === 'error' ? 'bg-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.6)]' : 'bg-[var(--primary)] shadow-[0_0_20px_rgba(139,92,246,0.6)]';
-            toast.className = `fixed top-10 left-1/2 -translate-x-1/2 text-white px-6 py-3 rounded-full font-black uppercase tracking-widest text-[10px] md:text-xs z-[300] animate-slide-up transition-opacity duration-500 ${bgClass}`;
-            toast.innerHTML = message; document.body.appendChild(toast); setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 3000);
+        const firebaseConfig = { 
+            apiKey: "AIzaSyCReE2nGwS6i3ZCAwphTykSL5g-VbDP07k", 
+            authDomain: "projectseed-b4af5.firebaseapp.com", 
+            projectId: "projectseed-b4af5", 
+            storageBucket: "projectseed-b4af5.firebasestorage.app", 
+            messagingSenderId: "353667479355", 
+            appId: "1:353667479355:web:3b043f0c92444652ae691e", 
+            measurementId: "G-X5W5K3VH72" 
         };
 
-        const updateHeroName = () => { 
+        const app = initializeApp(firebaseConfig); 
+        const auth = getAuth(app); 
+        const db = getFirestore(app); 
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'seed-app';
+
+        // 2. ESTADO GLOBAL (VARIÁVEIS)
+        let projects = []; 
+        let currentUser = null; 
+        let unsubscribeSnapshot = null;
+        let achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || []; 
+        let isOfflineMode = false; 
+        let currentAuthMode = 'login'; 
+        let tempMilestones = []; 
+        let selectedFocusTime = parseInt(localStorage.getItem('seed_default_focus')) || 25;
+        let draggedProjectId = null;
+        let editingProjectId = null;
+        let currentStation = 'now'; 
+        let activeProjectId = null; 
+        let timerInterval = null; 
+        let timeLeft = selectedFocusTime * 60; 
+        let isTimerRunning = false; 
+        let isCreationMode = false;
+        let currentSceneIndex = parseInt(localStorage.getItem('seed_focus_scene')) || 0;
+        let currentDashBgIndex = parseInt(localStorage.getItem('seed_dash_bg')) || 0;
+        let soundStates = { lessrain: false, midnight: false, adventure: false };
+
+        // 3. CONSTANTES DE DESIGN
+        const MEDALS = { 
+            explorador: { id: 'explorador', icon: '🥇', title: 'Explorador', desc: 'Criou 10 projetos' }, 
+            foco: { id: 'foco', icon: '🔥', title: 'Inabalável', desc: 'Sessão de 60m' }, 
+            botanico: { id: 'botanico', icon: '🌳', title: 'Botânico Master', desc: '5 sementes no Jardim' }, 
+            pesquisador: { id: 'pesquisador', icon: '📚', title: 'Pesquisador', desc: 'Notas com 1000+ letras' } 
+        };
+        const VIBE_IMAGES = { 
+            briefcase: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1000', 
+            book: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&q=80&w=1000', 
+            heart: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1000', 
+            palette: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=1000', 
+            coffee: 'https://images.unsplash.com/photo-1481833761820-0509d3217039?auto=format&fit=crop&q=80&w=1000' 
+        };
+        const PLANT_ICONS = { 
+            briefcase: 'tree-pine', book: 'tree-deciduous', heart: 'flower-2', palette: 'clover', coffee: 'cherry' 
+        };
+        const FOCUS_SCENES = [ 
+            { name: 'Quarto Lo-Fi', url: 'https://i.pinimg.com/originals/ff/34/3a/ff343aa8819c2573ad3409baf4af5e3e.gif' }, 
+            { name: 'Viagem de Trem', url: 'https://i.pinimg.com/originals/92/9f/98/929f9811fba2f931a0f4b3581976695b.gif' }, 
+            { name: 'Cidade Noturna', url: 'https://i.pinimg.com/originals/49/cd/d8/49cdd838e8c6d7fe5e2dd55deead5567.gif' }, 
+            { name: 'Janela Chuvosa', url: 'https://i.pinimg.com/originals/81/81/90/81819033e7242c1d826af87e2fb4975d.gif' }, 
+            { name: 'Natureza', url: 'https://i.pinimg.com/originals/08/9d/be/089dbe8f9d422e09d2e4fcae0adec609.gif' }, 
+            { name: 'Meia-Noite', url: 'https://i.pinimg.com/originals/13/b0/00/13b0000818cfd9cf27d39afaa051dc23.gif' } 
+        ];
+        const DASHBOARD_BGS = [ 
+            { name: 'Aurora (Padrão)', url: '' }, 
+            { name: 'Abstrato Fluido', url: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=2000' }, 
+            { name: 'Montanhas Sombrias', url: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=2000' }, 
+            { name: 'Floresta Névoa', url: 'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&q=80&w=2000' }, 
+            { name: 'Espaço Escuro', url: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&q=80&w=2000' }
+        ];
+
+        // 4. FUNÇÕES UTILITÁRIAS (Helpers)
+        window.formatFocusTime = (mins) => { 
+            if (!mins) return ''; 
+            const h = Math.floor(mins / 60); const m = mins % 60; 
+            return (h > 0 ? `${h}H ` : '') + (m > 0 || h === 0 ? `${m}M` : ''); 
+        };
+
+        window.showToast = (message, type = 'success') => {
+            const toast = document.createElement('div'); 
+            const bgClass = type === 'error' ? 'bg-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.6)]' : 'bg-[var(--primary)] shadow-[0_0_20px_rgba(139,92,246,0.6)]';
+            toast.className = `fixed top-10 left-1/2 -translate-x-1/2 text-white px-6 py-3 rounded-full font-black uppercase tracking-widest text-[10px] md:text-xs z-[300] animate-slide-up transition-opacity duration-500 ${bgClass}`;
+            toast.innerHTML = message; 
+            document.body.appendChild(toast); 
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 3000);
+        };
+
+        // NOVO: Gerenciador Universal de Modais (DRY)
+        window.toggleModal = (id, show, displayClass = 'flex') => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (show) {
+                el.classList.remove('hidden');
+                el.classList.add(displayClass);
+            } else {
+                el.classList.remove(displayClass);
+                el.classList.add('hidden');
+            }
+        };
+
+        // 5. AUTENTICAÇÃO E NUVEM
+        window.updateHeroName = () => { 
             const heroTitle = document.getElementById('main-hero-title'); 
-            let nameToUse = null;
-            if(currentUser && currentUser.displayName) { nameToUse = currentUser.displayName; } 
-            else if (isOfflineMode) { nameToUse = localStorage.getItem('seed_offline_name'); }
-            
+            let nameToUse = currentUser?.displayName || (isOfflineMode ? localStorage.getItem('seed_offline_name') : null);
             if(nameToUse && heroTitle) { 
                 const firstName = nameToUse.trim().split(' ')[0]; 
                 heroTitle.innerHTML = `Olá, ${firstName}. <br><span class="text-[var(--primary)] drop-shadow-md">O que vamos cultivar?</span>`; 
@@ -434,132 +749,200 @@
         };
 
         window.initCloud = () => {
-            if (!currentUser) return; if (unsubscribeSnapshot) unsubscribeSnapshot();
+            if (!currentUser) return; 
+            if (unsubscribeSnapshot) unsubscribeSnapshot();
             const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'seed_data', 'main');
             unsubscribeSnapshot = onSnapshot(docRef, (snapshot) => {
-                if (snapshot.exists()) { projects = snapshot.data().projects || []; achievements = snapshot.data().achievements || [];
-                } else { const oldData = JSON.parse(localStorage.getItem('seed_master_v1')) || []; projects = oldData; achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || []; if(oldData.length > 0) window.save(); }
-                if(typeof renderProjects === 'function') renderProjects();
-                if (typeof activeProjectId !== 'undefined' && activeProjectId && !document.getElementById('detail-view').classList.contains('hidden')) { const p = projects.find(proj => proj.id === activeProjectId); if(p && typeof window.openDetails === 'function') window.openDetails(activeProjectId); }
-            }, (err) => { console.log("Desconectado da nuvem."); });
+                if (snapshot.exists()) { 
+                    projects = snapshot.data().projects || []; achievements = snapshot.data().achievements || [];
+                } else { 
+                    const oldData = JSON.parse(localStorage.getItem('seed_master_v1')) || []; 
+                    projects = oldData; 
+                    achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || []; 
+                    if(oldData.length > 0) window.save(); 
+                }
+                window.renderProjects();
+                if (activeProjectId && !document.getElementById('detail-view').classList.contains('hidden')) { 
+                    window.openDetails(activeProjectId); 
+                }
+            }, (err) => { console.error("Desconectado da nuvem.", err); });
         };
 
-        onAuthStateChanged(auth, (user) => { currentUser = user; if (user) { document.getElementById('auth-overlay').classList.add('hidden'); updateHeroName(); window.initCloud(); } else { updateHeroName(); if (!isOfflineMode) { document.getElementById('auth-overlay').classList.remove('hidden'); } } });
-
-        window.togglePasswordVisibility = () => { const passInput = document.getElementById('auth-pass'); const iconEye = document.getElementById('icon-eye'); const iconEyeOff = document.getElementById('icon-eye-off'); if (passInput.type === 'password') { passInput.type = 'text'; iconEye.classList.replace('block', 'hidden'); iconEyeOff.classList.replace('hidden', 'block'); } else { passInput.type = 'password'; iconEye.classList.replace('hidden', 'block'); iconEyeOff.classList.replace('block', 'hidden'); } };
-        window.toggleAuthMode = () => { currentAuthMode = currentAuthMode === 'login' ? 'register' : 'login'; const nameGroup = document.getElementById('auth-name-group'); const title = document.getElementById('auth-title'); const subtitle = document.getElementById('auth-subtitle'); const btnMain = document.getElementById('btn-auth-main'); const btnToggle = document.getElementById('btn-auth-toggle'); if (currentAuthMode === 'register') { nameGroup.classList.remove('hidden'); title.innerText = "Nova Semente"; subtitle.innerText = "Crie a sua conta para começar"; btnMain.innerText = "Criar Minha Conta"; btnToggle.innerText = "Já tenho conta"; } else { nameGroup.classList.add('hidden'); title.innerText = "O seu Jardim"; subtitle.innerText = "Entre para cultivar as suas ideias"; btnMain.innerText = "Entrar no Seed"; btnToggle.innerText = "Criar Nova Conta"; } };
+        onAuthStateChanged(auth, (user) => { 
+            currentUser = user; 
+            if (user) { 
+                window.toggleModal('auth-overlay', false); 
+                window.updateHeroName(); 
+                window.initCloud(); 
+            } else { 
+                window.updateHeroName(); 
+                if (!isOfflineMode) window.toggleModal('auth-overlay', true); 
+            } 
+        });
 
         window.executeAuth = async () => {
-            const email = document.getElementById('auth-email').value; const pass = document.getElementById('auth-pass').value; const name = document.getElementById('auth-name').value;
-            if(!email || !pass) { window.showToast("❌ Preencha o seu email e palavra-passe.", "error"); return; }
-            if (currentAuthMode === 'register' && !name.trim()) { window.showToast("❌ Diga-nos como quer ser chamado.", "error"); return; }
-            if (pass.length < 6) { window.showToast("❌ A palavra-passe precisa de ter 6 caracteres.", "error"); return; }
+            const email = document.getElementById('auth-email').value; 
+            const pass = document.getElementById('auth-pass').value; 
+            const name = document.getElementById('auth-name').value;
+            if(!email || !pass) return window.showToast("❌ Preencha o seu email e senha.", "error");
+            if (currentAuthMode === 'register' && !name.trim()) return window.showToast("❌ Diga-nos como quer ser chamado.", "error");
+            if (pass.length < 6) return window.showToast("❌ A senha precisa ter 6 caracteres.", "error");
             try {
-                if(currentAuthMode === 'login') { await signInWithEmailAndPassword(auth, email, pass); window.showToast("✅ Login realizado com sucesso!");
-                } else { const userCredential = await createUserWithEmailAndPassword(auth, email, pass); await updateProfile(userCredential.user, { displayName: name.trim() }); currentUser = userCredential.user; window.showToast("🎉 Bem-vindo ao Seed!"); }
-                document.getElementById('auth-overlay').classList.add('hidden'); updateHeroName();
+                if(currentAuthMode === 'login') { 
+                    await signInWithEmailAndPassword(auth, email, pass); 
+                    window.showToast("✅ Login realizado com sucesso!");
+                } else { 
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, pass); 
+                    await updateProfile(userCredential.user, { displayName: name.trim() }); 
+                    currentUser = userCredential.user; 
+                    window.showToast("🎉 Bem-vindo ao Seed!"); 
+                }
+                window.toggleModal('auth-overlay', false); 
+                window.updateHeroName();
             } catch(error) {
-                if(error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') { window.showToast("❌ Email ou palavra-passe incorretos.", "error");
-                } else if(error.code === 'auth/email-already-in-use') { window.showToast("❌ Este email já está em uso.", "error");
-                } else if(error.code === 'auth/weak-password') { window.showToast("❌ A palavra-passe precisa de ter 6 caracteres.", "error");
-                } else { window.showToast("❌ Erro ao aceder à conta.", "error"); }
+                console.error("Erro no Firebase Auth:", error);
+                window.showToast("❌ Erro ao acessar a conta. Verifique os dados.", "error");
             }
         };
 
-        window.continueOffline = () => { isOfflineMode = true; document.getElementById('auth-overlay').classList.add('hidden'); const oldData = JSON.parse(localStorage.getItem('seed_master_v1')) || []; projects = oldData; achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || []; updateHeroName(); renderProjects(); window.showToast("🌱 A Iniciar Modo Offline"); };
-        
-        window.openSettings = () => { 
-            document.getElementById('settings-overlay').classList.remove('hidden'); document.getElementById('settings-overlay').classList.add('flex'); 
-            if (currentUser && currentUser.displayName) { document.getElementById('settings-name').value = currentUser.displayName; } 
-            else { document.getElementById('settings-name').value = localStorage.getItem('seed_offline_name') || ''; }
-            document.getElementById('settings-focus-time').value = localStorage.getItem('seed_default_focus') || '25'; lucide.createIcons();
-        };
-        window.closeSettings = () => { document.getElementById('settings-overlay').classList.remove('flex'); document.getElementById('settings-overlay').classList.add('hidden'); };
-
-        window.saveProfileName = async () => {
-            const newName = document.getElementById('settings-name').value.trim(); if (!newName) return;
-            if (currentUser) { try { await updateProfile(currentUser, { displayName: newName }); window.showToast("✅ Nome atualizado na Nuvem!"); updateHeroName(); } catch(e) { window.showToast("❌ Erro ao atualizar nome.", "error"); } } 
-            else { localStorage.setItem('seed_offline_name', newName); window.showToast("✅ Nome atualizado localmente!"); updateHeroName(); }
+        window.toggleAuthMode = () => { 
+            currentAuthMode = currentAuthMode === 'login' ? 'register' : 'login'; 
+            const isReg = currentAuthMode === 'register';
+            document.getElementById('auth-name-group').classList.toggle('hidden', !isReg);
+            document.getElementById('auth-title').innerText = isReg ? "Nova Semente" : "O seu Jardim"; 
+            document.getElementById('auth-subtitle').innerText = isReg ? "Crie a sua conta para começar" : "Entre para cultivar as suas ideias"; 
+            document.getElementById('btn-auth-main').innerText = isReg ? "Criar Minha Conta" : "Entrar no Seed"; 
+            document.getElementById('btn-auth-toggle').innerText = isReg ? "Já tenho conta" : "Criar Nova Conta"; 
         };
 
-        window.saveFocusSettings = () => { let mins = parseInt(document.getElementById('settings-focus-time').value); if (isNaN(mins) || mins < 1) mins = 25; localStorage.setItem('seed_default_focus', mins); selectedFocusTime = mins; if (!isTimerRunning) { timeLeft = mins * 60; updateTimerDisplay(); } window.showToast(`⏱️ Tempo Padrão definido: ${mins}m`); };
-        window.logout = async () => { if (unsubscribeSnapshot) { unsubscribeSnapshot(); unsubscribeSnapshot = null; } localStorage.removeItem('seed_master_v1'); localStorage.removeItem('seed_achievements_v1'); localStorage.removeItem('seed_activity_v1'); projects = []; achievements = []; isOfflineMode = false; renderProjects(); closeSettings(); if (currentUser) { await signOut(auth); } document.getElementById('auth-overlay').classList.remove('hidden'); window.showToast("🌱 Saiu do seu Jardim."); };
+        window.togglePasswordVisibility = () => { 
+            const passInput = document.getElementById('auth-pass'); 
+            const eye = document.getElementById('icon-eye'); 
+            const eyeOff = document.getElementById('icon-eye-off'); 
+            const isPass = passInput.type === 'password';
+            passInput.type = isPass ? 'text' : 'password'; 
+            eye.classList.toggle('hidden', isPass); eye.classList.toggle('block', !isPass);
+            eyeOff.classList.toggle('block', isPass); eyeOff.classList.toggle('hidden', !isPass);
+        };
 
-        window.deleteAccount = async (btn) => {
-            if (btn.innerText.includes("CERTEZA")) {
-                try { if (unsubscribeSnapshot) { unsubscribeSnapshot(); unsubscribeSnapshot = null; } if (currentUser) { const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'seed_data', 'main'); await deleteDoc(docRef); await deleteUser(currentUser); } projects = []; achievements = []; localStorage.removeItem('seed_master_v1'); localStorage.removeItem('seed_achievements_v1'); renderProjects(); closeSettings(); isOfflineMode = false; document.getElementById('auth-overlay').classList.remove('hidden'); window.showToast("🗑️ Conta apagada com sucesso.", "success");
-                } catch (error) { if (error.code === 'auth/requires-recent-login') { window.showToast("❌ Por segurança, saia da conta e faça login novamente.", "error"); } else { window.showToast("❌ Erro ao excluir conta.", "error"); } btn.innerHTML = `<i data-lucide="user-x" class="w-4 h-4"></i> <span id="delete-btn-text">Excluir Conta</span>`; btn.classList.remove('bg-rose-600', 'text-white'); lucide.createIcons(); }
-            } else { btn.innerHTML = `<i data-lucide="alert-triangle" class="w-4 h-4"></i> <span id="delete-btn-text">Certeza? Clique para apagar</span>`; btn.classList.add('bg-rose-600', 'text-white'); lucide.createIcons(); setTimeout(() => { if(document.body.contains(btn) && btn.innerText.includes("Certeza")) { btn.innerHTML = `<i data-lucide="user-x" class="w-4 h-4"></i> <span id="delete-btn-text">Excluir Conta</span>`; btn.classList.remove('bg-rose-600', 'text-white'); lucide.createIcons(); } }, 4000); }
+        window.continueOffline = () => { 
+            isOfflineMode = true; 
+            window.toggleModal('auth-overlay', false); 
+            projects = JSON.parse(localStorage.getItem('seed_master_v1')) || []; 
+            achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || []; 
+            window.updateHeroName(); window.renderProjects(); 
+            window.showToast("🌱 Iniciando Modo Offline"); 
         };
 
         window.save = async () => {
-            if (currentUser) { const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'seed_data', 'main'); try { await setDoc(docRef, { projects: projects, achievements: achievements }); localStorage.setItem('seed_master_v1', JSON.stringify(projects)); localStorage.setItem('seed_achievements_v1', JSON.stringify(achievements)); } catch(e) { console.log("Guardado apenas localmente."); }
-            } else { localStorage.setItem('seed_master_v1', JSON.stringify(projects)); localStorage.setItem('seed_achievements_v1', JSON.stringify(achievements)); }
-            const s = document.getElementById('save-status'); if(s) { s.style.opacity = '1'; setTimeout(() => s.style.opacity = '0', 1000); }
-        };
-        const save = window.save;
-
-        const MEDALS = { explorador: { id: 'explorador', icon: '🥇', title: 'Explorador', desc: 'Criou 10 projetos' }, foco: { id: 'foco', icon: '🔥', title: 'Inabalável', desc: 'Sessão de 60m' }, botanico: { id: 'botanico', icon: '🌳', title: 'Botânico Master', desc: '5 sementes no Jardim' }, pesquisador: { id: 'pesquisador', icon: '📚', title: 'Pesquisador', desc: 'Notas com 1000+ letras' } };
-        window.checkAchievements = () => { let unlockedAny = false; const safeAchievements = Array.isArray(achievements) ? achievements : []; if (!safeAchievements.includes('explorador') && projects.length >= 10) { safeAchievements.push('explorador'); unlockedAny = true; window.showToast('🏆 Conquista: Explorador de Ideias!'); } if (!safeAchievements.includes('botanico') && projects.filter(p => p.station === 'archive').length >= 5) { safeAchievements.push('botanico'); unlockedAny = true; window.showToast('🏆 Conquista: Botânico Master!'); } const hasLongNote = projects.some(p => (p.notes || '').length >= 1000); if (!safeAchievements.includes('pesquisador') && hasLongNote) { safeAchievements.push('pesquisador'); unlockedAny = true; window.showToast('🏆 Conquista: Pesquisador!'); } achievements = safeAchievements; if (unlockedAny) { save(); } };
-
-        const VIBE_IMAGES = { briefcase: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1000', book: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&q=80&w=1000', heart: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1000', palette: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=1000', coffee: 'https://images.unsplash.com/photo-1481833761820-0509d3217039?auto=format&fit=crop&q=80&w=1000', zap: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1000', plane: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1000', target: 'https://images.unsplash.com/photo-1484417894907-623942c8ee29?auto=format&fit=crop&q=80&w=1000', dices: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1000' };
-        const PLANT_ICONS = { briefcase: 'tree-pine', book: 'tree-deciduous', heart: 'flower-2', palette: 'clover', coffee: 'cherry', zap: 'tree-pine', plane: 'flower-2', target: 'tree-deciduous', dices: 'cherry' };
-        const FOCUS_SCENES = [ { name: 'Quarto Lo-Fi', url: 'https://i.pinimg.com/originals/ff/34/3a/ff343aa8819c2573ad3409baf4af5e3e.gif' }, { name: 'Viagem de Trem', url: 'https://i.pinimg.com/originals/92/9f/98/929f9811fba2f931a0f4b3581976695b.gif' }, { name: 'Cidade Noturna', url: 'https://i.pinimg.com/originals/49/cd/d8/49cdd838e8c6d7fe5e2dd55deead5567.gif' }, { name: 'Janela Chuvosa', url: 'https://i.pinimg.com/originals/81/81/90/81819033e7242c1d826af87e2fb4975d.gif' }, { name: 'Natureza', url: 'https://i.pinimg.com/originals/08/9d/be/089dbe8f9d422e09d2e4fcae0adec609.gif' }, { name: 'Meia-Noite', url: 'https://i.pinimg.com/originals/13/b0/00/13b0000818cfd9cf27d39afaa051dc23.gif' }, { name: 'Refúgio', url: 'https://i.pinimg.com/originals/d1/1a/42/d11a4231a6fd0b25c0b4b2d4634701e2.gif' }, { name: 'Fim de Tarde', url: 'https://i.pinimg.com/originals/49/4d/8c/494d8c14dbae01f9f90db8665edbe5f6.gif' }, { name: 'Metrópole', url: 'https://i.pinimg.com/originals/e4/c3/9a/e4c39a73c1d9f9d32ca69f9ea0783c66.gif' }, { name: 'Tranquilidade', url: 'https://i.pinimg.com/originals/91/96/32/919632d3c2d04ab12e56f886a428c528.gif' }, { name: 'Inspiração', url: 'https://i.pinimg.com/originals/39/38/77/3938775fa4484f170466ecfa6da4e662.gif' }, { name: 'Profundeza', url: 'https://i.pinimg.com/originals/ab/26/01/ab26019d6a9def8082a9d5134a9e2d74.gif' }, { name: 'Calmaria', url: 'https://i.pinimg.com/originals/26/d4/b6/26d4b6d862bd59f5bac487c6eb3a2af0.gif' }, { name: 'Retiro', url: 'https://i.pinimg.com/originals/57/3b/68/573b688fbac605dde5807bf57b725bd5.gif' } ];
-        
-        let currentSceneIndex = parseInt(localStorage.getItem('seed_focus_scene')) || 0;
-
-        window.handleProjectDragStart = (e, id) => { draggedProjectId = id; e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', id); setTimeout(() => e.target.classList.add('opacity-30', 'scale-95'), 0); };
-        window.handleProjectDragOver = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; e.currentTarget.classList.add('border-[var(--primary)]', 'shadow-[0_0_30px_rgba(139,92,246,0.3)]'); };
-        window.handleProjectDragLeave = (e) => { e.currentTarget.classList.remove('border-[var(--primary)]', 'shadow-[0_0_30px_rgba(139,92,246,0.3)]'); };
-        window.handleProjectDrop = (e, targetId) => { e.preventDefault(); e.currentTarget.classList.remove('border-[var(--primary)]', 'shadow-[0_0_30px_rgba(139,92,246,0.3)]'); if (draggedProjectId === null || draggedProjectId === targetId) return; const draggedIndex = projects.findIndex(p => p.id === draggedProjectId); const targetIndex = projects.findIndex(p => p.id === targetId); if (draggedIndex !== -1 && targetIndex !== -1 && projects[draggedIndex].station === projects[targetIndex].station) { const draggedItem = projects.splice(draggedIndex, 1)[0]; projects.splice(targetIndex, 0, draggedItem); save(); renderProjects(); } draggedProjectId = null; };
-        window.handleProjectDragEnd = (e) => { e.target.classList.remove('opacity-30', 'scale-95'); draggedProjectId = null; document.querySelectorAll('.project-card').forEach(el => el.classList.remove('border-[var(--primary)]', 'shadow-[0_0_30px_rgba(139,92,246,0.3)]')); };
-        window.handleTabDragOver = (e) => { e.preventDefault(); e.currentTarget.classList.add('bg-[var(--primary)]/20', 'text-[var(--primary)]'); };
-        window.handleTabDragLeave = (e) => { e.currentTarget.classList.remove('bg-[var(--primary)]/20', 'text-[var(--primary)]'); };
-        window.handleTabDrop = (e, targetStation) => { 
-            e.preventDefault(); e.currentTarget.classList.remove('bg-[var(--primary)]/20', 'text-[var(--primary)]'); 
-            if (draggedProjectId !== null) { 
-                if (targetStation === 'archive') { window.showToast("❌ Finalize o projeto para enviá-lo ao Jardim.", "error"); draggedProjectId = null; return; }
-                const project = projects.find(p => p.id === draggedProjectId); 
-                if (project && project.station !== targetStation) { project.station = targetStation; save(); renderProjects(); window.showToast("🌱 Projeto movido!"); } 
-            } 
-            draggedProjectId = null; 
+            if (currentUser) { 
+                const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'seed_data', 'main'); 
+                try { 
+                    await setDoc(docRef, { projects: projects, achievements: achievements }); 
+                    localStorage.setItem('seed_master_v1', JSON.stringify(projects)); 
+                    localStorage.setItem('seed_achievements_v1', JSON.stringify(achievements)); 
+                } catch(e) { console.warn("Guardado apenas localmente."); }
+            } else { 
+                localStorage.setItem('seed_master_v1', JSON.stringify(projects)); 
+                localStorage.setItem('seed_achievements_v1', JSON.stringify(achievements)); 
+            }
+            const s = document.getElementById('save-status'); 
+            if(s) { s.style.opacity = '1'; setTimeout(() => s.style.opacity = '0', 1000); }
         };
 
-        window.openGifSelector = () => { const grid = document.getElementById('gif-grid'); grid.innerHTML = FOCUS_SCENES.map((s, i) => `<div onclick="selectScene(${i})" class="group cursor-pointer rounded-3xl overflow-hidden relative border-2 ${currentSceneIndex === i ? 'border-[var(--primary)] shadow-[0_0_20px_var(--primary)]' : 'border-white/5 hover:border-white/20'} transition-all h-32 md:h-40"><img src="${s.url}" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity ${currentSceneIndex === i ? 'opacity-100' : ''}"><div class="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/90 to-transparent"><span class="text-[10px] font-black uppercase tracking-widest text-white drop-shadow-md flex items-center gap-2">${currentSceneIndex === i ? '<i data-lucide="check-circle-2" class="w-4 h-4 text-[var(--primary)]"></i>' : ''} ${s.name}</span></div></div>`).join(''); lucide.createIcons(); document.getElementById('gif-overlay').classList.remove('hidden'); document.getElementById('gif-overlay').classList.add('flex'); };
-        window.closeGifSelector = () => { document.getElementById('gif-overlay').classList.remove('flex'); document.getElementById('gif-overlay').classList.add('hidden'); };
-        window.selectScene = (index) => { currentSceneIndex = index; localStorage.setItem('seed_focus_scene', index); document.getElementById('room-bg').style.backgroundImage = `url('${FOCUS_SCENES[index].url}')`; closeGifSelector(); window.showToast("🖼️ Cenário alterado!"); };
+        window.checkAchievements = () => { 
+            let unlockedAny = false; 
+            const safeAch = Array.isArray(achievements) ? achievements : []; 
+            if (!safeAch.includes('explorador') && projects.length >= 10) { safeAch.push('explorador'); unlockedAny = true; window.showToast('🏆 Conquista: Explorador de Ideias!'); } 
+            if (!safeAch.includes('botanico') && projects.filter(p => p.station === 'archive').length >= 5) { safeAch.push('botanico'); unlockedAny = true; window.showToast('🏆 Conquista: Botânico Master!'); } 
+            if (!safeAch.includes('pesquisador') && projects.some(p => (p.notes || '').length >= 1000)) { safeAch.push('pesquisador'); unlockedAny = true; window.showToast('🏆 Conquista: Pesquisador!'); } 
+            achievements = safeAch; 
+            if (unlockedAny) window.save(); 
+        };
 
-        let currentStation = 'now'; let activeProjectId = null; let timerInterval = null; let timeLeft = selectedFocusTime * 60; let isTimerRunning = false; let isCreationMode = false;
+        // 6. RENDERIZAÇÃO PRINCIPAL E INTERFACE
+        window.changeTheme = (theme) => { 
+            document.body.className = `theme-purple custom-scrollbar min-h-screen relative overflow-x-hidden ${theme}`; 
+            localStorage.setItem('seed_theme', theme); lucide.createIcons(); 
+        };
+
+        window.applyDashboardBg = () => {
+            const bgDiv = document.getElementById('app-user-bg');
+            const overlayDiv = document.getElementById('app-bg-overlay');
+            const bg = DASHBOARD_BGS[currentDashBgIndex];
+            if (!bg || !bg.url) { 
+                bgDiv.style.opacity = '0'; overlayDiv.style.opacity = '0'; 
+            } else { 
+                bgDiv.style.backgroundImage = `url('${bg.url}')`; bgDiv.style.opacity = '0.5'; overlayDiv.style.opacity = '1'; 
+            }
+        };
+
+        window.openWallpaperSelector = () => {
+            const grid = document.getElementById('wallpaper-grid');
+            grid.innerHTML = DASHBOARD_BGS.map((bg, i) => `
+                <div onclick="window.selectWallpaper(${i})" class="group cursor-pointer rounded-3xl overflow-hidden relative border-2 ${currentDashBgIndex === i ? 'border-[var(--primary)] shadow-[0_0_20px_var(--primary)]' : 'border-white/5 hover:border-white/20'} transition-all h-32 md:h-40 flex items-center justify-center bg-black/50">
+                    ${bg.url ? `<img src="${bg.url}" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity ${currentDashBgIndex === i ? 'opacity-100' : ''}">` : `<div class="absolute inset-0 w-full h-full bg-gradient-to-br from-[var(--primary)]/20 to-transparent opacity-60"></div>`}
+                    <div class="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/90 to-transparent z-10">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-white drop-shadow-md flex items-center gap-2">
+                            ${currentDashBgIndex === i ? '<i data-lucide="check-circle-2" class="w-4 h-4 text-[var(--primary)]"></i>' : ''} ${bg.name}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+            window.toggleModal('wallpaper-overlay', true);
+        };
+
+        window.closeWallpaperSelector = () => window.toggleModal('wallpaper-overlay', false);
         
-        window.changeTheme = (theme) => { document.body.className = `theme-purple custom-scrollbar min-h-screen relative overflow-x-hidden ${theme}`; localStorage.setItem('seed_theme', theme); lucide.createIcons(); };
-        
+        window.selectWallpaper = (index) => { 
+            currentDashBgIndex = index; 
+            localStorage.setItem('seed_dash_bg', index); 
+            window.applyDashboardBg(); 
+            window.closeWallpaperSelector(); 
+            window.showToast("🖼️ Fundo atualizado com sucesso!"); 
+        };
+
         window.setStation = (station) => { 
             currentStation = station; 
             document.querySelectorAll('.sidebar-item').forEach(t => { t.classList.remove('active'); t.classList.add('border-transparent'); }); 
             const activeDesktop = document.getElementById(`tab-${station}`); 
             if(activeDesktop) { activeDesktop.classList.add('active'); activeDesktop.classList.remove('border-transparent'); }
+            
             document.querySelectorAll('[id^="mobile-tab-"]').forEach(t => { t.classList.remove('text-[var(--primary)]'); t.classList.add('text-zinc-500'); });
             const activeMobile = document.getElementById(`mobile-tab-${station}`);
             if(activeMobile) { activeMobile.classList.remove('text-zinc-500'); activeMobile.classList.add('text-[var(--primary)]'); }
-            renderProjects(); 
+            window.renderProjects(); 
         };
 
-        const renderProjects = () => {
-            const grid = document.getElementById('project-grid'); const filtered = projects.filter(p => p.station === currentStation);
+        window.renderProjects = () => {
+            const grid = document.getElementById('project-grid'); 
+            const filtered = projects.filter(p => p.station === currentStation);
             
             if (currentStation === 'archive') { 
                 grid.className = "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8";
                 grid.innerHTML = filtered.length ? filtered.map((p, index) => {
-                    let rarity = 'Semente Comum'; let bgGradient = 'from-emerald-900/10 to-transparent'; let borderClass = 'border-white/5 hover:border-emerald-500/30'; let shadowClass = 'hover:shadow-[0_0_30px_rgba(16,185,129,0.1)]'; let badgeClass = 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'; let glowClass = 'bg-emerald-500';
+                    let rarity = 'Semente Comum', bgGradient = 'from-emerald-900/10 to-transparent', borderClass = 'border-white/5 hover:border-emerald-500/30', shadowClass = 'hover:shadow-[0_0_30px_rgba(16,185,129,0.1)]', badgeClass = 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20', glowClass = 'bg-emerald-500';
                     if (p.milestones.length >= 7) { rarity = 'Planta Lendária'; bgGradient = 'from-amber-900/20 to-transparent'; borderClass = 'border-amber-500/20 hover:border-amber-500/50'; shadowClass = 'hover:shadow-[0_0_40px_rgba(245,158,11,0.2)]'; badgeClass = 'bg-amber-500/20 text-amber-300 border border-amber-500/30'; glowClass = 'bg-amber-500'; } 
                     else if (p.milestones.length >= 4) { rarity = 'Planta Rara'; bgGradient = 'from-indigo-900/20 to-transparent'; borderClass = 'border-indigo-500/20 hover:border-indigo-500/50'; shadowClass = 'hover:shadow-[0_0_40px_rgba(99,102,241,0.2)]'; badgeClass = 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'; glowClass = 'bg-indigo-500'; }
-                    return `<div style="animation-delay: ${index * 60}ms" onclick="openDetails(${p.id})" class="glass p-6 md:p-8 rounded-[2.5rem] md:rounded-[3rem] flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-500 group relative overflow-hidden aspect-[4/3] md:aspect-square border opacity-0 animate-cascade ${borderClass} ${shadowClass}"><div class="absolute inset-0 bg-gradient-to-b ${bgGradient} opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div><div class="absolute top-[40%] left-1/2 -translate-x-1/2 w-24 h-24 ${glowClass} blur-[50px] opacity-20 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none"></div><div class="absolute top-4 right-4 text-[7px] font-black uppercase tracking-widest px-2 py-1 rounded-full ${badgeClass} z-10 backdrop-blur-sm transition-all duration-500 group-hover:scale-105 shadow-lg">${rarity}</div><div class="relative z-10 w-16 h-16 md:w-20 md:h-20 mb-4 rounded-full bg-black/20 flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform duration-500 shadow-2xl backdrop-blur-md"><div class="absolute inset-0 rounded-full border border-white/10 rotate-45 pointer-events-none"></div><i data-lucide="${PLANT_ICONS[p.icon] || 'tree-deciduous'}" class="w-8 h-8 md:w-10 md:h-10 text-emerald-400 drop-shadow-[0_0_15px_rgba(52,211,153,0.5)]"></i></div><h4 class="font-bold text-sm line-clamp-2 px-2 text-zinc-300 relative z-10 group-hover:text-white transition-colors tracking-tight">${p.title}</h4><span class="text-[7px] font-black uppercase mt-3 tracking-widest opacity-50 text-zinc-400 relative z-10 flex items-center justify-center gap-1 group-hover:opacity-100 transition-opacity">Colhido: ${p.archivedAt || 'Recentemente'}</span></div>`;
-                }).join('') : `<div class="col-span-full py-24 text-center opacity-40 animate-slide-up"><div class="w-24 h-24 mx-auto mb-6 rounded-full bg-white/5 flex items-center justify-center border border-white/5"><i data-lucide="flower" class="w-10 h-10 text-zinc-500"></i></div><p class="font-black uppercase tracking-widest text-sm text-zinc-400">A sua Estufa está vazia.<br>Cultive sementes até aos 100% para as ver florescer aqui.</p></div>`;
+                    return `
+                        <div style="animation-delay: ${index * 60}ms" onclick="window.openDetails(${p.id})" class="glass p-6 md:p-8 rounded-[2.5rem] md:rounded-[3rem] flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-500 group relative overflow-hidden aspect-[4/3] md:aspect-square border opacity-0 animate-cascade ${borderClass} ${shadowClass}">
+                            <div class="absolute inset-0 bg-gradient-to-b ${bgGradient} opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <div class="absolute top-[40%] left-1/2 -translate-x-1/2 w-24 h-24 ${glowClass} blur-[50px] opacity-20 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none"></div>
+                            <div class="absolute top-4 right-4 text-[7px] font-black uppercase tracking-widest px-2 py-1 rounded-full ${badgeClass} z-10 backdrop-blur-sm transition-all duration-500 group-hover:scale-105 shadow-lg">${rarity}</div>
+                            <div class="relative z-10 w-16 h-16 md:w-20 md:h-20 mb-4 rounded-full bg-black/20 flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform duration-500 shadow-2xl backdrop-blur-md">
+                                <div class="absolute inset-0 rounded-full border border-white/10 rotate-45 pointer-events-none"></div>
+                                <i data-lucide="${PLANT_ICONS[p.icon] || 'tree-deciduous'}" class="w-8 h-8 md:w-10 md:h-10 text-emerald-400 drop-shadow-[0_0_15px_rgba(52,211,153,0.5)]"></i>
+                            </div>
+                            <h4 class="font-bold text-sm line-clamp-2 px-2 text-zinc-300 relative z-10 group-hover:text-white transition-colors tracking-tight">${p.title}</h4>
+                            <span class="text-[7px] font-black uppercase mt-3 tracking-widest opacity-50 text-zinc-400 relative z-10 flex items-center justify-center gap-1 group-hover:opacity-100 transition-opacity">Colhido: ${p.archivedAt || 'Recente'}</span>
+                        </div>`;
+                }).join('') : `<div class="col-span-full py-24 text-center opacity-40 animate-slide-up"><div class="w-24 h-24 mx-auto mb-6 rounded-full bg-white/5 flex items-center justify-center border border-white/5"><i data-lucide="flower" class="w-10 h-10 text-zinc-500"></i></div><p class="font-black uppercase tracking-widest text-sm text-zinc-400">A sua Estufa está vazia.<br>Cultive sementes até os 100% para florescer aqui.</p></div>`;
             } else { 
                 grid.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8";
                 grid.innerHTML = filtered.length ? filtered.map((p, index) => {
                     const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0;
-                    let plantIcon = 'sprout'; let plantColor = 'text-emerald-500/40'; let plantGlow = '';
+                    let plantIcon = 'sprout', plantColor = 'text-emerald-500/40', plantGlow = '';
                     if (prog === 100) { plantIcon = PLANT_ICONS[p.icon] || 'tree-deciduous'; plantColor = 'text-emerald-400'; plantGlow = 'drop-shadow-[0_0_10px_rgba(52,211,153,0.6)]'; }
                     else if (prog >= 70) { plantIcon = 'flower-2'; plantColor = 'text-emerald-400/80'; }
                     else if (prog >= 30) { plantIcon = 'leaf'; plantColor = 'text-emerald-500/60'; }
@@ -568,13 +951,28 @@
                     if (p.deadline) {
                         const today = new Date(); today.setHours(0,0,0,0); const tgt = new Date(p.deadline + 'T12:00:00'); tgt.setHours(0,0,0,0);
                         const diffDays = Math.ceil((tgt - today) / (1000 * 60 * 60 * 24));
-                        let dColor = 'text-blue-400'; let dText = 'Entrega: ' + tgt.toLocaleDateString('pt-BR', {day:'2-digit', month:'short'});
-                        if (diffDays < 0) { dColor = 'text-rose-500'; dText = 'Atrasado'; } else if (diffDays === 0) { dColor = 'text-amber-500'; dText = 'Termina Hoje'; } else if (diffDays <= 3) { dColor = 'text-amber-400'; dText = diffDays + ' dias restantes'; }
+                        let dColor = 'text-blue-400', dText = 'Entrega: ' + tgt.toLocaleDateString('pt-BR', {day:'2-digit', month:'short'});
+                        if (diffDays < 0) { dColor = 'text-rose-500'; dText = 'Atrasado'; } 
+                        else if (diffDays === 0) { dColor = 'text-amber-500'; dText = 'Termina Hoje'; } 
+                        else if (diffDays <= 3) { dColor = 'text-amber-400'; dText = diffDays + ' dias restantes'; }
                         deadlineHtml = `<div class="text-[9px] font-black uppercase ${dColor} tracking-widest flex items-center gap-1.5"><i data-lucide="flag" class="w-3 h-3"></i> ${dText}</div>`;
                     }
 
-                    return `<div style="animation-delay: ${index * 60}ms" draggable="true" ondragstart="handleProjectDragStart(event, ${p.id})" ondragover="handleProjectDragOver(event)" ondragleave="handleProjectDragLeave(event)" ondrop="handleProjectDrop(event, ${p.id})" ondragend="handleProjectDragEnd(event)" onclick="openDetails(${p.id})" class="glass p-6 md:p-8 rounded-[2.5rem] md:rounded-[3rem] flex flex-col justify-between project-card cursor-pointer opacity-0 animate-cascade relative overflow-hidden group aspect-[4/3] md:aspect-square max-h-[320px] max-w-sm mx-auto w-full">
-                        <button onclick="event.stopPropagation(); openEditModal(${p.id})" class="absolute top-5 right-5 z-30 p-2.5 bg-black/40 hover:bg-[var(--primary)] border border-white/10 rounded-xl opacity-100 md:opacity-0 group-hover:opacity-100 transition-all shadow-lg text-zinc-300 hover:text-white flex items-center justify-center backdrop-blur-md"><i data-lucide="more-horizontal" class="w-5 h-5 pointer-events-none"></i></button>
+                    // BRINDE: Hábito em Chamas 🔥 (Lógica do Card)
+                    let habitHtml = '';
+                    if (p.habit) {
+                        if (p.habit.streak >= 3) {
+                            habitHtml = `<div class="text-[9px] font-bold text-orange-400 bg-orange-500/10 border border-orange-500/20 px-2 py-1 rounded-md uppercase tracking-widest truncate flex items-center gap-1 w-fit"><i data-lucide="flame" class="w-3 h-3 text-orange-500"></i> Ofensiva: ${p.habit.streak}d</div>`;
+                        } else {
+                            habitHtml = `<div class="text-[9px] font-bold text-emerald-500 uppercase tracking-widest truncate">Ofensiva: ${p.habit.streak}d</div>`;
+                        }
+                    }
+
+                    return `
+                    <div style="animation-delay: ${index * 60}ms" draggable="true" ondragstart="window.handleProjectDragStart(event, ${p.id})" ondragover="window.handleProjectDragOver(event)" ondragleave="window.handleProjectDragLeave(event)" ondrop="window.handleProjectDrop(event, ${p.id})" ondragend="window.handleProjectDragEnd(event)" onclick="window.openDetails(${p.id})" class="glass p-6 md:p-8 rounded-[2.5rem] md:rounded-[3rem] flex flex-col justify-between project-card cursor-pointer opacity-0 animate-cascade relative overflow-hidden group aspect-[4/3] md:aspect-square max-h-[320px] max-w-sm mx-auto w-full">
+                        <button onclick="event.stopPropagation(); window.openEditModal(${p.id})" class="absolute top-5 right-5 z-30 p-2.5 bg-black/40 hover:bg-[var(--primary)] border border-white/10 rounded-xl opacity-100 md:opacity-0 group-hover:opacity-100 transition-all shadow-lg text-zinc-300 hover:text-white flex items-center justify-center backdrop-blur-md">
+                            <i data-lucide="more-horizontal" class="w-5 h-5 pointer-events-none"></i>
+                        </button>
                         <img src="${VIBE_IMAGES[p.icon]}" class="absolute top-0 left-0 w-full h-full object-cover opacity-[0.05] pointer-events-none">
                         <div class="relative z-10 flex flex-col h-full pointer-events-none">
                             <div class="flex justify-between items-start">
@@ -593,12 +991,12 @@
                             </div>
                             <div class="mt-auto space-y-3">
                                 <div class="flex flex-wrap items-center gap-3 mb-2">
-                                    ${p.focusTime ? `<div class="text-[9px] font-black uppercase text-blue-400/80 tracking-widest flex items-center gap-1.5"><i data-lucide="clock" class="w-3 h-3"></i> ${formatFocusTime(p.focusTime)}</div>` : ''}
+                                    ${p.focusTime ? `<div class="text-[9px] font-black uppercase text-blue-400/80 tracking-widest flex items-center gap-1.5"><i data-lucide="clock" class="w-3 h-3"></i> ${window.formatFocusTime(p.focusTime)}</div>` : ''}
                                     ${deadlineHtml}
                                 </div>
                                 <h4 class="text-lg md:text-xl font-black line-clamp-2 leading-tight tracking-tight">${p.title}</h4>
                                 <div><div class="h-2 w-full progress-bar rounded-full"><div class="progress-fill h-full rounded-full" style="width: ${prog}%"></div></div></div>
-                                ${p.habit ? `<div class="text-[9px] font-bold text-emerald-500 uppercase tracking-widest truncate">Streak: ${p.habit.streak}d</div>` : ''}
+                                ${habitHtml}
                             </div>
                         </div>
                     </div>`;
@@ -608,14 +1006,26 @@
         };
 
         window.openDetails = (id) => {
-            activeProjectId = id; const p = projects.find(p => p.id === id); if (!p) return; const isArchived = p.station === 'archive'; document.getElementById('vision-banner-container').innerHTML = `<img src="${VIBE_IMAGES[p.icon]}" class="w-full h-full object-cover">`;
-            const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0; const isHabitDone = p.habit && p.habit.lastCheck === new Date().toISOString().split('T')[0];
+            activeProjectId = id; 
+            const p = projects.find(p => p.id === id); 
+            if (!p) return; 
+            
+            const isArchived = p.station === 'archive'; 
+            document.getElementById('vision-banner-container').innerHTML = `<img src="${VIBE_IMAGES[p.icon]}" class="w-full h-full object-cover">`;
+            const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0; 
+            const isHabitDone = p.habit && p.habit.lastCheck === new Date().toISOString().split('T')[0];
             
             let deadlineBadge = ''; 
             if (p.deadline) { 
                 const tgt = new Date(p.deadline + 'T12:00:00'); 
                 deadlineBadge = `<div class="inline-flex gap-1.5 px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-widest text-zinc-300 drop-shadow-md"><i data-lucide="flag" class="w-3 h-3"></i> Entrega: ${tgt.toLocaleDateString('pt-BR')}</div>`; 
             }
+
+            // BRINDE: Hábito em Chamas 🔥 (Lógica do Modal)
+            const isFire = p.habit && p.habit.streak >= 3;
+            const habitBorderClass = isFire ? 'border-orange-500 shadow-[0_0_20px_rgba(249,115,22,0.1)]' : 'border-emerald-500';
+            const habitTextClass = isFire ? 'text-orange-400' : 'text-emerald-400';
+            const habitIconHtml = isFire ? `<i data-lucide="flame" class="w-4 h-4 text-orange-500"></i>` : '';
             
             document.getElementById('detail-content').innerHTML = `
                 <div class="max-w-3xl mx-auto space-y-12 animate-slide-up">
@@ -623,38 +1033,38 @@
                         <div class="space-y-4">
                             <div class="flex flex-wrap gap-2 items-center">
                                 <div class="inline-flex gap-2 px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-widest text-[var(--primary)] drop-shadow-md">${isArchived ? '<i data-lucide="tree-deciduous" class="w-3 h-3"></i> JARDIM' : p.station.toUpperCase()}</div>
-                                ${p.focusTime ? `<div class="inline-flex gap-1.5 px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-widest text-blue-400 drop-shadow-md"><i data-lucide="clock" class="w-3 h-3"></i> ${formatFocusTime(p.focusTime)}</div>` : ''}
+                                ${p.focusTime ? `<div class="inline-flex gap-1.5 px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-widest text-blue-400 drop-shadow-md"><i data-lucide="clock" class="w-3 h-3"></i> ${window.formatFocusTime(p.focusTime)}</div>` : ''}
                                 ${deadlineBadge}
                             </div>
                             <h2 class="text-3xl md:text-5xl font-black tracking-tighter drop-shadow-lg">${p.title}</h2>
                         </div>
                         <div class="flex flex-wrap gap-2">
                             ${!isArchived ? `
-                                <button onclick="openEditModal(${p.id})" class="bg-white/5 border border-white/10 px-4 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:bg-white/10 transition-colors text-zinc-300"><i data-lucide="edit-3" class="w-4 h-4"></i> Editar</button>
-                                <button onclick="askMentor()" class="bg-white/5 border border-white/10 px-4 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:bg-white/10 transition-colors"><i data-lucide="sparkles" class="w-4 h-4 text-indigo-400"></i> Mentor IA</button>
-                                ${prog === 100 ? `<button onclick="archiveProject(${p.id})" class="bg-emerald-500/80 backdrop-blur-md px-4 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:bg-emerald-400 transition-colors text-white"><i data-lucide="tree-deciduous" class="w-4 h-4"></i> Ao Jardim</button>` : ''}
-                                <button onclick="printProject(${p.id})" class="bg-white/5 border border-white/10 px-4 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:bg-white/10 transition-colors text-zinc-300"><i data-lucide="printer" class="w-4 h-4"></i> Relatório</button>
-                                <button onclick="openVirtualRoom()" class="bg-[var(--primary)] px-6 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:brightness-110 shadow-lg shadow-[var(--primary)]/20 transition-all text-white"><i data-lucide="door-open" class="w-4 h-4"></i> Sala Virtual</button>
+                                <button onclick="window.openEditModal(${p.id})" class="bg-white/5 border border-white/10 px-4 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:bg-white/10 transition-colors text-zinc-300"><i data-lucide="edit-3" class="w-4 h-4"></i> Editar</button>
+                                <button onclick="window.askMentor()" class="bg-white/5 border border-white/10 px-4 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:bg-white/10 transition-colors"><i data-lucide="sparkles" class="w-4 h-4 text-indigo-400"></i> Mentor IA</button>
+                                ${prog === 100 ? `<button onclick="window.archiveProject(${p.id})" class="bg-emerald-500/80 backdrop-blur-md px-4 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:bg-emerald-400 transition-colors text-white"><i data-lucide="tree-deciduous" class="w-4 h-4"></i> Ao Jardim</button>` : ''}
+                                <button onclick="window.printProject(${p.id})" class="bg-white/5 border border-white/10 px-4 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:bg-white/10 transition-colors text-zinc-300"><i data-lucide="printer" class="w-4 h-4"></i> Relatório</button>
+                                <button onclick="window.openVirtualRoom()" class="bg-[var(--primary)] px-6 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:brightness-110 shadow-lg shadow-[var(--primary)]/20 transition-all text-white"><i data-lucide="door-open" class="w-4 h-4"></i> Sala Virtual</button>
                             ` : `
-                                <button onclick="printProject(${p.id})" class="bg-white/5 border border-white/10 px-4 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:bg-white/10 transition-colors text-zinc-300"><i data-lucide="printer" class="w-4 h-4"></i> Relatório</button>
-                                <button onclick="deleteProject(${p.id}, this)" class="bg-rose-500/10 text-rose-500 border border-rose-500/20 px-4 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:bg-rose-500 hover:text-white transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i> Descartar</button>
+                                <button onclick="window.printProject(${p.id})" class="bg-white/5 border border-white/10 px-4 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:bg-white/10 transition-colors text-zinc-300"><i data-lucide="printer" class="w-4 h-4"></i> Relatório</button>
+                                <button onclick="window.deleteProject(${p.id}, this)" class="bg-rose-500/10 text-rose-500 border border-rose-500/20 px-4 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:bg-rose-500 hover:text-white transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i> Descartar</button>
                             `}
                         </div>
                     </div>
 
                     ${p.habit ? `
-                        <div class="glass p-6 md:p-8 rounded-[2rem] border-l-4 border-emerald-500 ${isArchived ? 'opacity-50' : ''}">
+                        <div class="glass p-6 md:p-8 rounded-[2rem] border-l-4 ${habitBorderClass} ${isArchived ? 'opacity-50' : ''} transition-colors duration-500">
                             <div class="flex items-center justify-between mb-2">
-                                <div class="text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">Hábito Diário</div>
-                                <div class="text-xs font-black text-emerald-400">${p.habit.streak} DIAS</div>
+                                <div class="text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400 flex items-center gap-2">${habitIconHtml} Hábito Diário</div>
+                                <div class="text-xs font-black ${habitTextClass}">${p.habit.streak} DIAS</div>
                             </div>
                             <div class="flex items-center justify-between font-bold text-xl md:text-2xl">
                                 <div class="flex items-center gap-3 flex-1">
                                     <span id="habit-text">${p.habit.title}</span>
-                                    ${!isArchived ? `<button id="btn-edit-habit" onclick="editHabit()" title="Editar"><i data-lucide="edit-2" class="w-5 h-5 text-blue-400/50 hover:text-blue-400 transition-colors"></i></button>` : ''}
-                                    <input id="habit-input" type="text" class="hidden flex-1 w-full bg-black/40 border border-[var(--primary)] rounded-xl px-4 py-2 outline-none text-white font-bold" value="${p.habit.title}" onblur="saveHabitEdit(this.value)" onkeydown="if(event.key==='Enter') this.blur()">
+                                    ${!isArchived ? `<button id="btn-edit-habit" onclick="window.editHabit()" title="Editar"><i data-lucide="edit-2" class="w-5 h-5 text-blue-400/50 hover:text-blue-400 transition-colors"></i></button>` : ''}
+                                    <input id="habit-input" type="text" class="hidden flex-1 w-full bg-black/40 border border-[var(--primary)] rounded-xl px-4 py-2 outline-none text-white font-bold" value="${p.habit.title}" onblur="window.saveHabitEdit(this.value)" onkeydown="if(event.key==='Enter') this.blur()">
                                 </div>
-                                ${!isArchived ? `<button onclick="checkHabit()" class="hover:scale-110 transition-transform ml-4 shrink-0"><i data-lucide="${isHabitDone ? 'check-circle-2' : 'circle'}" class="w-10 h-10 ${isHabitDone ? 'text-emerald-400' : 'text-zinc-500'}"></i></button>` : '<i data-lucide="lock" class="w-6 h-6 opacity-30"></i>'}
+                                ${!isArchived ? `<button onclick="window.checkHabit()" class="hover:scale-110 transition-transform ml-4 shrink-0"><i data-lucide="${isHabitDone ? 'check-circle-2' : 'circle'}" class="w-10 h-10 ${isHabitDone ? habitTextClass : 'text-zinc-500'}"></i></button>` : '<i data-lucide="lock" class="w-6 h-6 opacity-30"></i>'}
                             </div>
                         </div>
                     ` : ''}
@@ -664,60 +1074,134 @@
                         <div class="h-4 w-full progress-bar rounded-full"><div class="progress-fill h-full rounded-full" style="width: ${prog}%"></div></div>
                         <div class="space-y-3 mt-8">
                             ${p.milestones.map((m, i) => `
-                                <div id="milestone-row-${i}" ${!isArchived ? `draggable="true" ondragstart="handleDragStart(event, ${i})" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, ${i})" ondragend="handleDragEnd(event)"` : ''} class="glass p-5 md:p-6 rounded-2xl flex items-center justify-between ${!isArchived ? 'group hover:bg-white/5 transition-all cursor-grab active:cursor-grabbing border border-transparent' : 'opacity-80 border border-transparent'}">
+                                <div id="milestone-row-${i}" ${!isArchived ? `draggable="true" ondragstart="window.handleDragStart(event, ${i})" ondragover="window.handleDragOver(event)" ondragleave="window.handleDragLeave(event)" ondrop="window.handleDrop(event, ${i})" ondragend="window.handleDragEnd(event)"` : ''} class="glass p-5 md:p-6 rounded-2xl flex items-center justify-between ${!isArchived ? 'group hover:bg-white/5 transition-all cursor-grab active:cursor-grabbing border border-transparent' : 'opacity-80 border border-transparent'}">
                                     <div class="flex items-center gap-4 flex-1">
                                         ${!isArchived ? `<i data-lucide="grip-vertical" class="w-5 h-5 text-white/20 group-hover:text-white/50 shrink-0"></i>` : ''}
-                                        <div ${!isArchived ? `onclick="toggleMilestone(${i})"` : ''} class="${!isArchived ? 'cursor-pointer hover:scale-110' : ''} w-7 h-7 shrink-0 rounded-[10px] border-2 border-white/20 flex items-center justify-center ${m.completed ? 'bg-[var(--primary)] border-[var(--primary)]' : ''} transition-all">
+                                        <div ${!isArchived ? `onclick="window.toggleMilestone(${i})"` : ''} class="${!isArchived ? 'cursor-pointer hover:scale-110' : ''} w-7 h-7 shrink-0 rounded-[10px] border-2 border-white/20 flex items-center justify-center ${m.completed ? 'bg-[var(--primary)] border-[var(--primary)]' : ''} transition-all">
                                             ${m.completed ? '<i data-lucide="check" class="w-4 h-4 text-white"></i>' : ''}
                                         </div>
-                                        <span id="milestone-text-${i}" ${!isArchived ? `onclick="toggleMilestone(${i})"` : ''} class="font-bold md:text-lg flex-1 ${!isArchived ? 'cursor-pointer' : ''} ${m.completed ? 'line-through text-zinc-500' : 'text-zinc-200'} transition-all tracking-tight">${m.text}</span>
-                                        <input id="milestone-input-${i}" type="text" class="hidden flex-1 w-full bg-black/40 border border-[var(--primary)] rounded-xl px-4 py-2 outline-none text-white font-bold" value="${m.text}" onblur="saveMilestoneEdit(${i}, this.value)" onkeydown="if(event.key==='Enter') this.blur()">
+                                        <span id="milestone-text-${i}" ${!isArchived ? `onclick="window.toggleMilestone(${i})"` : ''} class="font-bold md:text-lg flex-1 ${!isArchived ? 'cursor-pointer' : ''} ${m.completed ? 'line-through text-zinc-500' : 'text-zinc-200'} transition-all tracking-tight">${m.text}</span>
+                                        <input id="milestone-input-${i}" type="text" class="hidden flex-1 w-full bg-black/40 border border-[var(--primary)] rounded-xl px-4 py-2 outline-none text-white font-bold" value="${m.text}" onblur="window.saveMilestoneEdit(${i}, this.value)" onkeydown="if(event.key==='Enter') this.blur()">
                                     </div>
                                     ${!isArchived ? `
                                     <div class="flex items-center gap-3 shrink-0 ml-4 opacity-30 md:opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <button onclick="editMilestone(${i})" title="Editar"><i data-lucide="edit-2" class="w-5 h-5 text-blue-400 hover:text-blue-300 transition-colors"></i></button>
-                                        <button onclick="removeMilestone(${i})" title="Remover"><i data-lucide="trash-2" class="w-5 h-5 text-rose-500 hover:text-rose-400 transition-colors"></i></button>
+                                        <button onclick="window.editMilestone(${i})" title="Editar"><i data-lucide="edit-2" class="w-5 h-5 text-blue-400 hover:text-blue-300 transition-colors"></i></button>
+                                        <button onclick="window.removeMilestone(${i})" title="Remover"><i data-lucide="trash-2" class="w-5 h-5 text-rose-500 hover:text-rose-400 transition-colors"></i></button>
                                     </div>` : ''}
                                 </div>
                             `).join('')}
-                            ${!isArchived ? `<div class="relative mt-6"><input id="new-m" type="text" placeholder="Adicionar novo marco (Pressione Enter)..." class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 outline-none font-bold focus:border-[var(--primary)] transition-colors text-lg" onkeydown="if(event.key==='Enter') addMilestone()"></div>` : ''}
+                            ${!isArchived ? `<div class="relative mt-6"><input id="new-m" type="text" placeholder="Adicionar novo marco (Pressione Enter)..." class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 outline-none font-bold focus:border-[var(--primary)] transition-colors text-lg" onkeydown="if(event.key==='Enter') window.addMilestone()"></div>` : ''}
                         </div>
                     </div>
                     
-                    ${!isArchived ? `<div class="pt-8 border-t border-white/5 text-center"><button onclick="deleteProject(${p.id}, this)" class="text-rose-500/60 hover:text-rose-400 text-[9px] font-black uppercase tracking-widest transition-colors">Remover Ideia Completamente</button></div>` : ''}
+                    ${!isArchived ? `<div class="pt-8 border-t border-white/5 text-center"><button onclick="window.deleteProject(${p.id}, this)" class="text-rose-500/60 hover:text-rose-400 text-[9px] font-black uppercase tracking-widest transition-colors">Remover Ideia Completamente</button></div>` : ''}
                 </div>
             `;
-            document.getElementById('detail-view').classList.remove('hidden'); document.body.style.overflow = 'hidden'; lucide.createIcons();
+            window.toggleModal('detail-view', true);
+            document.body.style.overflow = 'hidden'; 
+            lucide.createIcons();
         };
 
-        window.printProject = (id) => { const p = projects.find(proj => proj.id === id); if (!p) return; const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0; const printWindow = window.open('', '', 'width=800,height=600'); printWindow.document.write(`<html><head><title>Relatório - ${p.title}</title><style>body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #222; line-height: 1.6; padding: 40px; max-width: 800px; margin: 0 auto; background: #fff; } h1 { color: #111; border-bottom: 2px solid #8B5CF6; padding-bottom: 10px; margin-bottom: 20px; font-size: 2.5em; } h2 { color: #444; margin-top: 40px; font-size: 1.2em; text-transform: uppercase; letter-spacing: 2px; } .meta { color: #555; font-size: 0.9em; margin-bottom: 40px; padding: 15px; background: #f9f9f9; border-radius: 8px; } .meta strong { color: #111; } .milestone { margin: 8px 0; padding: 12px 15px; background: #fdfdfd; border: 1px solid #eee; border-radius: 6px; font-size: 1.1em; } .completed { text-decoration: line-through; color: #888; background: #f4f4f5; } .notes { white-space: pre-wrap; background: #fdfdfd; padding: 25px; border-radius: 8px; border: 1px solid #eee; border-left: 4px solid #8B5CF6; font-size: 1.05em; color: #444; } .footer { margin-top: 60px; font-size: 0.8em; color: #aaa; text-align: center; border-top: 1px solid #eee; padding-top: 20px; }</style></head><body><h1>${p.title}</h1><div class="meta"><strong>Status:</strong> ${p.station === 'archive' ? 'No Jardim (Concluído)' : 'Em Cultivo'}<br><strong>Progresso:</strong> ${prog}% concluído<br><strong>Tempo Total de Foco:</strong> ${formatFocusTime(p.focusTime) || 'Nenhuma sessão registada'}${p.habit ? `<br><strong>Hábito Associado:</strong> ${p.habit.title} (${p.habit.streak} dias seguidos)` : ''}</div><h2>Tarefas e Marcos</h2>${p.milestones.map(m => `<div class="milestone ${m.completed ? 'completed' : ''}"><strong>[ ${m.completed ? 'X' : '&nbsp;&nbsp;'} ]</strong> ${m.text}</div>`).join('')}${p.notes ? `<h2>Anotações do Projeto</h2><div class="notes">${p.notes}</div>` : ''}<div class="footer">Gerado via Seed App</div></body></html>`); printWindow.document.close(); printWindow.focus(); setTimeout(() => { printWindow.print(); printWindow.close(); }, 250); };
+        window.closeDetails = () => { 
+            activeProjectId = null; 
+            window.toggleModal('detail-view', false);
+            document.body.style.overflow = 'auto'; 
+            window.renderProjects(); 
+        };
 
-        window.openVirtualRoom = () => { const p = projects.find(p => p.id === activeProjectId); if(!p) return; isCreationMode = false; document.getElementById('room-project-name').innerText = p.title; document.getElementById('room-task-name').innerText = p.milestones.find(m=>!m.completed)?.text || "Sessão de Foco Livre"; document.getElementById('room-notes-input').value = p.notes || ''; renderRoomLinks(); renderRoomMilestones(); document.getElementById('room-bg').style.backgroundImage = `url('${FOCUS_SCENES[currentSceneIndex].url}')`; document.getElementById('room-bg').style.opacity = '1'; document.getElementById('room-darken').className = 'absolute inset-0 bg-black/60 transition-all duration-1000 z-10'; document.getElementById('room-time-selector').style.opacity = '1'; document.getElementById('room-time-selector').style.pointerEvents = 'auto'; if (!isTimerRunning) { let defaultTime = parseInt(localStorage.getItem('seed_default_focus')) || 25; setFocusTime(defaultTime); } updateRoomUI(); document.getElementById('virtual-room-overlay').classList.remove('hidden'); document.getElementById('virtual-room-overlay').classList.add('block'); lucide.createIcons(); };
-        window.closeVirtualRoom = () => { clearInterval(timerInterval); isTimerRunning = false; let defaultTime = parseInt(localStorage.getItem('seed_default_focus')) || 25; selectedFocusTime = defaultTime; timeLeft = defaultTime * 60; updateTimerDisplay(); document.getElementById('timer-ring').classList.remove('timer-active'); document.getElementById('btn-timer-zen').innerText = "Iniciar"; document.getElementById('icon-timer-creation-play').classList.remove('hidden'); document.getElementById('icon-timer-creation-play').classList.add('block'); document.getElementById('icon-timer-creation-pause').classList.remove('block'); document.getElementById('icon-timer-creation-pause').classList.add('hidden'); if(typeof soundStates !== 'undefined') { if(soundStates.lessrain) toggleSound('lessrain'); if(soundStates.midnight) toggleSound('midnight'); if(soundStates.adventure) toggleSound('adventure'); } document.getElementById('room-bg').style.opacity = '0'; document.getElementById('room-darken').className = 'absolute inset-0 bg-black/95 backdrop-blur-3xl transition-all duration-1000 z-10'; document.getElementById('virtual-room-overlay').classList.remove('block'); document.getElementById('virtual-room-overlay').classList.add('hidden'); if (activeProjectId && !document.getElementById('detail-view').classList.contains('hidden')) { openDetails(activeProjectId); } };
-        window.toggleRoomMode = () => { isCreationMode = !isCreationMode; updateRoomUI(); };
+        // 7. DRAG AND DROP (Reordenação de Projetos)
+        window.handleProjectDragStart = (e, id) => { 
+            draggedProjectId = id; e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', id); 
+            setTimeout(() => e.target.classList.add('opacity-30', 'scale-95'), 0); 
+        };
+        window.handleProjectDragOver = (e) => { 
+            e.preventDefault(); e.dataTransfer.dropEffect = 'move'; 
+            e.currentTarget.classList.add('border-[var(--primary)]', 'shadow-[0_0_30px_rgba(139,92,246,0.3)]'); 
+        };
+        window.handleProjectDragLeave = (e) => { 
+            e.currentTarget.classList.remove('border-[var(--primary)]', 'shadow-[0_0_30px_rgba(139,92,246,0.3)]'); 
+        };
+        window.handleProjectDrop = (e, targetId) => { 
+            e.preventDefault(); 
+            e.currentTarget.classList.remove('border-[var(--primary)]', 'shadow-[0_0_30px_rgba(139,92,246,0.3)]'); 
+            if (draggedProjectId === null || draggedProjectId === targetId) return; 
+            const draggedIndex = projects.findIndex(p => p.id === draggedProjectId); 
+            const targetIndex = projects.findIndex(p => p.id === targetId); 
+            if (draggedIndex !== -1 && targetIndex !== -1 && projects[draggedIndex].station === projects[targetIndex].station) { 
+                const draggedItem = projects.splice(draggedIndex, 1)[0]; 
+                projects.splice(targetIndex, 0, draggedItem); 
+                window.save(); window.renderProjects(); 
+            } 
+            draggedProjectId = null; 
+        };
+        window.handleProjectDragEnd = (e) => { 
+            e.target.classList.remove('opacity-30', 'scale-95'); draggedProjectId = null; 
+            document.querySelectorAll('.project-card').forEach(el => el.classList.remove('border-[var(--primary)]', 'shadow-[0_0_30px_rgba(139,92,246,0.3)]')); 
+        };
+        window.handleTabDragOver = (e) => { e.preventDefault(); e.currentTarget.classList.add('bg-[var(--primary)]/20', 'text-[var(--primary)]'); };
+        window.handleTabDragLeave = (e) => { e.currentTarget.classList.remove('bg-[var(--primary)]/20', 'text-[var(--primary)]'); };
+        window.handleTabDrop = (e, targetStation) => { 
+            e.preventDefault(); e.currentTarget.classList.remove('bg-[var(--primary)]/20', 'text-[var(--primary)]'); 
+            if (draggedProjectId !== null) { 
+                if (targetStation === 'archive') { window.showToast("❌ Finalize o projeto para enviá-lo ao Jardim.", "error"); draggedProjectId = null; return; }
+                const project = projects.find(p => p.id === draggedProjectId); 
+                if (project && project.station !== targetStation) { 
+                    project.station = targetStation; window.save(); window.renderProjects(); window.showToast("🌱 Projeto movido!"); 
+                } 
+            } 
+            draggedProjectId = null; 
+        };
 
-        const updateRoomUI = () => { const zenView = document.getElementById('room-view-zen'); const creationView = document.getElementById('room-view-creation'); const iconCreation = document.getElementById('icon-mode-creation'); const iconZen = document.getElementById('icon-mode-zen'); const milestonesPanel = document.getElementById('room-milestones-panel'); if (isCreationMode) { zenView.classList.remove('room-visible'); zenView.classList.add('room-hidden'); creationView.classList.remove('room-hidden'); creationView.classList.add('room-visible'); iconCreation.classList.remove('block'); iconCreation.classList.add('hidden'); iconZen.classList.remove('hidden'); iconZen.classList.add('block'); document.getElementById('room-darken').classList.remove('bg-black/60'); document.getElementById('room-darken').classList.add('bg-black/80'); milestonesPanel.classList.add('opacity-0', 'pointer-events-none', '!-translate-x-full'); } else { creationView.classList.remove('room-visible'); creationView.classList.add('room-hidden'); zenView.classList.remove('room-hidden'); zenView.classList.add('room-visible'); iconZen.classList.remove('block'); iconZen.classList.add('hidden'); iconCreation.classList.remove('hidden'); iconCreation.classList.add('block'); document.getElementById('room-darken').classList.remove('bg-black/80'); document.getElementById('room-darken').classList.add('bg-black/60'); milestonesPanel.classList.remove('opacity-0', 'pointer-events-none', '!-translate-x-full'); } };
-        window.toggleMobileMilestones = () => { const panel = document.getElementById('room-milestones-panel'); if (panel.classList.contains('-translate-x-full')) { panel.classList.remove('-translate-x-full'); } else { panel.classList.add('-translate-x-full'); } };
-
-        const renderRoomMilestones = () => { const p = projects.find(p => p.id === activeProjectId); if(!p) return; const container = document.getElementById('room-milestones-list'); container.innerHTML = p.milestones.map((m, i) => `<div class="flex items-start gap-3 group cursor-pointer" onclick="toggleRoomMilestone(${i})"><div class="w-5 h-5 mt-0.5 shrink-0 rounded-md border border-white/30 flex items-center justify-center ${m.completed ? 'bg-[var(--primary)] border-[var(--primary)]' : 'group-hover:border-[var(--primary)]'} transition-all">${m.completed ? '<i data-lucide="check" class="w-3 h-3 text-white"></i>' : ''}</div><span class="text-sm font-medium ${m.completed ? 'line-through text-zinc-600' : 'text-zinc-300 group-hover:text-white'} transition-colors leading-snug">${m.text}</span></div>`).join(''); lucide.createIcons(); document.getElementById('room-task-name').innerText = p.milestones.find(m=>!m.completed)?.text || "Sessão de Foco Livre"; };
-        window.toggleRoomMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(!p) return; p.milestones[i].completed = !p.milestones[i].completed; save(); renderRoomMilestones(); const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0; if (prog === 100) window.showToast("🎉 Todas as tarefas concluídas!"); };
-        window.updateRoomNotes = (val) => { const p = projects.find(proj => proj.id === activeProjectId); if(p && p.station !== 'archive') { p.notes = val; save(); window.checkAchievements(); } };
-
-        const renderRoomLinks = () => { const p = projects.find(p => p.id === activeProjectId); if(!p) return; const container = document.getElementById('room-links-container'); container.innerHTML = p.links && p.links.length > 0 ? p.links.map((l, i) => `<div class="flex items-center gap-1 bg-white/10 border border-white/10 rounded-xl pl-3 pr-2 py-1.5 group hover:bg-white/20 transition-colors"><a href="${l.url}" target="_blank" class="flex items-center gap-2 text-[11px] font-bold text-zinc-200 hover:text-white transition-colors truncate max-w-[250px]" title="${l.title || l.url}"><img src="https://www.google.com/s2/favicons?domain=${l.domain}&sz=64" class="w-4 h-4 rounded-full bg-black/50" onerror="this.style.display='none'"><span class="truncate">${l.title}</span></a><button onclick="removeRoomLink(${i})" class="p-1 opacity-0 group-hover:opacity-100 hover:text-rose-400 transition-all ml-1" title="Remover Link"><i data-lucide="x" class="w-3 h-3"></i></button></div>`).join('') : '<span class="text-[10px] text-zinc-500 font-medium my-auto italic">Nenhum link. A sua mesa está vazia.</span>'; lucide.createIcons(); };
-        window.addRoomLink = async () => { const input = document.getElementById('room-new-link'); const btn = document.getElementById('btn-add-room-link'); let url = input.value.trim(); if (!url) return; if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url; try { const urlObj = new URL(url); let domain = urlObj.hostname.replace('www.', ''); btn.innerHTML = '<i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i>'; btn.disabled = true; lucide.createIcons(); let pageTitle = domain; try { const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`); if (response.ok) { const data = await response.json(); const doc = new DOMParser().parseFromString(data.contents, "text/html"); const titleTag = doc.querySelector('title'); if (titleTag && titleTag.innerText) { pageTitle = titleTag.innerText.trim(); } } } catch(err) { console.log("Aviso: Não foi possível buscar o título."); } const p = projects.find(proj => proj.id === activeProjectId); if (!p.links) p.links = []; p.links.push({ url: url, domain: domain, title: pageTitle }); save(); input.value = ''; renderRoomLinks(); btn.innerText = "ADICIONAR"; btn.disabled = false; } catch(e) { window.showToast("❌ Endereço inválido.", "error"); btn.innerText = "ADICIONAR"; btn.disabled = false; } };
-        window.removeRoomLink = (index) => { const p = projects.find(proj => proj.id === activeProjectId); if (p && p.links) { p.links.splice(index, 1); save(); renderRoomLinks(); } };
-
-        window.setFocusTime = (minutes) => { if (isTimerRunning) return; selectedFocusTime = minutes; timeLeft = minutes * 60; updateTimerDisplay(); [15, 25, 45, 60].forEach(m => { const btn = document.getElementById(`btn-time-${m}`); if (btn) { if (m === minutes) { btn.classList.add('text-[var(--primary)]', 'border-[var(--primary)]'); } else { btn.classList.remove('text-[var(--primary)]', 'border-[var(--primary)]'); } } }); };
-        window.toggleTimer = () => { const btnZen = document.getElementById('btn-timer-zen'); const ring = document.getElementById('timer-ring'); const timeSelector = document.getElementById('room-time-selector'); const iconPlay = document.getElementById('icon-timer-creation-play'); const iconPause = document.getElementById('icon-timer-creation-pause'); if(isTimerRunning) { clearInterval(timerInterval); btnZen.innerText = "Retomar"; ring.classList.remove('timer-active'); iconPlay.classList.remove('hidden'); iconPlay.classList.add('block'); iconPause.classList.remove('block'); iconPause.classList.add('hidden'); timeSelector.style.opacity = '1'; timeSelector.style.pointerEvents = 'auto'; } else { timeSelector.style.opacity = '0'; timeSelector.style.pointerEvents = 'none'; timerInterval = setInterval(() => { timeLeft--; updateTimerDisplay(); if(timeLeft<=0) { clearInterval(timerInterval); const p = projects.find(proj => proj.id === activeProjectId); if(p) { p.focusTime = (p.focusTime || 0) + selectedFocusTime; } if (selectedFocusTime === 60 && !achievements.includes('foco')) { achievements.push('foco'); setTimeout(() => window.showToast('🏆 Conquista: Foco Inabalável!'), 2000); } save(); closeVirtualRoom(); window.showToast(`✅ Sessão de ${selectedFocusTime}m concluída!`); } }, 1000); btnZen.innerText = "Pausar"; ring.classList.add('timer-active'); iconPlay.classList.remove('block'); iconPlay.classList.add('hidden'); iconPause.classList.remove('hidden'); iconPause.classList.add('block'); } isTimerRunning = !isTimerRunning; };
-        const updateTimerDisplay = () => { const text = `${Math.floor(timeLeft/60).toString().padStart(2,'0')}:${(timeLeft%60).toString().padStart(2,'0')}`; document.getElementById('timer-display-zen').innerText = text; document.getElementById('timer-display-creation').innerText = text; };
-
-        window.addTempMilestone = () => { const input = document.getElementById('new-milestone-input'); const val = input.value.trim(); if(val) { tempMilestones.push({ text: val, completed: false }); input.value = ''; window.renderTempMilestones(); } };
+        // 8. CRIAÇÃO E EDIÇÃO DE PROJETOS
+        window.addTempMilestone = () => { 
+            const input = document.getElementById('new-milestone-input'); 
+            const val = input.value.trim(); 
+            if(val) { tempMilestones.push({ text: val, completed: false }); input.value = ''; window.renderTempMilestones(); } 
+        };
         window.removeTempMilestone = (index) => { tempMilestones.splice(index, 1); window.renderTempMilestones(); };
-        window.renderTempMilestones = () => { const list = document.getElementById('temp-milestones-list'); list.innerHTML = tempMilestones.map((m, i) => `<div class="flex items-center justify-between bg-black/40 border border-white/5 p-3 rounded-xl animate-slide-up"><span class="text-sm font-medium text-zinc-300 truncate">${m.text}</span><button type="button" onclick="removeTempMilestone(${i})" class="text-rose-500 hover:text-rose-400 p-1 shrink-0 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button></div>`).join(''); lucide.createIcons(); };
+        window.renderTempMilestones = () => { 
+            const list = document.getElementById('temp-milestones-list'); 
+            list.innerHTML = tempMilestones.map((m, i) => `<div class="flex items-center justify-between bg-black/40 border border-white/5 p-3 rounded-xl animate-slide-up"><span class="text-sm font-medium text-zinc-300 truncate">${m.text}</span><button type="button" onclick="window.removeTempMilestone(${i})" class="text-rose-500 hover:text-rose-400 p-1 shrink-0 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button></div>`).join(''); 
+            lucide.createIcons(); 
+        };
+
+        window.openModal = () => { 
+            editingProjectId = null;
+            document.getElementById('modal-main-title').innerText = 'Novo Plantio';
+            document.getElementById('modal-main-btn').innerText = 'Plantar Semente';
+            document.getElementById('modal-milestones-section').classList.remove('hidden');
+
+            window.toggleModal('modal', true);
+            document.getElementById('proj-title').value = ''; 
+            document.getElementById('proj-habit').value = ''; 
+            const deadlineInput = document.getElementById('proj-deadline'); if (deadlineInput) { deadlineInput.value = ''; }
+            document.getElementById('new-milestone-input').value = ''; 
+            tempMilestones = []; 
+            if(document.getElementById('temp-milestones-list')) window.renderTempMilestones(); 
+        };
+
+        window.openEditModal = (id) => {
+            const p = projects.find(proj => proj.id === id); if(!p) return;
+            editingProjectId = id;
+
+            document.getElementById('modal-main-title').innerText = 'Editar Semente';
+            document.getElementById('modal-main-btn').innerText = 'Salvar Alterações';
+            document.getElementById('modal-milestones-section').classList.add('hidden');
+            
+            document.getElementById('proj-title').value = p.title; 
+            document.getElementById('proj-icon').value = p.icon; 
+            document.getElementById('proj-station').value = p.station; 
+            document.getElementById('proj-habit').value = p.habit ? p.habit.title : ''; 
+            const deadlineInput = document.getElementById('proj-deadline'); if (deadlineInput) { deadlineInput.value = p.deadline || ''; }
+            
+            window.toggleModal('modal', true);
+        };
+        
+        window.closeModal = () => window.toggleModal('modal', false);
 
         window.saveProject = () => { 
             const title = document.getElementById('proj-title').value.trim(); 
-            if(!title) { window.showToast("❌ O projeto precisa de um título.", "error"); return; } 
+            if(!title) return window.showToast("❌ O projeto precisa de um título.", "error");
             const habit = document.getElementById('proj-habit').value.trim(); 
             const deadline = document.getElementById('proj-deadline').value; 
             const icon = document.getElementById('proj-icon').value;
@@ -727,85 +1211,165 @@
                 const p = projects.find(proj => proj.id === editingProjectId);
                 if(p) {
                     p.title = title; p.icon = icon; p.station = station; p.deadline = deadline || null;
-                    if(habit) { if(p.habit) { p.habit.title = habit; } else { p.habit = { title: habit, streak: 0, lastCheck: '' }; } } else { p.habit = null; }
+                    if(habit) { if(p.habit) p.habit.title = habit; else p.habit = { title: habit, streak: 0, lastCheck: '' }; } 
+                    else { p.habit = null; }
                 }
                 window.showToast("✅ Semente atualizada!");
             } else {
                 const pendingInput = document.getElementById('new-milestone-input').value.trim(); 
-                if(pendingInput) { tempMilestones.push({ text: pendingInput, completed: false }); } 
+                if(pendingInput) tempMilestones.push({ text: pendingInput, completed: false });
                 const finalMilestones = tempMilestones.length > 0 ? [...tempMilestones] : [{text: 'Dar o primeiro passo', completed: false}]; 
                 projects.unshift({ id: Date.now(), title: title, icon: icon, station: station, notes: '', links: [], focusTime: 0, habit: habit ? { title: habit, streak: 0, lastCheck: '' } : null, deadline: deadline || null, milestones: finalMilestones }); 
                 window.showToast("🌱 Semente plantada!");
             }
             
-            save(); window.checkAchievements(); closeModal(); renderProjects(); 
-            if (editingProjectId && activeProjectId === editingProjectId) { openDetails(editingProjectId); }
-        };
-        
-        window.openModal = () => { 
-            editingProjectId = null;
-            document.getElementById('modal').classList.remove('hidden'); document.getElementById('modal').classList.add('flex'); 
-            document.getElementById('proj-title').value = ''; document.getElementById('proj-habit').value = ''; 
-            const deadlineInput = document.getElementById('proj-deadline'); if (deadlineInput) { deadlineInput.value = ''; }
-            document.getElementById('new-milestone-input').value = ''; tempMilestones = []; if(document.getElementById('temp-milestones-list')) window.renderTempMilestones(); 
-            
-            document.getElementById('modal-main-title').innerText = 'Novo Plantio';
-            document.getElementById('modal-main-btn').innerText = 'Plantar Semente';
-            document.getElementById('modal-milestones-section').classList.remove('hidden');
+            window.save(); window.checkAchievements(); window.closeModal(); window.renderProjects(); 
+            if (editingProjectId && activeProjectId === editingProjectId) { window.openDetails(editingProjectId); }
         };
 
-        window.openEditModal = (id) => {
-            const p = projects.find(proj => proj.id === id); if(!p) return;
-            editingProjectId = id;
-            document.getElementById('modal').classList.remove('hidden'); document.getElementById('modal').classList.add('flex'); 
-            
-            document.getElementById('proj-title').value = p.title; 
-            document.getElementById('proj-icon').value = p.icon; 
-            document.getElementById('proj-station').value = p.station; 
-            document.getElementById('proj-habit').value = p.habit ? p.habit.title : ''; 
-            const deadlineInput = document.getElementById('proj-deadline'); if (deadlineInput) { deadlineInput.value = p.deadline || ''; }
-            
-            document.getElementById('modal-main-title').innerText = 'Editar Semente';
-            document.getElementById('modal-main-btn').innerText = 'Salvar Alterações';
-            document.getElementById('modal-milestones-section').classList.add('hidden');
+        window.archiveProject = (id) => { const p = projects.find(p => p.id === id); p.station = 'archive'; p.archivedAt = new Date().toLocaleDateString('pt-BR'); window.save(); window.checkAchievements(); window.closeDetails(); };
+        window.deleteProject = (id, btn) => { 
+            if(btn.innerText.includes("CERTEZA")) { 
+                const p = projects.find(proj => proj.id === id); if(p) p.station = 'trash'; 
+                window.save(); window.closeDetails(); window.showToast("🗑️ Ideia movida para a Lixeira."); 
+            } else { 
+                btn.innerText = "CERTEZA? CLIQUE NOVAMENTE"; btn.classList.add('bg-rose-500/20', 'text-rose-500'); 
+                setTimeout(() => { if(document.body.contains(btn)) { btn.innerText = "REMOVER IDEIA"; btn.classList.remove('bg-rose-500/20', 'text-rose-500'); } }, 3000); 
+            } 
         };
-        
-        window.closeModal = () => { document.getElementById('modal').classList.remove('flex'); document.getElementById('modal').classList.add('hidden'); };
 
-        window.archiveProject = (id) => { const p = projects.find(p => p.id === id); p.station = 'archive'; p.archivedAt = new Date().toLocaleDateString('pt-BR'); save(); window.checkAchievements(); window.closeDetails(); };
-        window.toggleMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; p.milestones[i].completed = !p.milestones[i].completed; save(); openDetails(activeProjectId); };
-        window.addMilestone = () => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; const v = document.getElementById('new-m').value; if(!v) return; p.milestones.push({text: v, completed: false}); save(); openDetails(activeProjectId); };
-        window.removeMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; p.milestones.splice(i,1); save(); openDetails(activeProjectId); };
+        // 9. LÓGICA DE MARCOS (MILESTONES) E HÁBITOS
+        window.addMilestone = () => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; const v = document.getElementById('new-m').value; if(!v) return; p.milestones.push({text: v, completed: false}); window.save(); window.openDetails(activeProjectId); };
+        window.removeMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; p.milestones.splice(i,1); window.save(); window.openDetails(activeProjectId); };
+        window.toggleMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; p.milestones[i].completed = !p.milestones[i].completed; window.save(); window.openDetails(activeProjectId); };
+        window.editMilestone = (i) => { document.getElementById(`milestone-text-${i}`).classList.add('hidden'); const input = document.getElementById(`milestone-input-${i}`); input.classList.remove('hidden'); input.focus(); input.setSelectionRange(input.value.length, input.value.length); };
+        window.saveMilestoneEdit = (i, val) => { const newText = val.trim(); const p = projects.find(p => p.id === activeProjectId); if (newText && p.milestones[i].text !== newText) { p.milestones[i].text = newText; window.save(); } window.openDetails(activeProjectId); };
         
-        let draggedMilestoneIndex = null;
+        window.editHabit = () => { document.getElementById('habit-text').classList.add('hidden'); document.getElementById('btn-edit-habit').classList.add('hidden'); const input = document.getElementById('habit-input'); input.classList.remove('hidden'); input.focus(); input.setSelectionRange(input.value.length, input.value.length); };
+        window.saveHabitEdit = (val) => { const newTitle = val.trim(); const p = projects.find(p => p.id === activeProjectId); if (newTitle && p.habit.title !== newTitle) { p.habit.title = newTitle; window.save(); } window.openDetails(activeProjectId); };
+        window.checkHabit = () => { 
+            const p = projects.find(p => p.id === activeProjectId); 
+            const today = new Date().toISOString().split('T')[0]; 
+            if(p.habit.lastCheck === today) { 
+                p.habit.lastCheck = p.habit.previousCheck || ''; p.habit.streak = Math.max(0, p.habit.streak - 1); 
+            } else { 
+                if (p.habit.lastCheck) { const diffDays = Math.ceil(Math.abs(new Date(today) - new Date(p.habit.lastCheck)) / (1000 * 60 * 60 * 24)); if (diffDays > 1) p.habit.streak = 0; } 
+                p.habit.previousCheck = p.habit.lastCheck; p.habit.lastCheck = today; p.habit.streak++; 
+            } 
+            window.save(); window.openDetails(activeProjectId); 
+        };
+
+        // DRAG AND DROP - MARCOS
         window.handleDragStart = (e, i) => { draggedMilestoneIndex = i; e.target.style.opacity = '0.4'; e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', i); };
         window.handleDragOver = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; e.currentTarget.classList.add('border-[var(--primary)]', 'bg-white/5'); };
         window.handleDragLeave = (e) => { e.currentTarget.classList.remove('border-[var(--primary)]', 'bg-white/5'); };
-        window.handleDrop = (e, targetIndex) => { e.preventDefault(); e.currentTarget.classList.remove('border-[var(--primary)]', 'bg-white/5'); if (draggedMilestoneIndex === null || draggedMilestoneIndex === targetIndex) return; const p = projects.find(proj => proj.id === activeProjectId); if(!p || p.station === 'archive') return; const draggedItem = p.milestones.splice(draggedMilestoneIndex, 1)[0]; p.milestones.splice(targetIndex, 0, draggedItem); save(); openDetails(activeProjectId); };
+        window.handleDrop = (e, targetIndex) => { e.preventDefault(); e.currentTarget.classList.remove('border-[var(--primary)]', 'bg-white/5'); if (draggedMilestoneIndex === null || draggedMilestoneIndex === targetIndex) return; const p = projects.find(proj => proj.id === activeProjectId); if(!p || p.station === 'archive') return; const draggedItem = p.milestones.splice(draggedMilestoneIndex, 1)[0]; p.milestones.splice(targetIndex, 0, draggedItem); window.save(); window.openDetails(activeProjectId); };
         window.handleDragEnd = (e) => { e.target.style.opacity = '1'; draggedMilestoneIndex = null; document.querySelectorAll('[id^="milestone-row-"]').forEach(el => el.classList.remove('border-[var(--primary)]', 'bg-white/5')); };
 
-        window.editMilestone = (i) => { document.getElementById(`milestone-text-${i}`).classList.add('hidden'); const input = document.getElementById(`milestone-input-${i}`); input.classList.remove('hidden'); input.focus(); input.setSelectionRange(input.value.length, input.value.length); };
-        window.saveMilestoneEdit = (i, val) => { const newText = val.trim(); const p = projects.find(p => p.id === activeProjectId); if (newText && p.milestones[i].text !== newText) { p.milestones[i].text = newText; save(); } openDetails(activeProjectId); };
-        window.editHabit = () => { document.getElementById('habit-text').classList.add('hidden'); document.getElementById('btn-edit-habit').classList.add('hidden'); const input = document.getElementById('habit-input'); input.classList.remove('hidden'); input.focus(); input.setSelectionRange(input.value.length, input.value.length); };
-        window.saveHabitEdit = (val) => { const newTitle = val.trim(); const p = projects.find(p => p.id === activeProjectId); if (newTitle && p.habit.title !== newTitle) { p.habit.title = newTitle; save(); } openDetails(activeProjectId); };
-        window.checkHabit = () => { const p = projects.find(p => p.id === activeProjectId); const today = new Date().toISOString().split('T')[0]; if(p.habit.lastCheck === today) { p.habit.lastCheck = p.habit.previousCheck || ''; p.habit.streak = Math.max(0, p.habit.streak - 1); } else { if (p.habit.lastCheck) { const diffDays = Math.ceil(Math.abs(new Date(today) - new Date(p.habit.lastCheck)) / (1000 * 60 * 60 * 24)); if (diffDays > 1) p.habit.streak = 0; } p.habit.previousCheck = p.habit.lastCheck; p.habit.lastCheck = today; p.habit.streak++; } save(); openDetails(activeProjectId); };
+        // 10. SALA VIRTUAL (TIMER & NOTAS)
+        window.openGifSelector = () => { 
+            const grid = document.getElementById('gif-grid'); 
+            grid.innerHTML = FOCUS_SCENES.map((s, i) => `<div onclick="window.selectScene(${i})" class="group cursor-pointer rounded-3xl overflow-hidden relative border-2 ${currentSceneIndex === i ? 'border-[var(--primary)] shadow-[0_0_20px_var(--primary)]' : 'border-white/5 hover:border-white/20'} transition-all h-32 md:h-40"><img src="${s.url}" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity ${currentSceneIndex === i ? 'opacity-100' : ''}"><div class="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/90 to-transparent"><span class="text-[10px] font-black uppercase tracking-widest text-white drop-shadow-md flex items-center gap-2">${currentSceneIndex === i ? '<i data-lucide="check-circle-2" class="w-4 h-4 text-[var(--primary)]"></i>' : ''} ${s.name}</span></div></div>`).join(''); 
+            lucide.createIcons(); window.toggleModal('gif-overlay', true); 
+        };
+        window.closeGifSelector = () => window.toggleModal('gif-overlay', false);
+        window.selectScene = (index) => { currentSceneIndex = index; localStorage.setItem('seed_focus_scene', index); document.getElementById('room-bg').style.backgroundImage = `url('${FOCUS_SCENES[index].url}')`; window.closeGifSelector(); window.showToast("🖼️ Cenário alterado!"); };
 
-        window.deleteProject = (id, btn) => { if(btn.innerText.includes("CERTEZA")) { const p = projects.find(proj => proj.id === id); if(p) p.station = 'trash'; save(); window.closeDetails(); window.showToast("🗑️ Ideia movida para a Lixeira."); } else { btn.innerText = "CERTEZA? CLIQUE NOVAMENTE"; btn.classList.add('bg-rose-500/20', 'text-rose-500'); setTimeout(() => { if(document.body.contains(btn)) { btn.innerText = "REMOVER IDEIA"; btn.classList.remove('bg-rose-500/20', 'text-rose-500'); } }, 3000); } };
-        window.openTrash = () => { closeSettings(); document.getElementById('trash-overlay').classList.remove('hidden'); document.getElementById('trash-overlay').classList.add('flex'); renderTrash(); };
-        window.closeTrash = () => { document.getElementById('trash-overlay').classList.remove('flex'); document.getElementById('trash-overlay').classList.add('hidden'); };
-        window.renderTrash = () => { const trashList = document.getElementById('trash-list'); const trashProjects = projects.filter(p => p.station === 'trash'); if (trashProjects.length === 0) { trashList.innerHTML = `<div class="py-16 text-center opacity-30"><i data-lucide="wind" class="w-16 h-16 mx-auto mb-4 text-zinc-500"></i><p class="font-black uppercase tracking-widest text-xs">Lixeira limpa e vazia.</p></div>`; } else { trashList.innerHTML = trashProjects.map(p => `<div class="glass p-5 rounded-3xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border border-rose-500/10 hover:border-rose-500/30 transition-colors"><div class="flex items-center gap-4"><div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 border border-white/5"><i data-lucide="${p.icon || 'leaf'}" class="w-6 h-6 text-zinc-500"></i></div><div><h4 class="font-bold text-white text-base line-clamp-1">${p.title}</h4><p class="text-[10px] font-black uppercase tracking-widest text-rose-500 mt-1">Descartada</p></div></div><div class="flex items-center gap-3 w-full md:w-auto"><button onclick="restoreProject(${p.id})" class="flex-1 md:flex-none px-5 py-3 rounded-2xl bg-white/5 hover:bg-emerald-500/20 hover:text-emerald-400 text-[10px] font-black uppercase tracking-widest transition-all text-zinc-300">Restaurar</button><button onclick="permanentDeleteProject(${p.id}, this)" class="flex-1 md:flex-none px-5 py-3 rounded-2xl bg-rose-500/10 hover:bg-rose-500 hover:text-white text-[10px] font-black uppercase tracking-widest transition-all text-rose-500 border border-rose-500/20">Excluir Definitivamente</button></div></div>`).join(''); } lucide.createIcons(); };
-        window.restoreProject = (id) => { const p = projects.find(proj => proj.id === id); if(p) { p.station = 'now'; save(); renderTrash(); renderProjects(); window.showToast("🌱 Ideia restaurada com sucesso!"); } };
-        window.permanentDeleteProject = (id, btn) => { if(btn.innerText.includes("CERTEZA")) { projects = projects.filter(proj => proj.id !== id); save(); renderTrash(); renderProjects(); window.showToast("🔥 Ideia pulverizada para sempre."); } else { btn.innerText = "CERTEZA? CLIQUE NOVAMENTE"; btn.classList.add('bg-rose-600', 'text-white'); btn.classList.remove('text-rose-500'); setTimeout(() => { if(document.body.contains(btn) && btn.innerText.includes("CERTEZA")) { btn.innerText = "EXCLUIR DEFINITIVAMENTE"; btn.classList.remove('bg-rose-600', 'text-white'); btn.classList.add('text-rose-500'); } }, 3000); } };
-        
-        window.closeDetails = () => { 
-            activeProjectId = null; 
-            document.getElementById('detail-view').classList.remove('flex'); 
-            document.body.style.overflow = 'auto'; 
-            document.getElementById('detail-view').classList.add('hidden'); 
-            renderProjects(); 
+        window.openVirtualRoom = () => { 
+            const p = projects.find(p => p.id === activeProjectId); if(!p) return; 
+            isCreationMode = false; 
+            document.getElementById('room-project-name').innerText = p.title; 
+            document.getElementById('room-task-name').innerText = p.milestones.find(m=>!m.completed)?.text || "Sessão de Foco Livre"; 
+            document.getElementById('room-notes-input').value = p.notes || ''; 
+            window.renderRoomLinks(); window.renderRoomMilestones(); 
+            document.getElementById('room-bg').style.backgroundImage = `url('${FOCUS_SCENES[currentSceneIndex].url}')`; 
+            document.getElementById('room-bg').style.opacity = '1'; 
+            document.getElementById('room-darken').className = 'absolute inset-0 bg-black/60 transition-all duration-1000 z-10'; 
+            document.getElementById('room-time-selector').style.opacity = '1'; document.getElementById('room-time-selector').style.pointerEvents = 'auto'; 
+            if (!isTimerRunning) { window.setFocusTime(parseInt(localStorage.getItem('seed_default_focus')) || 25); } 
+            window.updateRoomUI(); 
+            window.toggleModal('virtual-room-overlay', true, 'block'); 
+            lucide.createIcons(); 
         };
 
-        window.onload = () => { changeTheme(localStorage.getItem('seed_theme') || 'theme-purple'); renderProjects(); };
+        window.closeVirtualRoom = () => { 
+            clearInterval(timerInterval); isTimerRunning = false; 
+            const defaultTime = parseInt(localStorage.getItem('seed_default_focus')) || 25; selectedFocusTime = defaultTime; timeLeft = defaultTime * 60; 
+            window.updateTimerDisplay(); 
+            document.getElementById('timer-ring').classList.remove('timer-active'); document.getElementById('btn-timer-zen').innerText = "Iniciar"; 
+            document.getElementById('icon-timer-creation-play').classList.remove('hidden'); document.getElementById('icon-timer-creation-play').classList.add('block'); 
+            document.getElementById('icon-timer-creation-pause').classList.remove('block'); document.getElementById('icon-timer-creation-pause').classList.add('hidden'); 
+            if(typeof soundStates !== 'undefined') { 
+                if(soundStates.lessrain) window.toggleSound('lessrain'); 
+                if(soundStates.midnight) window.toggleSound('midnight'); 
+                if(soundStates.adventure) window.toggleSound('adventure'); 
+            } 
+            document.getElementById('room-bg').style.opacity = '0'; 
+            document.getElementById('room-darken').className = 'absolute inset-0 bg-black/95 backdrop-blur-3xl transition-all duration-1000 z-10'; 
+            window.toggleModal('virtual-room-overlay', false, 'block'); 
+            if (activeProjectId && !document.getElementById('detail-view').classList.contains('hidden')) { window.openDetails(activeProjectId); } 
+        };
+
+        window.toggleRoomMode = () => { isCreationMode = !isCreationMode; window.updateRoomUI(); };
+
+        window.updateRoomUI = () => { 
+            const zenView = document.getElementById('room-view-zen'); const creationView = document.getElementById('room-view-creation'); const iconCreation = document.getElementById('icon-mode-creation'); const iconZen = document.getElementById('icon-mode-zen'); const milestonesPanel = document.getElementById('room-milestones-panel'); 
+            if (isCreationMode) { 
+                zenView.classList.remove('room-visible'); zenView.classList.add('room-hidden'); 
+                creationView.classList.remove('room-hidden'); creationView.classList.add('room-visible'); 
+                iconCreation.classList.remove('block'); iconCreation.classList.add('hidden'); 
+                iconZen.classList.remove('hidden'); iconZen.classList.add('block'); 
+                document.getElementById('room-darken').classList.remove('bg-black/60'); document.getElementById('room-darken').classList.add('bg-black/80'); 
+                milestonesPanel.classList.add('opacity-0', 'pointer-events-none', '!-translate-x-full'); 
+            } else { 
+                creationView.classList.remove('room-visible'); creationView.classList.add('room-hidden'); 
+                zenView.classList.remove('room-hidden'); zenView.classList.add('room-visible'); 
+                iconZen.classList.remove('block'); iconZen.classList.add('hidden'); 
+                iconCreation.classList.remove('hidden'); iconCreation.classList.add('block'); 
+                document.getElementById('room-darken').classList.remove('bg-black/80'); document.getElementById('room-darken').classList.add('bg-black/60'); 
+                milestonesPanel.classList.remove('opacity-0', 'pointer-events-none', '!-translate-x-full'); 
+            } 
+        };
+
+        window.toggleMobileMilestones = () => { document.getElementById('room-milestones-panel').classList.toggle('-translate-x-full'); };
+
+        window.renderRoomMilestones = () => { const p = projects.find(p => p.id === activeProjectId); if(!p) return; document.getElementById('room-milestones-list').innerHTML = p.milestones.map((m, i) => `<div class="flex items-start gap-3 group cursor-pointer" onclick="window.toggleRoomMilestone(${i})"><div class="w-5 h-5 mt-0.5 shrink-0 rounded-md border border-white/30 flex items-center justify-center ${m.completed ? 'bg-[var(--primary)] border-[var(--primary)]' : 'group-hover:border-[var(--primary)]'} transition-all">${m.completed ? '<i data-lucide="check" class="w-3 h-3 text-white"></i>' : ''}</div><span class="text-sm font-medium ${m.completed ? 'line-through text-zinc-600' : 'text-zinc-300 group-hover:text-white'} transition-colors leading-snug">${m.text}</span></div>`).join(''); lucide.createIcons(); document.getElementById('room-task-name').innerText = p.milestones.find(m=>!m.completed)?.text || "Sessão de Foco Livre"; };
+        window.toggleRoomMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(!p) return; p.milestones[i].completed = !p.milestones[i].completed; window.save(); window.renderRoomMilestones(); const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0; if (prog === 100) window.showToast("🎉 Todas as tarefas concluídas!"); };
+        window.updateRoomNotes = (val) => { const p = projects.find(proj => proj.id === activeProjectId); if(p && p.station !== 'archive') { p.notes = val; window.save(); window.checkAchievements(); } };
+
+        window.renderRoomLinks = () => { const p = projects.find(p => p.id === activeProjectId); if(!p) return; document.getElementById('room-links-container').innerHTML = p.links && p.links.length > 0 ? p.links.map((l, i) => `<div class="flex items-center gap-1 bg-white/10 border border-white/10 rounded-xl pl-3 pr-2 py-1.5 group hover:bg-white/20 transition-colors"><a href="${l.url}" target="_blank" class="flex items-center gap-2 text-[11px] font-bold text-zinc-200 hover:text-white transition-colors truncate max-w-[250px]" title="${l.title || l.url}"><img src="https://www.google.com/s2/favicons?domain=${l.domain}&sz=64" class="w-4 h-4 rounded-full bg-black/50" onerror="this.style.display='none'"><span class="truncate">${l.title}</span></a><button onclick="window.removeRoomLink(${i})" class="p-1 opacity-0 group-hover:opacity-100 hover:text-rose-400 transition-all ml-1" title="Remover Link"><i data-lucide="x" class="w-3 h-3"></i></button></div>`).join('') : '<span class="text-[10px] text-zinc-500 font-medium my-auto italic">Nenhum link. A sua mesa está vazia.</span>'; lucide.createIcons(); };
+        window.addRoomLink = async () => { const input = document.getElementById('room-new-link'); const btn = document.getElementById('btn-add-room-link'); let url = input.value.trim(); if (!url) return; if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url; try { const urlObj = new URL(url); let domain = urlObj.hostname.replace('www.', ''); btn.innerHTML = '<i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i>'; btn.disabled = true; lucide.createIcons(); let pageTitle = domain; try { const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`); if (response.ok) { const data = await response.json(); const doc = new DOMParser().parseFromString(data.contents, "text/html"); const titleTag = doc.querySelector('title'); if (titleTag && titleTag.innerText) { pageTitle = titleTag.innerText.trim(); } } } catch(err) { console.log("Aviso: Não foi possível buscar o título."); } const p = projects.find(proj => proj.id === activeProjectId); if (!p.links) p.links = []; p.links.push({ url: url, domain: domain, title: pageTitle }); window.save(); input.value = ''; window.renderRoomLinks(); btn.innerText = "ADICIONAR"; btn.disabled = false; } catch(e) { window.showToast("❌ Endereço inválido.", "error"); btn.innerText = "ADICIONAR"; btn.disabled = false; } };
+        window.removeRoomLink = (index) => { const p = projects.find(proj => proj.id === activeProjectId); if (p && p.links) { p.links.splice(index, 1); window.save(); window.renderRoomLinks(); } };
+
+        window.updateTimerDisplay = () => { const text = `${Math.floor(timeLeft/60).toString().padStart(2,'0')}:${(timeLeft%60).toString().padStart(2,'0')}`; document.getElementById('timer-display-zen').innerText = text; document.getElementById('timer-display-creation').innerText = text; };
+        
+        window.setFocusTime = (minutes) => { if (isTimerRunning) return; selectedFocusTime = minutes; timeLeft = minutes * 60; window.updateTimerDisplay(); [15, 25, 45, 60].forEach(m => { const btn = document.getElementById(`btn-time-${m}`); if (btn) { if (m === minutes) { btn.classList.add('text-[var(--primary)]', 'border-[var(--primary)]'); } else { btn.classList.remove('text-[var(--primary)]', 'border-[var(--primary)]'); } } }); };
+        
+        window.toggleTimer = () => { const btnZen = document.getElementById('btn-timer-zen'); const ring = document.getElementById('timer-ring'); const timeSelector = document.getElementById('room-time-selector'); const iconPlay = document.getElementById('icon-timer-creation-play'); const iconPause = document.getElementById('icon-timer-creation-pause'); if(isTimerRunning) { clearInterval(timerInterval); btnZen.innerText = "Retomar"; ring.classList.remove('timer-active'); iconPlay.classList.remove('hidden'); iconPlay.classList.add('block'); iconPause.classList.remove('block'); iconPause.classList.add('hidden'); timeSelector.style.opacity = '1'; timeSelector.style.pointerEvents = 'auto'; } else { timeSelector.style.opacity = '0'; timeSelector.style.pointerEvents = 'none'; timerInterval = setInterval(() => { timeLeft--; window.updateTimerDisplay(); if(timeLeft<=0) { clearInterval(timerInterval); const p = projects.find(proj => proj.id === activeProjectId); if(p) { p.focusTime = (p.focusTime || 0) + selectedFocusTime; } if (selectedFocusTime === 60 && !achievements.includes('foco')) { achievements.push('foco'); setTimeout(() => window.showToast('🏆 Conquista: Foco Inabalável!'), 2000); } window.save(); window.closeVirtualRoom(); window.showToast(`✅ Sessão de ${selectedFocusTime}m concluída!`); } }, 1000); btnZen.innerText = "Pausar"; ring.classList.add('timer-active'); iconPlay.classList.remove('block'); iconPlay.classList.add('hidden'); iconPause.classList.remove('hidden'); iconPause.classList.add('block'); } isTimerRunning = !isTimerRunning; };
+
+        window.toggleSound = (type) => { const audio = document.getElementById(`audio-${type}`); const btn = document.getElementById(`btn-sound-${type}`); const indicator = document.getElementById('focus-sound-indicator'); if (soundStates[type]) { audio.pause(); soundStates[type] = false; btn.classList.remove('text-[var(--primary)]', 'bg-[var(--primary)]/20'); btn.classList.add('text-zinc-400', 'bg-white/5'); } else { audio.volume = document.getElementById(`vol-${type}`).value; audio.play().then(() => { soundStates[type] = true; btn.classList.remove('text-zinc-400', 'bg-white/5'); btn.classList.add('text-[var(--primary)]', 'bg-[var(--primary)]/20'); if (Object.values(soundStates).some(state => state === true)) { indicator.classList.remove('hidden'); } }).catch(e => { console.log("Servidor carregando o áudio...", e); window.showToast("⏳ Áudio a carregar. Verifique os nomes dos ficheiros no GitHub.", "error"); audio.load(); }); } if (Object.values(soundStates).some(state => state === true)) { indicator.classList.remove('hidden'); } else { indicator.classList.add('hidden'); } };
+        window.changeVolume = (type, value) => { const audio = document.getElementById(`audio-${type}`); if(audio) audio.volume = value; };
+
+        // 11. MODAIS SECUNDÁRIOS
+        window.openTrash = () => { window.closeSettings(); window.toggleModal('trash-overlay', true); window.renderTrash(); };
+        window.closeTrash = () => window.toggleModal('trash-overlay', false);
+        window.renderTrash = () => { const trashList = document.getElementById('trash-list'); const trashProjects = projects.filter(p => p.station === 'trash'); if (trashProjects.length === 0) { trashList.innerHTML = `<div class="py-16 text-center opacity-30"><i data-lucide="wind" class="w-16 h-16 mx-auto mb-4 text-zinc-500"></i><p class="font-black uppercase tracking-widest text-xs">Lixeira limpa e vazia.</p></div>`; } else { trashList.innerHTML = trashProjects.map(p => `<div class="glass p-5 rounded-3xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border border-rose-500/10 hover:border-rose-500/30 transition-colors"><div class="flex items-center gap-4"><div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 border border-white/5"><i data-lucide="${p.icon || 'leaf'}" class="w-6 h-6 text-zinc-500"></i></div><div><h4 class="font-bold text-white text-base line-clamp-1">${p.title}</h4><p class="text-[10px] font-black uppercase tracking-widest text-rose-500 mt-1">Descartada</p></div></div><div class="flex items-center gap-3 w-full md:w-auto"><button onclick="window.restoreProject(${p.id})" class="flex-1 md:flex-none px-5 py-3 rounded-2xl bg-white/5 hover:bg-emerald-500/20 hover:text-emerald-400 text-[10px] font-black uppercase tracking-widest transition-all text-zinc-300">Restaurar</button><button onclick="window.permanentDeleteProject(${p.id}, this)" class="flex-1 md:flex-none px-5 py-3 rounded-2xl bg-rose-500/10 hover:bg-rose-500 hover:text-white text-[10px] font-black uppercase tracking-widest transition-all text-rose-500 border border-rose-500/20">Excluir Definitivamente</button></div></div>`).join(''); } lucide.createIcons(); };
+        window.restoreProject = (id) => { const p = projects.find(proj => proj.id === id); if(p) { p.station = 'now'; window.save(); window.renderTrash(); window.renderProjects(); window.showToast("🌱 Ideia restaurada com sucesso!"); } };
+        window.permanentDeleteProject = (id, btn) => { if(btn.innerText.includes("CERTEZA")) { projects = projects.filter(proj => proj.id !== id); window.save(); window.renderTrash(); window.renderProjects(); window.showToast("🔥 Ideia pulverizada para sempre."); } else { btn.innerText = "CERTEZA? CLIQUE NOVAMENTE"; btn.classList.add('bg-rose-600', 'text-white'); btn.classList.remove('text-rose-500'); setTimeout(() => { if(document.body.contains(btn) && btn.innerText.includes("CERTEZA")) { btn.innerText = "EXCLUIR DEFINITIVAMENTE"; btn.classList.remove('bg-rose-600', 'text-white'); btn.classList.add('text-rose-500'); } }, 3000); } };
+
+        window.openStats = () => { try { const validProjects = projects.filter(p => p.station !== 'trash'); const total = validProjects.length; const archived = validProjects.filter(p => p.station === 'archive').length; const inProgress = validProjects.filter(p => p.station === 'now').length; const planning = validProjects.filter(p => p.station === 'next' || p.station === 'someday').length; let totalMilestones = 0; let completedMilestones = 0; validProjects.forEach(p => { totalMilestones += p.milestones.length; completedMilestones += p.milestones.filter(m => m.completed).length; }); const overallProgress = totalMilestones === 0 ? 0 : Math.round((completedMilestones / totalMilestones) * 100); const safeAchievements = Array.isArray(achievements) ? achievements : []; document.getElementById('stats-chart').innerHTML = `<div class="glass p-6 rounded-2xl flex justify-between items-center mb-4 border border-[var(--primary)]"><span class="font-bold text-lg">Evolução Geral da Vida</span><span class="font-black text-3xl text-[var(--primary)]">${overallProgress}%</span></div><div class="grid grid-cols-2 gap-4 mb-4"><div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="layers" class="w-8 h-8 text-indigo-400"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Ideias Totais</span><span class="font-black text-3xl">${total}</span></div><div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="award" class="w-8 h-8 text-emerald-400"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">No Jardim (Fim)</span><span class="font-black text-3xl text-emerald-400">${archived}</span></div><div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="zap" class="w-8 h-8 text-[var(--primary)]"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Ativos Agora</span><span class="font-black text-3xl text-[var(--primary)]">${inProgress}</span></div><div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="calendar" class="w-8 h-8 text-blue-400"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Planejamento</span><span class="font-black text-3xl text-blue-400">${planning}</span></div></div><div class="glass p-6 rounded-2xl space-y-4 mt-4"><h4 class="text-[10px] font-black uppercase tracking-widest text-zinc-400 text-center">Sala de Troféus</h4><div class="grid grid-cols-2 md:grid-cols-4 gap-4">${Object.values(MEDALS).map(m => { const unlocked = safeAchievements.includes(m.id); return `<div class="glass p-4 rounded-xl text-center flex flex-col items-center justify-center gap-2 ${unlocked ? 'border border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.2)] bg-amber-500/10' : 'opacity-40 grayscale'} transition-all"><div class="text-3xl drop-shadow-md">${m.icon}</div><div class="text-[10px] font-black uppercase text-zinc-200">${m.title}</div><div class="text-[8px] text-zinc-400 leading-tight">${m.desc}</div></div>`; }).join('')}</div></div>`; lucide.createIcons(); window.toggleModal('stats-overlay', true); } catch(e) { console.error(e); window.showToast("Erro ao abrir termómetro.", "error"); } };
+        window.closeStats = () => window.toggleModal('stats-overlay', false);
+
+        window.askMentor = () => { const p = projects.find(p => p.id === activeProjectId); if(!p) return; window.toggleModal('mentor-overlay', true); document.getElementById('mentor-response').innerHTML = `<div class="text-center space-y-4 py-8"><div class="w-16 h-16 bg-[var(--primary)]/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-[var(--primary)]/30"><i data-lucide="sparkles" class="w-8 h-8 text-[var(--primary)]"></i></div><h4 class="text-2xl md:text-3xl font-black text-white tracking-tight">Mentor IA em breve!</h4><p class="text-zinc-400 text-sm md:text-base leading-relaxed max-w-md mx-auto">A inteligência artificial do seu jardim está a ser treinada neste momento. Muito em breve, você terá conselhos ultra-personalizados baseados nos seus marcos e anotações.</p><div class="inline-block mt-6 px-4 py-2 rounded-full border border-[var(--primary)]/30 bg-[var(--primary)]/10 text-[var(--primary)] text-[var(--primary)] text-[10px] font-black uppercase tracking-widest shadow-[0_0_15px_rgba(139,92,246,0.2)]">Em Construção 🚧</div></div>`; lucide.createIcons(); };
+        window.closeMentor = () => window.toggleModal('mentor-overlay', false);
+
+        window.printProject = (id) => { const p = projects.find(proj => proj.id === id); if (!p) return; const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0; const printWindow = window.open('', '', 'width=800,height=600'); printWindow.document.write(`<html><head><title>Relatório - ${p.title}</title><style>body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #222; line-height: 1.6; padding: 40px; max-width: 800px; margin: 0 auto; background: #fff; } h1 { color: #111; border-bottom: 2px solid #8B5CF6; padding-bottom: 10px; margin-bottom: 20px; font-size: 2.5em; } h2 { color: #444; margin-top: 40px; font-size: 1.2em; text-transform: uppercase; letter-spacing: 2px; } .meta { color: #555; font-size: 0.9em; margin-bottom: 40px; padding: 15px; background: #f9f9f9; border-radius: 8px; } .meta strong { color: #111; } .milestone { margin: 8px 0; padding: 12px 15px; background: #fdfdfd; border: 1px solid #eee; border-radius: 6px; font-size: 1.1em; } .completed { text-decoration: line-through; color: #888; background: #f4f4f5; } .notes { white-space: pre-wrap; background: #fdfdfd; padding: 25px; border-radius: 8px; border: 1px solid #eee; border-left: 4px solid #8B5CF6; font-size: 1.05em; color: #444; } .footer { margin-top: 60px; font-size: 0.8em; color: #aaa; text-align: center; border-top: 1px solid #eee; padding-top: 20px; }</style></head><body><h1>${p.title}</h1><div class="meta"><strong>Status:</strong> ${p.station === 'archive' ? 'No Jardim (Concluído)' : 'Em Cultivo'}<br><strong>Progresso:</strong> ${prog}% concluído<br><strong>Tempo Total de Foco:</strong> ${window.formatFocusTime(p.focusTime) || 'Nenhuma sessão registada'}${p.habit ? `<br><strong>Hábito Associado:</strong> ${p.habit.title} (${p.habit.streak} dias seguidos)` : ''}</div><h2>Tarefas e Marcos</h2>${p.milestones.map(m => `<div class="milestone ${m.completed ? 'completed' : ''}"><strong>[ ${m.completed ? 'X' : '&nbsp;&nbsp;'} ]</strong> ${m.text}</div>`).join('')}${p.notes ? `<h2>Anotações do Projeto</h2><div class="notes">${p.notes}</div>` : ''}<div class="footer">Gerado via Seed App</div></body></html>`); printWindow.document.close(); printWindow.focus(); setTimeout(() => { printWindow.print(); printWindow.close(); }, 250); };
+
+        window.onload = () => { 
+            window.changeTheme(localStorage.getItem('seed_theme') || 'theme-purple'); 
+            window.applyDashboardBg();
+            window.renderProjects(); 
+        };
     </script>
 </body>
 </html>
