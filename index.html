@@ -26,7 +26,7 @@
             --primary: #8B5CF6;
             --primary-dark: #6D28D9;
             --bg: transparent; 
-            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-bg: rgba(255, 255, 255, 0.04);
             --card-border: rgba(255, 255, 255, 0.08);
         }
 
@@ -46,8 +46,8 @@
 
         .glass {
             background: var(--card-bg);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
             border: 1px solid var(--card-border);
         }
 
@@ -67,6 +67,7 @@
             transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* Sidebar Ativa Premium */
         .sidebar-item {
             transition: all 0.3s ease;
             position: relative;
@@ -75,6 +76,7 @@
             background: rgba(255, 255, 255, 0.05);
             color: var(--primary);
             border-left: 3px solid var(--primary);
+            box-shadow: inset 20px 0 30px -20px var(--primary-dark);
         }
         .sidebar-item.active i {
             color: var(--primary);
@@ -98,13 +100,25 @@
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+        /* Card Hover Premium */
         .project-card {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+            transform-origin: center center;
+            opacity: 0; /* Base para o Stagger Fade-in */
         }
         .project-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 20px 40px -20px rgba(0,0,0,0.5);
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 40px -10px var(--primary-dark);
+        }
+
+        /* Stagger Animation Engine */
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-cascade { 
+            animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
         }
 
         @keyframes slideUp {
@@ -231,8 +245,9 @@
                     <h2 id="main-hero-title" class="text-3xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight drop-shadow-md">Bem-vindo, <br><span class="text-[var(--primary)]">ao seu Jardim.</span></h2>
                 </section>
 
+                <!-- Grid de Projetos -->
                 <section id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
-                    <!-- Projetos injetados via JS -->
+                    <!-- Projetos injetados via JS com Animação Stagger -->
                 </section>
 
                 <footer class="mt-24 text-center opacity-30 hover:opacity-100 transition-opacity duration-500 pb-10">
@@ -247,7 +262,7 @@
         </main>
     </div>
 
-    <!-- BOTTOM BAR (Mobile Drag & Drop Support) -->
+    <!-- BOTTOM BAR (Mobile) -->
     <nav class="md:hidden fixed bottom-0 left-0 w-full glass border-t border-white/5 pb-safe z-50 flex justify-around items-center px-2 py-3 backdrop-blur-3xl bg-black/60">
         <button onclick="setStation('now')" id="mobile-tab-now" ondragover="handleTabDragOver(event)" ondragleave="handleTabDragLeave(event)" ondrop="handleTabDrop(event, 'now')" class="flex flex-col items-center gap-1 p-2 text-[var(--primary)] transition-colors rounded-xl">
             <i data-lucide="zap" class="w-5 h-5 pointer-events-none"></i><span class="text-[8px] font-black uppercase tracking-widest pointer-events-none">Agora</span>
@@ -266,32 +281,32 @@
         </button>
     </nav>
 
-    <!-- Modal Novo Plantio (COMPLETO E CORRIGIDO) -->
+    <!-- Modal Novo Plantio -->
     <div id="modal" class="fixed inset-0 bg-black/95 z-[160] hidden items-center justify-center p-4 md:p-6 backdrop-blur-md">
-        <div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-8 max-h-[90vh] overflow-y-auto custom-scrollbar">
+        <div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-8 max-h-[90vh] overflow-y-auto custom-scrollbar shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10">
             <div class="flex justify-between items-center">
                 <h3 class="text-3xl font-black tracking-tight">Novo Plantio</h3>
                 <button onclick="closeModal()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x" class="w-7 h-7"></i></button>
             </div>
             <div class="space-y-6">
-                <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Nome do Projeto</label><input id="proj-title" type="text" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:border-[var(--primary)] outline-none text-lg font-bold transition-colors"></div>
+                <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Nome do Projeto</label><input id="proj-title" type="text" class="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 focus:border-[var(--primary)] outline-none text-lg font-bold transition-colors"></div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Tema Visual (Área)</label><select id="proj-icon" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none font-bold text-gray-300 focus:border-[var(--primary)] transition-colors cursor-pointer"><option value="briefcase" class="bg-[#0a0a0c]">💼 Trabalho & Carreira</option><option value="book" class="bg-[#0a0a0c]">📚 Estudos & Aprendizado</option><option value="heart" class="bg-[#0a0a0c]">🏋️ Saúde & Corpo (Oldschool)</option><option value="palette" class="bg-[#0a0a0c]">🎨 Arte & Criação</option><option value="coffee" class="bg-[#0a0a0c]">☕ Lazer & Pessoal (Unplug)</option></select></div>
-                    <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Prioridade</label><select id="proj-station" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none font-bold text-gray-300 focus:border-[var(--primary)] transition-colors cursor-pointer"><option value="now" class="bg-[#0a0a0c]">Projeto para agora</option><option value="next" class="bg-[#0a0a0c]">Projeto próximo</option><option value="someday" class="bg-[#0a0a0c]">Projeto futuro</option></select></div>
+                    <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Tema Visual (Área)</label><select id="proj-icon" class="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 outline-none font-bold text-gray-300 focus:border-[var(--primary)] transition-colors cursor-pointer"><option value="briefcase" class="bg-[#0a0a0c]">💼 Trabalho & Carreira</option><option value="book" class="bg-[#0a0a0c]">📚 Estudos & Aprendizado</option><option value="heart" class="bg-[#0a0a0c]">🏋️ Saúde & Corpo (Oldschool)</option><option value="palette" class="bg-[#0a0a0c]">🎨 Arte & Criação</option><option value="coffee" class="bg-[#0a0a0c]">☕ Lazer & Pessoal (Unplug)</option></select></div>
+                    <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Prioridade</label><select id="proj-station" class="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 outline-none font-bold text-gray-300 focus:border-[var(--primary)] transition-colors cursor-pointer"><option value="now" class="bg-[#0a0a0c]">Projeto para agora</option><option value="next" class="bg-[#0a0a0c]">Projeto próximo</option><option value="someday" class="bg-[#0a0a0c]">Projeto futuro</option></select></div>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Hábito Diário (Opcional)</label><input id="proj-habit" type="text" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium transition-colors focus:border-[var(--primary)]"></div>
-                    <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Data de Entrega (Opcional)</label><input id="proj-deadline" type="date" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium text-zinc-400 transition-colors focus:border-[var(--primary)] [color-scheme:dark]"></div>
+                    <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Hábito Diário (Opcional)</label><input id="proj-habit" type="text" class="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium transition-colors focus:border-[var(--primary)]"></div>
+                    <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Data de Entrega (Opcional)</label><input id="proj-deadline" type="date" class="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium text-zinc-400 transition-colors focus:border-[var(--primary)] [color-scheme:dark]"></div>
                 </div>
                 
-                <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Marcos e Tarefas</label><div class="flex gap-2"><input id="new-milestone-input" type="text" placeholder="Escreva uma tarefa e pressione Enter..." class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium transition-colors focus:border-[var(--primary)] text-sm" onkeydown="if(event.key==='Enter'){ event.preventDefault(); addTempMilestone(); }"><button type="button" onclick="addTempMilestone()" class="px-6 bg-white/5 border border-white/10 hover:bg-[var(--primary)] hover:border-[var(--primary)] rounded-2xl text-white transition-colors flex items-center justify-center"><i data-lucide="plus" class="w-5 h-5"></i></button></div><div id="temp-milestones-list" class="space-y-2 mt-3 max-h-40 overflow-y-auto custom-scrollbar"></div></div>
+                <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Marcos e Tarefas</label><div class="flex gap-2"><input id="new-milestone-input" type="text" placeholder="Escreva uma tarefa e pressione Enter..." class="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium transition-colors focus:border-[var(--primary)] text-sm" onkeydown="if(event.key==='Enter'){ event.preventDefault(); addTempMilestone(); }"><button type="button" onclick="addTempMilestone()" class="px-6 bg-white/10 hover:bg-[var(--primary)] rounded-2xl text-white transition-colors flex items-center justify-center"><i data-lucide="plus" class="w-5 h-5"></i></button></div><div id="temp-milestones-list" class="space-y-2 mt-3 max-h-40 overflow-y-auto custom-scrollbar"></div></div>
             </div>
             <button onclick="addProject()" class="w-full bg-[var(--primary)] py-5 rounded-[2rem] font-black text-white shadow-2xl shadow-[var(--primary)]/30 uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all">Plantar Semente</button>
         </div>
     </div>
 
-    <!-- Modais Restantes -->
+    <!-- Outros Modais (Detail, Stats, Settings, Trash, Mentor, Gif) -->
     <!-- Detalhes do Projeto -->
     <section id="detail-view" class="fixed inset-0 bg-black/85 backdrop-blur-3xl z-[150] overflow-y-auto hidden">
         <div id="vision-banner-container" class="absolute top-0 left-0 w-full h-[40vh] vision-banner pointer-events-none"></div>
@@ -304,35 +319,29 @@
         </div>
     </section>
 
-    <!-- Termómetro -->
-    <div id="stats-overlay" class="fixed inset-0 bg-black/80 z-[160] hidden items-start justify-center p-4 md:p-6 backdrop-blur-3xl animate-slide-up overflow-y-auto custom-scrollbar"><div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-8 shadow-2xl my-auto"><div class="flex justify-between items-center"><h3 class="text-3xl font-black">Evolução</h3><button onclick="closeStats()" class="text-zinc-500 hover:text-white"><i data-lucide="x"></i></button></div><div id="stats-chart" class="space-y-4"></div></div></div>
+    <div id="stats-overlay" class="fixed inset-0 bg-black/80 z-[160] hidden items-start justify-center p-4 md:p-6 backdrop-blur-3xl animate-slide-up overflow-y-auto custom-scrollbar"><div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-8 shadow-2xl my-auto border border-white/10"><div class="flex justify-between items-center"><h3 class="text-3xl font-black">Evolução</h3><button onclick="closeStats()" class="text-zinc-500 hover:text-white"><i data-lucide="x"></i></button></div><div id="stats-chart" class="space-y-4"></div></div></div>
     
-    <!-- Configurações -->
     <div id="settings-overlay" class="fixed inset-0 bg-black/80 z-[160] hidden items-center justify-center p-4 md:p-6 backdrop-blur-md animate-slide-up">
-        <div class="glass w-full max-w-lg rounded-[3rem] p-8 md:p-10 space-y-8 flex flex-col max-h-[90vh] relative overflow-hidden shadow-2xl">
+        <div class="glass w-full max-w-lg rounded-[3rem] p-8 md:p-10 space-y-8 flex flex-col max-h-[90vh] relative overflow-hidden shadow-2xl border border-white/10">
             <div class="flex justify-between items-center shrink-0">
                 <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-[var(--primary)]/20 flex items-center justify-center border border-[var(--primary)]/30"><i data-lucide="settings" class="text-[var(--primary)] w-5 h-5"></i></div><div><h3 class="text-2xl font-black tracking-tight text-white">Ajustes</h3></div></div>
                 <button onclick="closeSettings()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
             <div class="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-8 pb-4">
-                <div class="space-y-3"><h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2"><i data-lucide="user" class="w-3 h-3"></i> Perfil</h4><div class="flex gap-2"><input id="settings-name" type="text" placeholder="Como quer ser chamado?" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none text-sm font-bold focus:border-[var(--primary)] transition-colors text-white"><button onclick="saveProfileName()" class="px-6 py-4 bg-[var(--primary)] rounded-2xl text-white text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-lg shadow-[var(--primary)]/20">Salvar</button></div></div>
-                <div class="space-y-3"><h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2"><i data-lucide="timer" class="w-3 h-3"></i> Sala de Foco</h4><div class="flex items-center justify-between glass p-5 rounded-2xl border border-white/5"><div><span class="block text-sm font-bold text-zinc-200">Tempo Padrão (Minutos)</span><span class="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mt-1">Duração inicial do Timer</span></div><div class="flex items-center gap-2"><input id="settings-focus-time" type="number" min="1" max="120" value="25" class="w-20 bg-black/40 border border-white/10 rounded-xl px-3 py-3 outline-none text-center text-sm font-bold focus:border-[var(--primary)] transition-colors text-white"><button onclick="saveFocusSettings()" class="p-3 bg-white/10 hover:bg-[var(--primary)] rounded-xl transition-colors text-white" title="Salvar Tempo"><i data-lucide="save" class="w-5 h-5"></i></button></div></div></div>
-                <div class="space-y-3"><h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2"><i data-lucide="database" class="w-3 h-3"></i> Dados e Ferramentas</h4><div class="flex gap-3"><button onclick="openTrash()" class="w-full glass py-4 rounded-2xl font-bold text-zinc-300 hover:bg-white/10 active:scale-95 transition-all text-xs flex items-center justify-center gap-2 border border-white/5"><i data-lucide="trash-2" class="w-4 h-4 text-rose-400"></i> Abrir Lixeira</button></div></div>
-                <div class="space-y-3 pt-6 border-t border-white/5"><h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-rose-500/80 flex items-center gap-2"><i data-lucide="shield-alert" class="w-3 h-3"></i> Acesso e Segurança</h4><div class="space-y-3"><button onclick="logout()" class="w-full bg-white/5 border border-white/10 py-4 rounded-2xl font-bold text-zinc-300 hover:bg-white/10 active:scale-95 transition-all text-xs flex items-center justify-center gap-2"><i data-lucide="log-out" class="w-4 h-4"></i> Sair do Jardim</button><button onclick="deleteAccount(this)" class="w-full bg-rose-500/10 border border-rose-500/20 py-4 rounded-2xl font-bold text-rose-500 hover:bg-rose-500 hover:text-white active:scale-95 transition-all text-xs flex items-center justify-center gap-2"><i data-lucide="user-x" class="w-4 h-4"></i> <span id="delete-btn-text">Excluir Conta</span></button></div></div>
+                <div class="space-y-3"><h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2"><i data-lucide="user" class="w-3 h-3"></i> Perfil</h4><div class="flex gap-2"><input id="settings-name" type="text" placeholder="Como quer ser chamado?" class="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 outline-none text-sm font-bold focus:border-[var(--primary)] transition-colors text-white"><button onclick="saveProfileName()" class="px-6 py-4 bg-[var(--primary)] rounded-2xl text-white text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-lg shadow-[var(--primary)]/20">Salvar</button></div></div>
+                <div class="space-y-3"><h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2"><i data-lucide="timer" class="w-3 h-3"></i> Sala de Foco</h4><div class="flex items-center justify-between bg-black/20 p-5 rounded-2xl border border-white/5"><div><span class="block text-sm font-bold text-zinc-200">Tempo Padrão (Minutos)</span><span class="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mt-1">Duração inicial</span></div><div class="flex items-center gap-2"><input id="settings-focus-time" type="number" min="1" max="120" value="25" class="w-20 bg-black/40 border border-white/10 rounded-xl px-3 py-3 outline-none text-center text-sm font-bold focus:border-[var(--primary)] transition-colors text-white"><button onclick="saveFocusSettings()" class="p-3 bg-white/10 hover:bg-[var(--primary)] rounded-xl transition-colors text-white" title="Salvar Tempo"><i data-lucide="save" class="w-5 h-5"></i></button></div></div></div>
+                <div class="space-y-3"><h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2"><i data-lucide="database" class="w-3 h-3"></i> Dados</h4><div class="flex gap-3"><button onclick="openTrash()" class="w-full bg-black/20 py-4 rounded-2xl font-bold text-zinc-300 hover:bg-white/10 active:scale-95 transition-all text-xs flex items-center justify-center gap-2 border border-white/5"><i data-lucide="trash-2" class="w-4 h-4 text-rose-400"></i> Abrir Lixeira</button></div></div>
+                <div class="space-y-3 pt-6 border-t border-white/5"><h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-rose-500/80 flex items-center gap-2"><i data-lucide="shield-alert" class="w-3 h-3"></i> Segurança</h4><div class="space-y-3"><button onclick="logout()" class="w-full bg-black/20 border border-white/5 py-4 rounded-2xl font-bold text-zinc-300 hover:bg-white/10 active:scale-95 transition-all text-xs flex items-center justify-center gap-2"><i data-lucide="log-out" class="w-4 h-4"></i> Sair do Jardim</button><button onclick="deleteAccount(this)" class="w-full bg-rose-500/10 border border-rose-500/20 py-4 rounded-2xl font-bold text-rose-500 hover:bg-rose-500 hover:text-white active:scale-95 transition-all text-xs flex items-center justify-center gap-2"><i data-lucide="user-x" class="w-4 h-4"></i> <span id="delete-btn-text">Excluir Conta</span></button></div></div>
             </div>
         </div>
     </div>
 
-    <!-- Lixeira -->
-    <div id="trash-overlay" class="fixed inset-0 bg-black/90 z-[170] hidden items-center justify-center p-4 md:p-6 backdrop-blur-xl animate-slide-up"><div class="glass w-full max-w-3xl rounded-[3rem] p-8 md:p-10 space-y-6 max-h-[90vh] flex flex-col relative overflow-hidden shadow-2xl"><div class="flex justify-between items-center relative z-10 border-b border-white/5 pb-6"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-rose-500/20 flex items-center justify-center border border-rose-500/30"><i data-lucide="trash-2" class="text-rose-500 w-5 h-5"></i></div><div><h3 class="text-2xl font-black tracking-tight text-white">Lixeira</h3><p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">Sementes descartadas</p></div></div><button onclick="closeTrash()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x"></i></button></div><div id="trash-list" class="flex-1 overflow-y-auto custom-scrollbar space-y-4 pr-2 relative z-10"></div></div></div>
+    <div id="trash-overlay" class="fixed inset-0 bg-black/90 z-[170] hidden items-center justify-center p-4 md:p-6 backdrop-blur-xl animate-slide-up"><div class="glass w-full max-w-3xl rounded-[3rem] p-8 md:p-10 space-y-6 max-h-[90vh] flex flex-col relative overflow-hidden shadow-2xl border border-white/10"><div class="flex justify-between items-center relative z-10 border-b border-white/5 pb-6"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-rose-500/20 flex items-center justify-center border border-rose-500/30"><i data-lucide="trash-2" class="text-rose-500 w-5 h-5"></i></div><div><h3 class="text-2xl font-black tracking-tight text-white">Lixeira</h3><p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">Sementes descartadas</p></div></div><button onclick="closeTrash()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x"></i></button></div><div id="trash-list" class="flex-1 overflow-y-auto custom-scrollbar space-y-4 pr-2 relative z-10"></div></div></div>
     
-    <!-- Mentor -->
-    <div id="mentor-overlay" class="fixed inset-0 bg-black/90 z-[160] hidden items-center justify-center p-6 backdrop-blur-md animate-slide-up"><div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-6 flex flex-col max-h-[85vh]"><div class="flex justify-between items-center"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center"><i data-lucide="sparkles" class="text-white w-6 h-6"></i></div><h3 class="text-2xl font-black tracking-tight">Mentor IA</h3></div><button onclick="closeMentor()" class="text-zinc-500 hover:text-white"><i data-lucide="x"></i></button></div><div id="mentor-response" class="flex-1 overflow-y-auto text-zinc-300 leading-relaxed text-lg space-y-4 custom-scrollbar"></div><button onclick="closeMentor()" class="w-full py-4 glass rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-white/5 transition-colors">Fechar</button></div></div>
+    <div id="mentor-overlay" class="fixed inset-0 bg-black/90 z-[160] hidden items-center justify-center p-6 backdrop-blur-md animate-slide-up"><div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-6 flex flex-col max-h-[85vh] border border-white/10"><div class="flex justify-between items-center"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center"><i data-lucide="sparkles" class="text-white w-6 h-6"></i></div><h3 class="text-2xl font-black tracking-tight">Mentor IA</h3></div><button onclick="closeMentor()" class="text-zinc-500 hover:text-white"><i data-lucide="x"></i></button></div><div id="mentor-response" class="flex-1 overflow-y-auto text-zinc-300 leading-relaxed text-lg space-y-4 custom-scrollbar"></div><button onclick="closeMentor()" class="w-full py-4 bg-white/5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-white/10 transition-colors border border-white/10">Fechar</button></div></div>
     
-    <!-- Seletor de Gif -->
-    <div id="gif-overlay" class="fixed inset-0 bg-black/90 z-[200] hidden items-center justify-center p-4 md:p-6 backdrop-blur-xl animate-slide-up"><div class="glass w-full max-w-4xl rounded-[3rem] p-8 md:p-10 flex flex-col max-h-[90vh] relative overflow-hidden shadow-2xl"><div class="flex justify-between items-center relative z-10 border-b border-white/5 pb-6 mb-6"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-[var(--primary)]/20 flex items-center justify-center border border-[var(--primary)]/30"><i data-lucide="image" class="text-[var(--primary)] w-5 h-5"></i></div><div><h3 class="text-2xl font-black tracking-tight text-white">Cenários de Foco</h3><p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">Escolha o seu ambiente visual</p></div></div><button onclick="closeGifSelector()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x"></i></button></div><div id="gif-grid" class="flex-1 overflow-y-auto custom-scrollbar pr-2 relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div></div></div>
+    <div id="gif-overlay" class="fixed inset-0 bg-black/90 z-[200] hidden items-center justify-center p-4 md:p-6 backdrop-blur-xl animate-slide-up"><div class="glass w-full max-w-4xl rounded-[3rem] p-8 md:p-10 flex flex-col max-h-[90vh] relative overflow-hidden shadow-2xl border border-white/10"><div class="flex justify-between items-center relative z-10 border-b border-white/5 pb-6 mb-6"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-[var(--primary)]/20 flex items-center justify-center border border-[var(--primary)]/30"><i data-lucide="image" class="text-[var(--primary)] w-5 h-5"></i></div><div><h3 class="text-2xl font-black tracking-tight text-white">Cenários de Foco</h3><p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">Escolha o seu ambiente visual</p></div></div><button onclick="closeGifSelector()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x"></i></button></div><div id="gif-grid" class="flex-1 overflow-y-auto custom-scrollbar pr-2 relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div></div></div>
 
-    <!-- SALA VIRTUAL HÍBRIDA -->
     <div id="virtual-room-overlay" class="fixed inset-0 z-[180] hidden animate-slide-up">
         <div id="room-bg" class="absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-1000 z-0"></div>
         <div id="room-darken" class="absolute inset-0 bg-black/60 transition-all duration-1000 z-10"></div>
@@ -400,9 +409,7 @@
         let projects = []; let currentUser = null; let unsubscribeSnapshot = null;
         let achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || []; 
         let isOfflineMode = false; let currentAuthMode = 'login'; 
-
-        let tempMilestones = [];
-        let selectedFocusTime = parseInt(localStorage.getItem('seed_default_focus')) || 25;
+        let tempMilestones = []; let selectedFocusTime = parseInt(localStorage.getItem('seed_default_focus')) || 25;
         let draggedProjectId = null;
 
         const formatFocusTime = (mins) => { if (!mins) return ''; const h = Math.floor(mins / 60); const m = mins % 60; return (h > 0 ? `${h}H ` : '') + (m > 0 || h === 0 ? `${m}M` : ''); };
@@ -410,7 +417,7 @@
         window.showToast = (message, type = 'success') => {
             const toast = document.createElement('div'); const bgClass = type === 'error' ? 'bg-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.6)]' : 'bg-[var(--primary)] shadow-[0_0_20px_rgba(139,92,246,0.6)]';
             toast.className = `fixed top-10 left-1/2 -translate-x-1/2 text-white px-6 py-3 rounded-full font-black uppercase tracking-widest text-[10px] md:text-xs z-[300] animate-slide-up transition-opacity duration-500 ${bgClass}`;
-            toast.innerHTML = message; document.body.appendChild(toast); setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 4000);
+            toast.innerHTML = message; document.body.appendChild(toast); setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 3000);
         };
 
         const updateHeroName = () => { 
@@ -498,7 +505,6 @@
 
         const VIBE_IMAGES = { briefcase: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1000', book: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&q=80&w=1000', heart: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1000', palette: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=1000', coffee: 'https://images.unsplash.com/photo-1481833761820-0509d3217039?auto=format&fit=crop&q=80&w=1000', zap: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1000', plane: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1000', target: 'https://images.unsplash.com/photo-1484417894907-623942c8ee29?auto=format&fit=crop&q=80&w=1000', dices: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1000' };
         const PLANT_ICONS = { briefcase: 'tree-pine', book: 'tree-deciduous', heart: 'flower-2', palette: 'clover', coffee: 'cherry', zap: 'tree-pine', plane: 'flower-2', target: 'tree-deciduous', dices: 'cherry' };
-
         const FOCUS_SCENES = [ { name: 'Quarto Lo-Fi', url: 'https://i.pinimg.com/originals/ff/34/3a/ff343aa8819c2573ad3409baf4af5e3e.gif' }, { name: 'Viagem de Trem', url: 'https://i.pinimg.com/originals/92/9f/98/929f9811fba2f931a0f4b3581976695b.gif' }, { name: 'Cidade Noturna', url: 'https://i.pinimg.com/originals/49/cd/d8/49cdd838e8c6d7fe5e2dd55deead5567.gif' }, { name: 'Janela Chuvosa', url: 'https://i.pinimg.com/originals/81/81/90/81819033e7242c1d826af87e2fb4975d.gif' }, { name: 'Natureza', url: 'https://i.pinimg.com/originals/08/9d/be/089dbe8f9d422e09d2e4fcae0adec609.gif' }, { name: 'Meia-Noite', url: 'https://i.pinimg.com/originals/13/b0/00/13b0000818cfd9cf27d39afaa051dc23.gif' }, { name: 'Refúgio', url: 'https://i.pinimg.com/originals/d1/1a/42/d11a4231a6fd0b25c0b4b2d4634701e2.gif' }, { name: 'Fim de Tarde', url: 'https://i.pinimg.com/originals/49/4d/8c/494d8c14dbae01f9f90db8665edbe5f6.gif' }, { name: 'Metrópole', url: 'https://i.pinimg.com/originals/e4/c3/9a/e4c39a73c1d9f9d32ca69f9ea0783c66.gif' }, { name: 'Tranquilidade', url: 'https://i.pinimg.com/originals/91/96/32/919632d3c2d04ab12e56f886a428c528.gif' }, { name: 'Inspiração', url: 'https://i.pinimg.com/originals/39/38/77/3938775fa4484f170466ecfa6da4e662.gif' }, { name: 'Profundeza', url: 'https://i.pinimg.com/originals/ab/26/01/ab26019d6a9def8082a9d5134a9e2d74.gif' }, { name: 'Calmaria', url: 'https://i.pinimg.com/originals/26/d4/b6/26d4b6d862bd59f5bac487c6eb3a2af0.gif' }, { name: 'Retiro', url: 'https://i.pinimg.com/originals/57/3b/68/573b688fbac605dde5807bf57b725bd5.gif' } ];
         
         let currentSceneIndex = parseInt(localStorage.getItem('seed_focus_scene')) || 0;
@@ -511,18 +517,11 @@
         window.handleTabDragOver = (e) => { e.preventDefault(); e.currentTarget.classList.add('bg-[var(--primary)]/20', 'text-[var(--primary)]'); };
         window.handleTabDragLeave = (e) => { e.currentTarget.classList.remove('bg-[var(--primary)]/20', 'text-[var(--primary)]'); };
         window.handleTabDrop = (e, targetStation) => { 
-            e.preventDefault(); 
-            e.currentTarget.classList.remove('bg-[var(--primary)]/20', 'text-[var(--primary)]'); 
+            e.preventDefault(); e.currentTarget.classList.remove('bg-[var(--primary)]/20', 'text-[var(--primary)]'); 
             if (draggedProjectId !== null) { 
-                if (targetStation === 'archive') {
-                    window.showToast("❌ Finalize o projeto manualmente para enviá-lo ao Jardim.", "error");
-                    draggedProjectId = null;
-                    return;
-                }
+                if (targetStation === 'archive') { window.showToast("❌ Finalize o projeto para enviá-lo ao Jardim.", "error"); draggedProjectId = null; return; }
                 const project = projects.find(p => p.id === draggedProjectId); 
-                if (project && project.station !== targetStation) { 
-                    project.station = targetStation; save(); renderProjects(); window.showToast("🌱 Projeto movido com sucesso!"); 
-                } 
+                if (project && project.station !== targetStation) { project.station = targetStation; save(); renderProjects(); window.showToast("🌱 Projeto movido!"); } 
             } 
             draggedProjectId = null; 
         };
@@ -551,15 +550,15 @@
             
             if (currentStation === 'archive') { 
                 grid.className = "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8";
-                grid.innerHTML = filtered.length ? filtered.map(p => {
+                grid.innerHTML = filtered.length ? filtered.map((p, index) => {
                     let rarity = 'Semente Comum'; let bgGradient = 'from-emerald-900/10 to-transparent'; let borderClass = 'border-white/5 hover:border-emerald-500/30'; let shadowClass = 'hover:shadow-[0_0_30px_rgba(16,185,129,0.1)]'; let badgeClass = 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'; let glowClass = 'bg-emerald-500';
                     if (p.milestones.length >= 7) { rarity = 'Planta Lendária'; bgGradient = 'from-amber-900/20 to-transparent'; borderClass = 'border-amber-500/20 hover:border-amber-500/50'; shadowClass = 'hover:shadow-[0_0_40px_rgba(245,158,11,0.2)]'; badgeClass = 'bg-amber-500/20 text-amber-300 border border-amber-500/30'; glowClass = 'bg-amber-500'; } 
                     else if (p.milestones.length >= 4) { rarity = 'Planta Rara'; bgGradient = 'from-indigo-900/20 to-transparent'; borderClass = 'border-indigo-500/20 hover:border-indigo-500/50'; shadowClass = 'hover:shadow-[0_0_40px_rgba(99,102,241,0.2)]'; badgeClass = 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'; glowClass = 'bg-indigo-500'; }
-                    return `<div onclick="openDetails(${p.id})" class="glass p-6 md:p-8 rounded-[2.5rem] md:rounded-[3rem] flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-500 group relative overflow-hidden aspect-[4/3] md:aspect-square border ${borderClass} ${shadowClass}"><div class="absolute inset-0 bg-gradient-to-b ${bgGradient} opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div><div class="absolute top-[40%] left-1/2 -translate-x-1/2 w-24 h-24 ${glowClass} blur-[50px] opacity-20 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none"></div><div class="absolute top-4 right-4 text-[7px] font-black uppercase tracking-widest px-2 py-1 rounded-full ${badgeClass} z-10 backdrop-blur-sm transition-all duration-500 group-hover:scale-105 shadow-lg">${rarity}</div><div class="relative z-10 w-16 h-16 md:w-20 md:h-20 mb-4 rounded-full bg-black/20 flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform duration-500 shadow-2xl backdrop-blur-md"><div class="absolute inset-0 rounded-full border border-white/10 rotate-45 pointer-events-none"></div><i data-lucide="${PLANT_ICONS[p.icon] || 'tree-deciduous'}" class="w-8 h-8 md:w-10 md:h-10 text-emerald-400 drop-shadow-[0_0_15px_rgba(52,211,153,0.5)]"></i></div><h4 class="font-bold text-sm line-clamp-2 px-2 text-zinc-300 relative z-10 group-hover:text-white transition-colors">${p.title}</h4><span class="text-[7px] font-black uppercase mt-3 tracking-widest opacity-50 text-zinc-400 relative z-10 flex items-center justify-center gap-1 group-hover:opacity-100 transition-opacity">Colhido: ${p.archivedAt || 'Recentemente'}</span></div>`;
+                    return `<div style="animation-delay: ${index * 60}ms" onclick="openDetails(${p.id})" class="glass p-6 md:p-8 rounded-[2.5rem] md:rounded-[3rem] flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-500 group relative overflow-hidden aspect-[4/3] md:aspect-square border opacity-0 animate-cascade ${borderClass} ${shadowClass}"><div class="absolute inset-0 bg-gradient-to-b ${bgGradient} opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div><div class="absolute top-[40%] left-1/2 -translate-x-1/2 w-24 h-24 ${glowClass} blur-[50px] opacity-20 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none"></div><div class="absolute top-4 right-4 text-[7px] font-black uppercase tracking-widest px-2 py-1 rounded-full ${badgeClass} z-10 backdrop-blur-sm transition-all duration-500 group-hover:scale-105 shadow-lg">${rarity}</div><div class="relative z-10 w-16 h-16 md:w-20 md:h-20 mb-4 rounded-full bg-black/20 flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform duration-500 shadow-2xl backdrop-blur-md"><div class="absolute inset-0 rounded-full border border-white/10 rotate-45 pointer-events-none"></div><i data-lucide="${PLANT_ICONS[p.icon] || 'tree-deciduous'}" class="w-8 h-8 md:w-10 md:h-10 text-emerald-400 drop-shadow-[0_0_15px_rgba(52,211,153,0.5)]"></i></div><h4 class="font-bold text-sm line-clamp-2 px-2 text-zinc-300 relative z-10 group-hover:text-white transition-colors tracking-tight">${p.title}</h4><span class="text-[7px] font-black uppercase mt-3 tracking-widest opacity-50 text-zinc-400 relative z-10 flex items-center justify-center gap-1 group-hover:opacity-100 transition-opacity">Colhido: ${p.archivedAt || 'Recentemente'}</span></div>`;
                 }).join('') : `<div class="col-span-full py-24 text-center opacity-40 animate-slide-up"><div class="w-24 h-24 mx-auto mb-6 rounded-full bg-white/5 flex items-center justify-center border border-white/5"><i data-lucide="flower" class="w-10 h-10 text-zinc-500"></i></div><p class="font-black uppercase tracking-widest text-sm text-zinc-400">A sua Estufa está vazia.<br>Cultive sementes até aos 100% para as ver florescer aqui.</p></div>`;
             } else { 
                 grid.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8";
-                grid.innerHTML = filtered.length ? filtered.map(p => {
+                grid.innerHTML = filtered.length ? filtered.map((p, index) => {
                     const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0;
                     let plantIcon = 'sprout'; let plantColor = 'text-emerald-500/40'; let plantGlow = '';
                     if (prog === 100) { plantIcon = PLANT_ICONS[p.icon] || 'tree-deciduous'; plantColor = 'text-emerald-400'; plantGlow = 'drop-shadow-[0_0_10px_rgba(52,211,153,0.6)]'; }
@@ -568,23 +567,19 @@
                     
                     let deadlineHtml = '';
                     if (p.deadline) {
-                        const today = new Date(); today.setHours(0,0,0,0);
-                        const tgt = new Date(p.deadline + 'T00:00:00');
-                        const diffDays = Math.ceil((tgt - today) / (1000 * 60 * 60 * 24));
+                        const today = new Date(); today.setHours(0,0,0,0); const tgt = new Date(p.deadline + 'T00:00:00'); const diffDays = Math.ceil((tgt - today) / (1000 * 60 * 60 * 24));
                         let dColor = 'text-blue-400'; let dText = 'Entrega: ' + tgt.toLocaleDateString('pt-BR', {day:'2-digit', month:'short'});
-                        if (diffDays < 0) { dColor = 'text-rose-500'; dText = 'Atrasado'; }
-                        else if (diffDays === 0) { dColor = 'text-amber-500'; dText = 'Termina Hoje'; }
-                        else if (diffDays <= 3) { dColor = 'text-amber-400'; dText = diffDays + ' dias restantes'; }
+                        if (diffDays < 0) { dColor = 'text-rose-500'; dText = 'Atrasado'; } else if (diffDays === 0) { dColor = 'text-amber-500'; dText = 'Termina Hoje'; } else if (diffDays <= 3) { dColor = 'text-amber-400'; dText = diffDays + ' dias restantes'; }
                         deadlineHtml = `<div class="text-[9px] font-black uppercase ${dColor} tracking-widest flex items-center gap-1.5"><i data-lucide="flag" class="w-3 h-3"></i> ${dText}</div>`;
                     }
 
-                    return `<div draggable="true" ondragstart="handleProjectDragStart(event, ${p.id})" ondragover="handleProjectDragOver(event)" ondragleave="handleProjectDragLeave(event)" ondrop="handleProjectDrop(event, ${p.id})" ondragend="handleProjectDragEnd(event)" onclick="openDetails(${p.id})" class="glass p-6 md:p-8 rounded-[2.5rem] md:rounded-[3rem] flex flex-col justify-between project-card cursor-pointer animate-slide-up relative overflow-hidden group aspect-square max-h-[320px] max-w-sm mx-auto w-full">
+                    return `<div style="animation-delay: ${index * 60}ms" draggable="true" ondragstart="handleProjectDragStart(event, ${p.id})" ondragover="handleProjectDragOver(event)" ondragleave="handleProjectDragLeave(event)" ondrop="handleProjectDrop(event, ${p.id})" ondragend="handleProjectDragEnd(event)" onclick="openDetails(${p.id})" class="glass p-6 md:p-8 rounded-[2.5rem] md:rounded-[3rem] flex flex-col justify-between project-card cursor-pointer opacity-0 animate-cascade relative overflow-hidden group aspect-[4/3] md:aspect-square max-h-[320px] max-w-sm mx-auto w-full">
                         <img src="${VIBE_IMAGES[p.icon]}" class="absolute top-0 left-0 w-full h-full object-cover opacity-[0.05] pointer-events-none">
                         <div class="relative z-10 flex flex-col h-full pointer-events-none">
                             <div class="flex justify-between items-start">
                                 <div class="flex flex-col gap-3">
-                                    <div class="relative w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-black/40 flex items-center justify-center border border-white/5 group-hover:border-emerald-500/30 transition-colors shadow-lg">
-                                        <div class="absolute inset-0 bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl pointer-events-none"></div>
+                                    <div class="relative w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-black/40 flex items-center justify-center border border-white/5 group-hover:border-[var(--primary)] transition-colors shadow-lg">
+                                        <div class="absolute inset-0 bg-[var(--primary)]/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl pointer-events-none"></div>
                                         <i data-lucide="${plantIcon}" class="${plantColor} w-6 h-6 md:w-7 md:h-7 relative z-10 transition-all duration-500 group-hover:scale-110 ${plantGlow}"></i>
                                     </div>
                                 </div>
@@ -600,12 +595,8 @@
                                     ${p.focusTime ? `<div class="text-[9px] font-black uppercase text-blue-400/80 tracking-widest flex items-center gap-1.5"><i data-lucide="clock" class="w-3 h-3"></i> ${formatFocusTime(p.focusTime)}</div>` : ''}
                                     ${deadlineHtml}
                                 </div>
-                                <h4 class="text-lg md:text-xl font-black line-clamp-2 leading-tight">${p.title}</h4>
-                                <div>
-                                    <div class="h-2 w-full progress-bar rounded-full">
-                                        <div class="progress-fill h-full rounded-full" style="width: ${prog}%"></div>
-                                    </div>
-                                </div>
+                                <h4 class="text-lg md:text-xl font-black line-clamp-2 leading-tight tracking-tight">${p.title}</h4>
+                                <div><div class="h-2 w-full progress-bar rounded-full"><div class="progress-fill h-full rounded-full" style="width: ${prog}%"></div></div></div>
                                 ${p.habit ? `<div class="text-[9px] font-bold text-emerald-500 uppercase tracking-widest truncate">Streak: ${p.habit.streak}d</div>` : ''}
                             </div>
                         </div>
@@ -618,15 +609,9 @@
         window.openDetails = (id) => {
             activeProjectId = id; const p = projects.find(p => p.id === id); if (!p) return; const isArchived = p.station === 'archive'; document.getElementById('vision-banner-container').innerHTML = `<img src="${VIBE_IMAGES[p.icon]}" class="w-full h-full object-cover">`;
             const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0; const isHabitDone = p.habit && p.habit.lastCheck === new Date().toISOString().split('T')[0];
-            
-            let deadlineBadge = '';
-            if (p.deadline) {
-                const tgt = new Date(p.deadline + 'T00:00:00');
-                deadlineBadge = `<div class="inline-flex gap-1.5 px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-widest text-zinc-300 drop-shadow-md"><i data-lucide="flag" class="w-3 h-3"></i> Entrega: ${tgt.toLocaleDateString('pt-BR')}</div>`;
-            }
-            
+            let deadlineBadge = ''; if (p.deadline) { const tgt = new Date(p.deadline + 'T00:00:00'); deadlineBadge = `<div class="inline-flex gap-1.5 px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-widest text-zinc-300 drop-shadow-md"><i data-lucide="flag" class="w-3 h-3"></i> Entrega: ${tgt.toLocaleDateString('pt-BR')}</div>`; }
             document.getElementById('detail-content').innerHTML = `
-                <div class="max-w-3xl mx-auto space-y-12">
+                <div class="max-w-3xl mx-auto space-y-12 animate-slide-up">
                     <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-8">
                         <div class="space-y-4">
                             <div class="flex flex-wrap gap-2 items-center">
@@ -677,7 +662,7 @@
                                         <div ${!isArchived ? `onclick="toggleMilestone(${i})"` : ''} class="${!isArchived ? 'cursor-pointer hover:scale-110' : ''} w-7 h-7 shrink-0 rounded-[10px] border-2 border-white/20 flex items-center justify-center ${m.completed ? 'bg-[var(--primary)] border-[var(--primary)]' : ''} transition-all">
                                             ${m.completed ? '<i data-lucide="check" class="w-4 h-4 text-white"></i>' : ''}
                                         </div>
-                                        <span id="milestone-text-${i}" ${!isArchived ? `onclick="toggleMilestone(${i})"` : ''} class="font-bold md:text-lg flex-1 ${!isArchived ? 'cursor-pointer' : ''} ${m.completed ? 'line-through text-zinc-500' : 'text-zinc-200'} transition-all">${m.text}</span>
+                                        <span id="milestone-text-${i}" ${!isArchived ? `onclick="toggleMilestone(${i})"` : ''} class="font-bold md:text-lg flex-1 ${!isArchived ? 'cursor-pointer' : ''} ${m.completed ? 'line-through text-zinc-500' : 'text-zinc-200'} transition-all tracking-tight">${m.text}</span>
                                         <input id="milestone-input-${i}" type="text" class="hidden flex-1 w-full bg-black/40 border border-[var(--primary)] rounded-xl px-4 py-2 outline-none text-white font-bold" value="${m.text}" onblur="saveMilestoneEdit(${i}, this.value)" onkeydown="if(event.key==='Enter') this.blur()">
                                     </div>
                                     ${!isArchived ? `
@@ -743,13 +728,6 @@
         window.addMilestone = () => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; const v = document.getElementById('new-m').value; if(!v) return; p.milestones.push({text: v, completed: false}); save(); openDetails(activeProjectId); };
         window.removeMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; p.milestones.splice(i,1); save(); openDetails(activeProjectId); };
         
-        let draggedMilestoneIndex = null;
-        window.handleDragStart = (e, i) => { draggedMilestoneIndex = i; e.target.style.opacity = '0.4'; e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', i); };
-        window.handleDragOver = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; e.currentTarget.classList.add('border-[var(--primary)]', 'bg-white/5'); };
-        window.handleDragLeave = (e) => { e.currentTarget.classList.remove('border-[var(--primary)]', 'bg-white/5'); };
-        window.handleDrop = (e, targetIndex) => { e.preventDefault(); e.currentTarget.classList.remove('border-[var(--primary)]', 'bg-white/5'); if (draggedMilestoneIndex === null || draggedMilestoneIndex === targetIndex) return; const p = projects.find(proj => proj.id === activeProjectId); if(!p || p.station === 'archive') return; const draggedItem = p.milestones.splice(draggedMilestoneIndex, 1)[0]; p.milestones.splice(targetIndex, 0, draggedItem); save(); openDetails(activeProjectId); };
-        window.handleDragEnd = (e) => { e.target.style.opacity = '1'; draggedMilestoneIndex = null; document.querySelectorAll('[id^="milestone-row-"]').forEach(el => el.classList.remove('border-[var(--primary)]', 'bg-white/5')); };
-
         window.editMilestone = (i) => { document.getElementById(`milestone-text-${i}`).classList.add('hidden'); const input = document.getElementById(`milestone-input-${i}`); input.classList.remove('hidden'); input.focus(); input.setSelectionRange(input.value.length, input.value.length); };
         window.saveMilestoneEdit = (i, val) => { const newText = val.trim(); const p = projects.find(p => p.id === activeProjectId); if (newText && p.milestones[i].text !== newText) { p.milestones[i].text = newText; save(); } openDetails(activeProjectId); };
         window.editHabit = () => { document.getElementById('habit-text').classList.add('hidden'); document.getElementById('btn-edit-habit').classList.add('hidden'); const input = document.getElementById('habit-input'); input.classList.remove('hidden'); input.focus(); input.setSelectionRange(input.value.length, input.value.length); };
@@ -770,17 +748,6 @@
             document.getElementById('detail-view').classList.add('hidden'); 
             renderProjects(); 
         };
-
-        let soundStates = { lessrain: false, midnight: false, adventure: false };
-        window.toggleSound = (type) => { const audio = document.getElementById(`audio-${type}`); const btn = document.getElementById(`btn-sound-${type}`); const indicator = document.getElementById('focus-sound-indicator'); if (soundStates[type]) { audio.pause(); soundStates[type] = false; btn.classList.remove('text-[var(--primary)]', 'bg-[var(--primary)]/20'); btn.classList.add('text-zinc-400', 'bg-white/5'); } else { audio.volume = document.getElementById(`vol-${type}`).value; audio.play().then(() => { soundStates[type] = true; btn.classList.remove('text-zinc-400', 'bg-white/5'); btn.classList.add('text-[var(--primary)]', 'bg-[var(--primary)]/20'); if (Object.values(soundStates).some(state => state === true)) { indicator.classList.remove('hidden'); } }).catch(e => { console.log("Servidor carregando o áudio...", e); window.showToast("⏳ Áudio a carregar. Verifique os nomes dos ficheiros no GitHub.", "error"); audio.load(); }); } if (Object.values(soundStates).some(state => state === true)) { indicator.classList.remove('hidden'); } else { indicator.classList.add('hidden'); } };
-        window.changeVolume = (type, value) => { const audio = document.getElementById(`audio-${type}`); if(audio) audio.volume = value; };
-
-        window.openStats = () => { try { const validProjects = projects.filter(p => p.station !== 'trash'); const total = validProjects.length; const archived = validProjects.filter(p => p.station === 'archive').length; const inProgress = validProjects.filter(p => p.station === 'now').length; const planning = validProjects.filter(p => p.station === 'next' || p.station === 'someday').length; let totalMilestones = 0; let completedMilestones = 0; validProjects.forEach(p => { totalMilestones += p.milestones.length; completedMilestones += p.milestones.filter(m => m.completed).length; }); const overallProgress = totalMilestones === 0 ? 0 : Math.round((completedMilestones / totalMilestones) * 100); const safeAchievements = Array.isArray(achievements) ? achievements : []; document.getElementById('stats-chart').innerHTML = `<div class="glass p-6 rounded-2xl flex justify-between items-center mb-4 border border-[var(--primary)]"><span class="font-bold text-lg">Evolução Geral da Vida</span><span class="font-black text-3xl text-[var(--primary)]">${overallProgress}%</span></div><div class="grid grid-cols-2 gap-4 mb-4"><div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="layers" class="w-8 h-8 text-indigo-400"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Ideias Totais</span><span class="font-black text-3xl">${total}</span></div><div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="award" class="w-8 h-8 text-emerald-400"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">No Jardim (Fim)</span><span class="font-black text-3xl text-emerald-400">${archived}</span></div><div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="zap" class="w-8 h-8 text-[var(--primary)]"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Ativos Agora</span><span class="font-black text-3xl text-[var(--primary)]">${inProgress}</span></div><div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="calendar" class="w-8 h-8 text-blue-400"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Planejamento</span><span class="font-black text-3xl text-blue-400">${planning}</span></div></div><div class="glass p-6 rounded-2xl space-y-4 mt-4"><h4 class="text-[10px] font-black uppercase tracking-widest text-zinc-400 text-center">Sala de Troféus</h4><div class="grid grid-cols-2 md:grid-cols-4 gap-4">${Object.values(MEDALS).map(m => { const unlocked = safeAchievements.includes(m.id); return `<div class="glass p-4 rounded-xl text-center flex flex-col items-center justify-center gap-2 ${unlocked ? 'border border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.2)] bg-amber-500/10' : 'opacity-40 grayscale'} transition-all"><div class="text-3xl drop-shadow-md">${m.icon}</div><div class="text-[10px] font-black uppercase text-zinc-200">${m.title}</div><div class="text-[8px] text-zinc-400 leading-tight">${m.desc}</div></div>`; }).join('')}</div></div>`; lucide.createIcons(); document.getElementById('stats-overlay').classList.remove('hidden'); document.getElementById('stats-overlay').classList.add('flex'); } catch(e) { console.error(e); window.showToast("Erro ao abrir termómetro.", "error"); } };
-        window.closeStats = () => { document.getElementById('stats-overlay').classList.remove('flex'); document.getElementById('stats-overlay').classList.add('hidden'); };
-
-        window.closeMentor = () => { document.getElementById('mentor-overlay').classList.remove('flex'); document.getElementById('mentor-overlay').classList.add('hidden'); };
-        
-        window.askMentor = () => { const p = projects.find(p => p.id === activeProjectId); if(!p) return; document.getElementById('mentor-overlay').classList.remove('hidden'); document.getElementById('mentor-overlay').classList.add('flex'); const responseDiv = document.getElementById('mentor-response'); responseDiv.innerHTML = `<div class="text-center space-y-4 py-8"><div class="w-16 h-16 bg-[var(--primary)]/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-[var(--primary)]/30"><i data-lucide="sparkles" class="w-8 h-8 text-[var(--primary)]"></i></div><h4 class="text-2xl md:text-3xl font-black text-white tracking-tight">Mentor IA em breve!</h4><p class="text-zinc-400 text-sm md:text-base leading-relaxed max-w-md mx-auto">A inteligência artificial do seu jardim está a ser treinada neste momento. Muito em breve, você terá conselhos ultra-personalizados baseados nos seus marcos e anotações.</p><div class="inline-block mt-6 px-4 py-2 rounded-full border border-[var(--primary)]/30 bg-[var(--primary)]/10 text-[var(--primary)] text-[var(--primary)] text-[10px] font-black uppercase tracking-widest shadow-[0_0_15px_rgba(139,92,246,0.2)]">Em Construção 🚧</div></div>`; lucide.createIcons(); };
 
         window.onload = () => { changeTheme(localStorage.getItem('seed_theme') || 'theme-purple'); renderProjects(); };
     </script>
