@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -9,10 +9,9 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Seed">
     
-    <!-- Ícone Real do Projeto TOTALMENTE blindado em SVG -->
-    <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%233B82F6'/%3E%3Cg transform='translate(4.5, 4.5) scale(0.625)' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 20A7 7 0 0 1 14 6h5a2 2 0 0 1 2 2v5a7 7 0 0 1-7 7H9a2 2 0 0 1-2-2V8a7 7 0 0 1 7-7h5'/%3E%3Cpath d='M11 20V10'/%3E%3C/g%3E%3C/svg%3E">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%233B82F6'/%3E%3Cg transform='translate(4.5, 4.5) scale(0.625)' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 20A7 7 0 0 1 14 6h5a2 2 0 0 1 2 2v5a7 7 0 0 1-7 7H9a2 2 0 0 1-2-2V8a7 7 0 0 1 7-7h5'/%3E%3Cpath d='M11 20V10'/%3E%3C/g%3E%3C/svg%3E">
-    <link rel="apple-touch-icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%233B82F6'/%3E%3Cg transform='translate(4.5, 4.5) scale(0.625)' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 20A7 7 0 0 1 14 6h5a2 2 0 0 1 2 2v5a7 7 0 0 1-7 7H9a2 2 0 0 1-2-2V8a7 7 0 0 1 7-7h5'/%3E%3Cpath d='M11 20V10'/%3E%3C/g%3E%3C/svg%3E">
+    <!-- Ícone Real do Projeto -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256' viewBox='0 0 24 24' fill='none' stroke='%238B5CF6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 20A7 7 0 0 1 14 6h5a2 2 0 0 1 2 2v5a7 7 0 0 1-7 7H9a2 2 0 0 1-2-2V8a7 7 0 0 1 7-7h5'/%3E%3Cpath d='M11 20V10'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256' viewBox='0 0 24 24' fill='none' stroke='%238B5CF6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 20A7 7 0 0 1 14 6h5a2 2 0 0 1 2 2v5a7 7 0 0 1-7 7H9a2 2 0 0 1-2-2V8a7 7 0 0 1 7-7h5'/%3E%3Cpath d='M11 20V10'/%3E%3C/svg%3E">
     
     <link rel="manifest" href="manifest.json">
 
@@ -68,10 +67,30 @@
             transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .station-tab.active {
+        .sidebar-item {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .sidebar-item.active {
+            background: rgba(255, 255, 255, 0.05);
             color: var(--primary);
-            border-bottom: 2px solid var(--primary);
-            opacity: 1 !important;
+            border-left: 3px solid var(--primary);
+        }
+        .sidebar-item.active i {
+            color: var(--primary);
+        }
+
+        .app-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+        
+        @media (max-width: 768px) {
+            .app-layout {
+                grid-template-columns: 1fr;
+                padding-bottom: 80px; 
+            }
         }
 
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
@@ -79,6 +98,9 @@
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+        .project-card {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;
+        }
         .project-card:hover {
             transform: translateY(-8px);
             border-color: rgba(255, 255, 255, 0.2);
@@ -91,68 +113,30 @@
         }
         .animate-slide-up { animation: slideUp 0.5s ease-out forwards; }
 
-        .audio-wave {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-            height: 20px;
-        }
-        .audio-bar {
-            width: 2px;
-            height: 100%;
-            background: var(--primary);
-            animation: wave 1s ease-in-out infinite;
-        }
-        @keyframes wave {
-            0%, 100% { height: 20%; }
-            50% { height: 100%; }
-        }
+        .audio-wave { display: flex; align-items: center; gap: 2px; height: 20px; }
+        .audio-bar { width: 2px; height: 100%; background: var(--primary); animation: wave 1s ease-in-out infinite; }
+        @keyframes wave { 0%, 100% { height: 20%; } 50% { height: 100%; } }
 
-        .vision-banner {
-            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-            opacity: 0.5 !important;
-        }
-
+        .vision-banner { mask-image: linear-gradient(to bottom, black 40%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%); opacity: 0.5 !important; }
         #detail-view .relative { padding-top: 4rem; padding-bottom: 4rem; }
 
-        @keyframes timerPulse {
-            0% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4); }
-            70% { box-shadow: 0 0 0 30px rgba(139, 92, 246, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); }
-        }
+        @keyframes timerPulse { 0% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4); } 70% { box-shadow: 0 0 0 30px rgba(139, 92, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); } }
         .timer-active { animation: timerPulse 2s infinite; border-color: var(--primary); }
 
         .room-hidden { opacity: 0; transform: translateY(20px) scale(0.95); pointer-events: none; z-index: 0; }
         .room-visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; z-index: 10; }
 
-        /* Animações da Aurora de Fundo */
-        @keyframes aurora-1 {
-            0% { transform: translate(0%, 0%) scale(1); }
-            33% { transform: translate(5%, -10%) scale(1.1); }
-            66% { transform: translate(-5%, 10%) scale(0.9); }
-            100% { transform: translate(0%, 0%) scale(1); }
-        }
-        @keyframes aurora-2 {
-            0% { transform: translate(0%, 0%) scale(1); }
-            33% { transform: translate(-10%, 5%) scale(0.9); }
-            66% { transform: translate(10%, -5%) scale(1.1); }
-            100% { transform: translate(0%, 0%) scale(1); }
-        }
-        @keyframes aurora-3 {
-            0% { transform: translate(0%, 0%) scale(1); }
-            33% { transform: translate(10%, 10%) scale(1.1); }
-            66% { transform: translate(-10%, -10%) scale(0.9); }
-            100% { transform: translate(0%, 0%) scale(1); }
-        }
+        @keyframes aurora-1 { 0% { transform: translate(0%, 0%) scale(1); } 33% { transform: translate(5%, -10%) scale(1.1); } 66% { transform: translate(-5%, 10%) scale(0.9); } 100% { transform: translate(0%, 0%) scale(1); } }
+        @keyframes aurora-2 { 0% { transform: translate(0%, 0%) scale(1); } 33% { transform: translate(-10%, 5%) scale(0.9); } 66% { transform: translate(10%, -5%) scale(1.1); } 100% { transform: translate(0%, 0%) scale(1); } }
+        @keyframes aurora-3 { 0% { transform: translate(0%, 0%) scale(1); } 33% { transform: translate(10%, 10%) scale(1.1); } 66% { transform: translate(-10%, -10%) scale(0.9); } 100% { transform: translate(0%, 0%) scale(1); } }
         .animate-aurora-1 { animation: aurora-1 25s infinite ease-in-out alternate; }
         .animate-aurora-2 { animation: aurora-2 30s infinite ease-in-out alternate-reverse; }
         .animate-aurora-3 { animation: aurora-3 35s infinite ease-in-out alternate; }
     </style>
 </head>
-<body class="theme-purple custom-scrollbar min-h-screen relative">
+<body class="theme-purple custom-scrollbar min-h-screen relative overflow-x-hidden">
 
-    <!-- Ecrã de Login / Registo Dinâmico -->
+    <!-- Auth Modal -->
     <div id="auth-overlay" class="fixed inset-0 bg-black/95 z-[200] flex flex-col items-center justify-center p-6 backdrop-blur-2xl transition-opacity duration-500 hidden">
         <div class="glass w-full max-w-md rounded-[3rem] p-10 space-y-8 animate-slide-up text-center relative overflow-hidden shadow-2xl shadow-[var(--primary)]/10">
             <div class="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/10 to-transparent opacity-50"></div>
@@ -162,336 +146,239 @@
                 </div>
                 <h2 id="auth-title" class="text-3xl font-black tracking-tighter mb-2">O seu Jardim</h2>
                 <p id="auth-subtitle" class="text-zinc-400 text-xs mb-8 font-bold uppercase tracking-widest">Entre para cultivar as suas ideias</p>
-                
                 <div class="space-y-4 text-left">
-                    <div id="auth-name-group" class="hidden transition-all duration-300">
-                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Como quer ser chamado?</label>
-                        <input id="auth-name" type="text" placeholder="O seu Nome" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors">
-                    </div>
+                    <div id="auth-name-group" class="hidden transition-all duration-300"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Como quer ser chamado?</label><input id="auth-name" type="text" placeholder="Seu Nome" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors"></div>
+                    <div><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">E-mail de Acesso</label><input id="auth-email" type="email" placeholder="seu@email.com" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors"></div>
                     <div>
-                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Email de Acesso</label>
-                        <input id="auth-email" type="email" placeholder="seu@email.com" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Palavra-passe Secreta</label>
-                        <div class="relative">
-                            <input id="auth-pass" type="password" placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-2xl pl-5 pr-12 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors">
-                            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors" title="Mostrar Palavra-passe">
-                                <i data-lucide="eye" id="icon-eye" class="w-5 h-5 block"></i>
-                                <i data-lucide="eye-off" id="icon-eye-off" class="w-5 h-5 hidden"></i>
-                            </button>
-                        </div>
+                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Senha Secreta</label>
+                        <div class="relative"><input id="auth-pass" type="password" placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-2xl pl-5 pr-12 py-4 focus:border-[var(--primary)] outline-none text-md font-bold transition-colors"><button type="button" onclick="togglePasswordVisibility()" class="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors" title="Mostrar Palavra-passe"><i data-lucide="eye" id="icon-eye" class="w-5 h-5 block"></i><i data-lucide="eye-off" id="icon-eye-off" class="w-5 h-5 hidden"></i></button></div>
                     </div>
                 </div>
-
-                <div class="mt-8 space-y-3">
-                    <button id="btn-auth-main" onclick="executeAuth()" class="w-full bg-[var(--primary)] py-4 rounded-2xl font-black text-white shadow-xl hover:opacity-90 active:scale-95 transition-all uppercase tracking-widest text-xs">Entrar no Seed</button>
-                    <button id="btn-auth-toggle" onclick="toggleAuthMode()" class="w-full bg-white/5 border border-white/10 py-4 rounded-2xl font-black text-zinc-300 hover:bg-white/10 active:scale-95 transition-all uppercase tracking-widest text-xs">Criar Nova Conta</button>
-                </div>
+                <div class="mt-8 space-y-3"><button id="btn-auth-main" onclick="executeAuth()" class="w-full bg-[var(--primary)] py-4 rounded-2xl font-black text-white shadow-xl hover:opacity-90 active:scale-95 transition-all uppercase tracking-widest text-xs">Entrar no Seed</button><button id="btn-auth-toggle" onclick="toggleAuthMode()" class="w-full bg-white/5 border border-white/10 py-4 rounded-2xl font-black text-zinc-300 hover:bg-white/10 active:scale-95 transition-all uppercase tracking-widest text-xs">Criar Nova Conta</button></div>
                 <button onclick="continueOffline()" class="mt-6 text-[10px] font-bold text-zinc-500 hover:text-zinc-300 uppercase tracking-widest underline decoration-zinc-700 underline-offset-4 transition-colors">Continuar Offline (Sem Nuvem)</button>
             </div>
         </div>
     </div>
 
-    <!-- Sistema de Fundo Dinâmico (AURORA ANIMADA) -->
+    <!-- Background Animado -->
     <div class="fixed inset-0 z-[-2] bg-[#0a0a0c] overflow-hidden pointer-events-none">
         <div class="absolute -top-[20%] -left-[10%] w-[60vw] h-[60vw] rounded-full bg-[var(--primary)] blur-[120px] opacity-20 animate-aurora-1 transition-colors duration-1000"></div>
         <div class="absolute top-[20%] -right-[20%] w-[50vw] h-[50vw] rounded-full bg-[var(--primary-dark)] blur-[120px] opacity-20 animate-aurora-2 transition-colors duration-1000"></div>
         <div class="absolute -bottom-[20%] left-[10%] w-[70vw] h-[70vw] rounded-full bg-[var(--primary)] blur-[120px] opacity-10 animate-aurora-3 transition-colors duration-1000"></div>
     </div>
 
-    <!-- Navegação -->
-    <nav class="p-6 flex justify-between items-center border-b border-white/5 sticky top-0 bg-black/40 backdrop-blur-xl z-50 transition-colors">
-        <div class="flex items-center gap-3 cursor-pointer group" onclick="closeDetails(); closeVirtualRoom(); closeStats(); closeMentor(); closeSettings()">
-            <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] flex items-center justify-center shadow-lg shadow-[var(--primary)]/30 group-hover:rotate-12 transition-transform">
-                <i data-lucide="leaf" class="text-white w-6 h-6"></i>
-            </div>
-            <h1 class="text-2xl font-black tracking-tighter gradient-text">SEED</h1>
-        </div>
+    <!-- Layout com Sidebar -->
+    <div class="app-layout">
         
-        <div class="flex items-center gap-2 md:gap-4">
-            <button onclick="openStats()" class="glass p-3 rounded-xl hover:text-[var(--primary)] transition-all text-zinc-400" title="Termómetro">
-                <i data-lucide="pie-chart" class="w-5 h-5"></i>
-            </button>
-            <button onclick="openSettings()" class="glass p-3 rounded-xl hover:text-[var(--primary)] transition-all text-zinc-400" title="Configurações">
-                <i data-lucide="settings" class="w-5 h-5"></i>
-            </button>
-            <div class="hidden md:flex items-center gap-3 glass p-2 rounded-2xl px-5">
-                <button onclick="changeTheme('theme-purple')" class="w-4 h-4 rounded-full bg-violet-500 hover:scale-125 transition-transform"></button>
-                <button onclick="changeTheme('theme-emerald')" class="w-4 h-4 rounded-full bg-emerald-500 hover:scale-125 transition-transform"></button>
-                <button onclick="changeTheme('theme-blue')" class="w-4 h-4 rounded-full bg-blue-500 hover:scale-125 transition-transform"></button>
-                <button onclick="changeTheme('theme-rose')" class="w-4 h-4 rounded-full bg-rose-500 hover:scale-125 transition-transform"></button>
+        <!-- SIDEBAR (Apenas Desktop com Eventos Drag & Drop) -->
+        <aside class="hidden md:flex flex-col glass border-r border-white/5 h-screen sticky top-0 z-40 bg-black/20">
+            <div class="p-8 pb-4 flex flex-col items-center justify-center border-b border-white/5 cursor-pointer group" onclick="closeDetails(); closeVirtualRoom(); closeStats(); closeMentor(); closeSettings()">
+                <div class="w-14 h-14 rounded-3xl bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] flex items-center justify-center shadow-lg shadow-[var(--primary)]/30 group-hover:rotate-12 transition-transform mb-4">
+                    <i data-lucide="leaf" class="text-white w-7 h-7"></i>
+                </div>
+                <h1 class="text-2xl font-black tracking-tighter gradient-text">SEED</h1>
+                <p class="text-[9px] font-bold uppercase tracking-widest text-zinc-500 mt-1">Project Life</p>
             </div>
-        </div>
+
+            <nav class="flex-1 py-8 px-4 flex flex-col gap-2">
+                <button onclick="setStation('now')" id="tab-now" ondragover="handleTabDragOver(event)" ondragleave="handleTabDragLeave(event)" ondrop="handleTabDrop(event, 'now')" class="sidebar-item active w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-zinc-400 font-bold hover:bg-white/5 hover:text-white group">
+                    <i data-lucide="zap" class="w-5 h-5 group-hover:scale-110 transition-transform pointer-events-none"></i>
+                    <span class="tracking-wide pointer-events-none">Agora</span>
+                </button>
+                <button onclick="setStation('next')" id="tab-next" ondragover="handleTabDragOver(event)" ondragleave="handleTabDragLeave(event)" ondrop="handleTabDrop(event, 'next')" class="sidebar-item w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-zinc-400 font-bold hover:bg-white/5 hover:text-white group border-l-4 border-transparent">
+                    <i data-lucide="calendar" class="w-5 h-5 group-hover:scale-110 transition-transform pointer-events-none"></i>
+                    <span class="tracking-wide pointer-events-none">Próximos</span>
+                </button>
+                <button onclick="setStation('someday')" id="tab-someday" ondragover="handleTabDragOver(event)" ondragleave="handleTabDragLeave(event)" ondrop="handleTabDrop(event, 'someday')" class="sidebar-item w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-zinc-400 font-bold hover:bg-white/5 hover:text-white group border-l-4 border-transparent">
+                    <i data-lucide="inbox" class="w-5 h-5 group-hover:scale-110 transition-transform pointer-events-none"></i>
+                    <span class="tracking-wide pointer-events-none">Algum dia</span>
+                </button>
+                
+                <div class="my-4 border-t border-white/5 mx-4"></div>
+                
+                <button onclick="setStation('archive')" id="tab-archive" class="sidebar-item w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-zinc-400 font-bold hover:bg-white/5 hover:text-white group border-l-4 border-transparent">
+                    <i data-lucide="tree-deciduous" class="w-5 h-5 text-emerald-500/70 group-hover:text-emerald-400 group-hover:scale-110 transition-transform pointer-events-none"></i>
+                    <span class="tracking-wide pointer-events-none">O Jardim</span>
+                </button>
+            </nav>
+
+            <div class="p-6 border-t border-white/5 flex items-center justify-between">
+                <button onclick="openStats()" class="p-3 rounded-xl hover:bg-white/5 text-zinc-400 hover:text-[var(--primary)] transition-all" title="Evolução Geral"><i data-lucide="pie-chart" class="w-5 h-5"></i></button>
+                <button onclick="openSettings()" class="p-3 rounded-xl hover:bg-white/5 text-zinc-400 hover:text-[var(--primary)] transition-all" title="Ajustes da Conta"><i data-lucide="settings" class="w-5 h-5"></i></button>
+            </div>
+        </aside>
+
+        <!-- ÁREA CENTRAL (Main Content) -->
+        <main class="flex flex-col min-h-screen relative w-full">
+            <header class="p-6 flex justify-between items-center z-30 sticky top-0 bg-black/20 backdrop-blur-xl md:bg-transparent md:backdrop-blur-none border-b border-white/5 md:border-none">
+                <div class="flex md:hidden items-center gap-3 cursor-pointer" onclick="closeDetails(); closeVirtualRoom(); closeStats(); closeSettings()">
+                    <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] flex items-center justify-center">
+                        <i data-lucide="leaf" class="text-white w-4 h-4"></i>
+                    </div>
+                    <h1 class="text-lg font-black tracking-tighter gradient-text">SEED</h1>
+                </div>
+
+                <div class="ml-auto flex items-center gap-3 glass p-2 rounded-2xl px-4 md:px-5">
+                    <button onclick="changeTheme('theme-purple')" class="w-4 h-4 rounded-full bg-violet-500 hover:scale-125 transition-transform"></button>
+                    <button onclick="changeTheme('theme-emerald')" class="w-4 h-4 rounded-full bg-emerald-500 hover:scale-125 transition-transform"></button>
+                    <button onclick="changeTheme('theme-blue')" class="w-4 h-4 rounded-full bg-blue-500 hover:scale-125 transition-transform"></button>
+                    <button onclick="changeTheme('theme-rose')" class="w-4 h-4 rounded-full bg-rose-500 hover:scale-125 transition-transform"></button>
+                </div>
+            </header>
+
+            <div id="main-view" class="flex-1 p-4 md:p-10 lg:p-12 pb-32 w-full max-w-7xl mx-auto">
+                <section class="mb-10 text-center md:text-left animate-slide-up">
+                    <h2 id="main-hero-title" class="text-3xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight drop-shadow-md">Bem-vindo, <br><span class="text-[var(--primary)]">ao seu Jardim.</span></h2>
+                </section>
+
+                <section id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+                    <!-- Projetos injetados via JS -->
+                </section>
+
+                <footer class="mt-24 text-center opacity-30 hover:opacity-100 transition-opacity duration-500 pb-10">
+                    <p class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">&copy; 2026 Seed App</p>
+                    <p class="text-[8px] font-bold uppercase tracking-[0.1em] text-zinc-500 mt-1">Feito com foco profundo</p>
+                </footer>
+            </div>
+            
+            <button onclick="openModal()" class="fixed bottom-24 md:bottom-12 right-6 md:right-12 w-16 h-16 rounded-3xl bg-[var(--primary)] text-white shadow-2xl shadow-[var(--primary)]/40 flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40 group">
+                <i data-lucide="plus" class="w-8 h-8 group-hover:rotate-90 transition-transform duration-300"></i>
+            </button>
+        </main>
+    </div>
+
+    <!-- BOTTOM BAR (Mobile Drag & Drop Support) -->
+    <nav class="md:hidden fixed bottom-0 left-0 w-full glass border-t border-white/5 pb-safe z-50 flex justify-around items-center px-2 py-3 backdrop-blur-3xl bg-black/60">
+        <button onclick="setStation('now')" id="mobile-tab-now" ondragover="handleTabDragOver(event)" ondragleave="handleTabDragLeave(event)" ondrop="handleTabDrop(event, 'now')" class="flex flex-col items-center gap-1 p-2 text-[var(--primary)] transition-colors rounded-xl">
+            <i data-lucide="zap" class="w-5 h-5 pointer-events-none"></i><span class="text-[8px] font-black uppercase tracking-widest pointer-events-none">Agora</span>
+        </button>
+        <button onclick="setStation('next')" id="mobile-tab-next" ondragover="handleTabDragOver(event)" ondragleave="handleTabDragLeave(event)" ondrop="handleTabDrop(event, 'next')" class="flex flex-col items-center gap-1 p-2 text-zinc-500 hover:text-zinc-300 transition-colors rounded-xl">
+            <i data-lucide="calendar" class="w-5 h-5 pointer-events-none"></i><span class="text-[8px] font-black uppercase tracking-widest pointer-events-none">Próximos</span>
+        </button>
+        <button onclick="setStation('someday')" id="mobile-tab-someday" ondragover="handleTabDragOver(event)" ondragleave="handleTabDragLeave(event)" ondrop="handleTabDrop(event, 'someday')" class="flex flex-col items-center gap-1 p-2 text-zinc-500 hover:text-zinc-300 transition-colors rounded-xl">
+            <i data-lucide="inbox" class="w-5 h-5 pointer-events-none"></i><span class="text-[8px] font-black uppercase tracking-widest pointer-events-none">Futuro</span>
+        </button>
+        <button onclick="setStation('archive')" id="mobile-tab-archive" class="flex flex-col items-center gap-1 p-2 text-zinc-500 hover:text-emerald-400 transition-colors rounded-xl">
+            <i data-lucide="tree-deciduous" class="w-5 h-5 pointer-events-none"></i><span class="text-[8px] font-black uppercase tracking-widest pointer-events-none">Jardim</span>
+        </button>
+        <button onclick="openSettings()" class="flex flex-col items-center gap-1 p-2 text-zinc-500 hover:text-white transition-colors border-l border-white/5 pl-4 ml-1">
+            <i data-lucide="settings" class="w-5 h-5"></i><span class="text-[8px] font-black uppercase tracking-widest">Conta</span>
+        </button>
     </nav>
 
-    <!-- Visão Geral -->
-    <main id="main-view" class="max-w-6xl mx-auto p-4 md:p-6 space-y-12 pb-32">
-        <section class="py-8 md:py-12 text-center space-y-5 animate-slide-up">
-            <h2 id="main-hero-title" class="text-4xl md:text-7xl font-black leading-none tracking-tight">O equilíbrio da <br><span class="text-[var(--primary)]">sua jornada.</span></h2>
-            <p class="text-zinc-400 max-w-xl mx-auto text-base md:text-lg font-medium drop-shadow-md">Plante ideias, foque no agora e cultive hábitos diários.</p>
-        </section>
-
-        <section class="flex justify-center gap-6 md:gap-10 border-b border-white/5 pb-2 overflow-x-auto hide-scrollbar">
-            <button onclick="setStation('now')" id="tab-now" class="station-tab active px-4 py-3 font-bold text-xs tracking-widest uppercase transition-all whitespace-nowrap drop-shadow-md">Agora</button>
-            <button onclick="setStation('next')" id="tab-next" class="station-tab px-4 py-3 font-bold text-xs tracking-widest uppercase transition-all opacity-40 whitespace-nowrap drop-shadow-md">Próximos</button>
-            <button onclick="setStation('someday')" id="tab-someday" class="station-tab px-4 py-3 font-bold text-xs tracking-widest uppercase transition-all opacity-40 whitespace-nowrap drop-shadow-md">Algum dia</button>
-            <button onclick="setStation('archive')" id="tab-archive" class="station-tab px-4 py-3 font-bold text-xs tracking-widest uppercase transition-all opacity-40 whitespace-nowrap flex items-center gap-2 drop-shadow-md">
-                <i data-lucide="tree-deciduous" class="w-4 h-4"></i> Jardim
-            </button>
-        </section>
-
-        <section id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            <!-- Projetos aqui -->
-        </section>
-
-        <footer class="mt-24 text-center opacity-40 hover:opacity-100 transition-opacity duration-500">
-            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">&copy; 2026 Seed App</p>
-            <p class="text-[8px] font-bold uppercase tracking-[0.1em] text-zinc-500 mt-1">Idealizado e criado por <span class="text-[var(--primary)] transition-colors">Vinicius Goetz</span></p>
-        </footer>
-    </main>
-
-    <!-- Detalhes do Projeto -->
-    <section id="detail-view" class="fixed inset-0 bg-black/85 backdrop-blur-3xl z-[60] overflow-y-auto hidden">
-        <div id="vision-banner-container" class="absolute top-0 left-0 w-full h-[40vh] vision-banner pointer-events-none"></div>
-        <div class="relative max-w-4xl mx-auto p-6 py-12 min-h-screen flex flex-col">
-            <div class="flex justify-between items-center mb-12">
-                <button onclick="closeDetails()" class="flex items-center gap-2 text-zinc-300 hover:text-[var(--primary)] transition-colors font-bold uppercase tracking-widest text-xs drop-shadow-md">
-                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Seed
-                </button>
-                <div id="save-status" class="text-[10px] font-black text-emerald-500 uppercase tracking-widest opacity-0 transition-opacity">Guardado</div>
-            </div>
-            <div id="detail-content" class="space-y-12 flex-1 pb-24">
-                <!-- Conteúdo injetado via JS -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Termómetro -->
-    <div id="stats-overlay" class="fixed inset-0 bg-black/80 z-[70] hidden items-start justify-center p-4 md:p-6 backdrop-blur-3xl animate-slide-up overflow-y-auto custom-scrollbar"><div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-8 shadow-2xl my-auto"><div class="flex justify-between items-center"><h3 class="text-3xl font-black">Termómetro</h3><button onclick="closeStats()" class="text-zinc-500 hover:text-white"><i data-lucide="x"></i></button></div><div id="stats-chart" class="space-y-4"></div></div></div>
-    
-    <!-- Configurações -->
-    <div id="settings-overlay" class="fixed inset-0 bg-black/80 z-[120] hidden items-center justify-center p-4 md:p-6 backdrop-blur-md animate-slide-up">
-        <div class="glass w-full max-w-lg rounded-[3rem] p-8 md:p-10 space-y-8 flex flex-col max-h-[90vh] relative overflow-hidden shadow-2xl">
-            <div class="flex justify-between items-center shrink-0">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-[var(--primary)]/20 flex items-center justify-center border border-[var(--primary)]/30">
-                        <i data-lucide="settings" class="text-[var(--primary)] w-5 h-5"></i>
-                    </div>
-                    <div><h3 class="text-2xl font-black tracking-tight text-white">Ajustes</h3></div>
-                </div>
-                <button onclick="closeSettings()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
-            </div>
-            <div class="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-8 pb-4">
-                <div class="space-y-3">
-                    <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2"><i data-lucide="user" class="w-3 h-3"></i> Perfil</h4>
-                    <div class="flex gap-2">
-                        <input id="settings-name" type="text" placeholder="Como quer ser chamado?" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none text-sm font-bold focus:border-[var(--primary)] transition-colors text-white">
-                        <button onclick="saveProfileName()" class="px-6 py-4 bg-[var(--primary)] rounded-2xl text-white text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-lg shadow-[var(--primary)]/20">Salvar</button>
-                    </div>
-                </div>
-                <div class="space-y-3">
-                    <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2"><i data-lucide="timer" class="w-3 h-3"></i> Sala de Foco</h4>
-                    <div class="flex items-center justify-between glass p-5 rounded-2xl border border-white/5">
-                        <div>
-                            <span class="block text-sm font-bold text-zinc-200">Tempo Padrão (Minutos)</span>
-                            <span class="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mt-1">Duração inicial do Timer</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <input id="settings-focus-time" type="number" min="1" max="120" value="25" class="w-20 bg-black/40 border border-white/10 rounded-xl px-3 py-3 outline-none text-center text-sm font-bold focus:border-[var(--primary)] transition-colors text-white">
-                            <button onclick="saveFocusSettings()" class="p-3 bg-white/10 hover:bg-[var(--primary)] rounded-xl transition-colors text-white" title="Salvar Tempo"><i data-lucide="save" class="w-5 h-5"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="space-y-3">
-                    <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2"><i data-lucide="database" class="w-3 h-3"></i> Dados e Ferramentas</h4>
-                    <div class="flex gap-3">
-                        <button onclick="openTrash()" class="w-full glass py-4 rounded-2xl font-bold text-zinc-300 hover:bg-white/10 active:scale-95 transition-all text-xs flex items-center justify-center gap-2 border border-white/5"><i data-lucide="trash-2" class="w-4 h-4 text-rose-400"></i> Abrir Lixeira</button>
-                    </div>
-                </div>
-                <div class="space-y-3 pt-6 border-t border-white/5">
-                    <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-rose-500/80 flex items-center gap-2"><i data-lucide="shield-alert" class="w-3 h-3"></i> Acesso e Segurança</h4>
-                    <div class="space-y-3">
-                        <button onclick="logout()" class="w-full bg-white/5 border border-white/10 py-4 rounded-2xl font-bold text-zinc-300 hover:bg-white/10 active:scale-95 transition-all text-xs flex items-center justify-center gap-2"><i data-lucide="log-out" class="w-4 h-4"></i> Sair do Jardim</button>
-                        <button onclick="deleteAccount(this)" class="w-full bg-rose-500/10 border border-rose-500/20 py-4 rounded-2xl font-bold text-rose-500 hover:bg-rose-500 hover:text-white active:scale-95 transition-all text-xs flex items-center justify-center gap-2"><i data-lucide="user-x" class="w-4 h-4"></i> <span id="delete-btn-text">Excluir Conta e Apagar Tudo</span></button>
-                    </div>
-                </div>
-                <div class="pt-4 text-center opacity-50"><p class="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400">Seed V1.1 &copy; 2026</p></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modais Restantes -->
-    <div id="trash-overlay" class="fixed inset-0 bg-black/90 z-[130] hidden items-center justify-center p-4 md:p-6 backdrop-blur-xl animate-slide-up"><div class="glass w-full max-w-3xl rounded-[3rem] p-8 md:p-10 space-y-6 max-h-[90vh] flex flex-col relative overflow-hidden shadow-2xl"><div class="flex justify-between items-center relative z-10 border-b border-white/5 pb-6"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-rose-500/20 flex items-center justify-center border border-rose-500/30"><i data-lucide="trash-2" class="text-rose-500 w-5 h-5"></i></div><div><h3 class="text-2xl font-black tracking-tight text-white">Lixeira</h3><p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">Sementes descartadas</p></div></div><button onclick="closeTrash()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x"></i></button></div><div id="trash-list" class="flex-1 overflow-y-auto custom-scrollbar space-y-4 pr-2 relative z-10"></div></div></div>
-    <div id="mentor-overlay" class="fixed inset-0 bg-black/90 z-[110] hidden items-center justify-center p-6 backdrop-blur-md animate-slide-up"><div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-6 flex flex-col max-h-[85vh]"><div class="flex justify-between items-center"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center"><i data-lucide="sparkles" class="text-white w-6 h-6"></i></div><h3 class="text-2xl font-black tracking-tight">Mentor IA</h3></div><button onclick="closeMentor()" class="text-zinc-500 hover:text-white"><i data-lucide="x"></i></button></div><div id="mentor-response" class="flex-1 overflow-y-auto text-zinc-300 leading-relaxed text-lg space-y-4 custom-scrollbar"></div><button onclick="closeMentor()" class="w-full py-4 glass rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-white/5 transition-colors">Fechar</button></div></div>
-    <div id="gif-overlay" class="fixed inset-0 bg-black/90 z-[200] hidden items-center justify-center p-4 md:p-6 backdrop-blur-xl animate-slide-up"><div class="glass w-full max-w-4xl rounded-[3rem] p-8 md:p-10 flex flex-col max-h-[90vh] relative overflow-hidden shadow-2xl"><div class="flex justify-between items-center relative z-10 border-b border-white/5 pb-6 mb-6"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-[var(--primary)]/20 flex items-center justify-center border border-[var(--primary)]/30"><i data-lucide="image" class="text-[var(--primary)] w-5 h-5"></i></div><div><h3 class="text-2xl font-black tracking-tight text-white">Cenários de Foco</h3><p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">Escolha o seu ambiente visual</p></div></div><button onclick="closeGifSelector()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x"></i></button></div><div id="gif-grid" class="flex-1 overflow-y-auto custom-scrollbar pr-2 relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div></div></div>
-
-    <!-- MÓDULO 2.0: A SALA VIRTUAL HÍBRIDA (FOCO & CRIAÇÃO) -->
-    <div id="virtual-room-overlay" class="fixed inset-0 z-[100] hidden animate-slide-up">
-        <div id="room-bg" class="absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-1000 z-0"></div>
-        <div id="room-darken" class="absolute inset-0 bg-black/60 transition-all duration-1000 z-10"></div>
-        
-        <div class="absolute top-6 right-6 md:top-8 md:right-8 flex gap-3 z-50 transition-opacity duration-500" id="room-top-buttons">
-            <button onclick="toggleMobileMilestones()" class="md:hidden p-3 rounded-2xl glass hover:text-[var(--primary)] transition-all text-zinc-400" title="Ver Tarefas"><i data-lucide="list-todo" class="w-5 h-5"></i></button>
-            <button onclick="toggleRoomMode()" id="btn-toggle-mode" class="p-3 rounded-2xl glass hover:text-[var(--primary)] transition-all text-zinc-400 group" title="Modo Criação / Modo Zen">
-                <i data-lucide="pen-tool" id="icon-mode-creation" class="w-5 h-5 block group-hover:scale-110 transition-transform"></i>
-                <i data-lucide="clock" id="icon-mode-zen" class="w-5 h-5 hidden group-hover:scale-110 transition-transform"></i>
-            </button>
-            <button onclick="openGifSelector()" class="p-3 rounded-2xl glass hover:text-[var(--primary)] transition-all text-zinc-400" title="Galeria de Cenários"><i data-lucide="image" class="w-5 h-5"></i></button>
-            <button onclick="closeVirtualRoom()" class="p-3 rounded-2xl glass hover:text-rose-400 transition-all text-zinc-400"><i data-lucide="x" class="w-5 h-5"></i></button>
-        </div>
-
-        <div id="room-milestones-panel" class="absolute left-0 top-0 bottom-0 w-[85vw] md:w-80 bg-black/80 md:bg-black/20 backdrop-blur-2xl md:backdrop-blur-sm border-r border-white/5 transform -translate-x-full md:translate-x-0 transition-all duration-500 z-40 p-8 pt-24 md:pt-32 flex flex-col gap-6 overflow-y-auto custom-scrollbar md:opacity-20 hover:opacity-100">
-            <div class="flex justify-between items-center md:block">
-                <h4 class="text-[10px] font-black uppercase text-zinc-400 tracking-[0.3em]">Marcos Ativos</h4>
-                <button onclick="toggleMobileMilestones()" class="md:hidden text-zinc-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
-            </div>
-            <div id="room-milestones-list" class="space-y-4"></div>
-        </div>
-
-        <div class="absolute inset-0 z-20 flex items-start justify-center p-4 overflow-y-auto custom-scrollbar">
-            <div class="w-full grid place-items-center my-auto py-12 min-h-max">
-                
-                <!-- ESTADO 1: MODO ZEN -->
-                <div id="room-view-zen" class="col-start-1 row-start-1 room-visible flex flex-col items-center justify-center w-full max-w-lg transition-all duration-700">
-                    <div class="text-center space-y-10 w-full">
-                        <div class="space-y-2">
-                            <h4 id="room-project-name" class="text-sm font-black text-[var(--primary)] uppercase tracking-[0.4em] drop-shadow-md">Sala de Foco</h4>
-                            <h3 id="room-task-name" class="text-xl md:text-2xl font-bold text-zinc-300 line-clamp-2 drop-shadow-md">Sua Semente</h3>
-                        </div>
-
-                        <div id="room-time-selector" class="flex justify-center gap-3 transition-opacity duration-500">
-                            <button onclick="setFocusTime(15)" id="btn-time-15" class="px-5 py-2 rounded-2xl glass font-bold text-xs transition-all hover:bg-white/5">15m</button>
-                            <button onclick="setFocusTime(25)" id="btn-time-25" class="px-5 py-2 rounded-2xl glass font-bold text-xs transition-all text-[var(--primary)] border-[var(--primary)]">25m</button>
-                            <button onclick="setFocusTime(45)" id="btn-time-45" class="px-5 py-2 rounded-2xl glass font-bold text-xs transition-all hover:bg-white/5">45m</button>
-                            <button onclick="setFocusTime(60)" id="btn-time-60" class="px-5 py-2 rounded-2xl glass font-bold text-xs transition-all hover:bg-white/5">60m</button>
-                        </div>
-                        
-                        <div class="relative flex items-center justify-center">
-                            <div id="timer-ring" class="w-64 h-64 md:w-72 md:h-72 rounded-full border-4 border-white/5 flex flex-col items-center justify-center transition-all relative glass">
-                                <span id="timer-display-zen" class="text-7xl md:text-8xl font-black tracking-tighter drop-shadow-lg">25:00</span>
-                                <div id="focus-sound-indicator" class="mt-4 flex items-center gap-2 text-[10px] font-black uppercase text-zinc-400 hidden">
-                                    <div class="audio-wave"><div class="audio-bar"></div><div class="audio-bar"></div><div class="audio-bar"></div></div>
-                                    Som Ativo
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col gap-3 mt-8 max-w-xs mx-auto glass p-5 rounded-[2rem]">
-                            <h4 class="text-[9px] font-black uppercase text-zinc-500 tracking-widest text-left ml-2 mb-1">Mixer de Ambiente</h4>
-                            <div class="flex items-center gap-4">
-                                <button id="btn-sound-lessrain" onclick="toggleSound('lessrain')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-zinc-400 shrink-0" title="Chuva Suave"><i data-lucide="cloud-drizzle" class="w-5 h-5"></i></button>
-                                <input type="range" id="vol-lessrain" min="0" max="1" step="0.01" value="0.3" oninput="changeVolume('lessrain', this.value)" class="w-full accent-[var(--primary)] bg-white/10 rounded-lg appearance-none h-1 cursor-pointer">
-                            </div>
-                            <div class="flex items-center gap-4">
-                                <button id="btn-sound-midnight" onclick="toggleSound('midnight')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-zinc-400 shrink-0" title="Lo-Fi: Meia-Noite"><i data-lucide="moon" class="w-5 h-5"></i></button>
-                                <input type="range" id="vol-midnight" min="0" max="1" step="0.01" value="0.5" oninput="changeVolume('midnight', this.value)" class="w-full accent-[var(--primary)] bg-white/10 rounded-lg appearance-none h-1 cursor-pointer">
-                            </div>
-                            <div class="flex items-center gap-4">
-                                <button id="btn-sound-adventure" onclick="toggleSound('adventure')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-zinc-400 shrink-0" title="Música: Aventura"><i data-lucide="flame" class="w-5 h-5"></i></button>
-                                <input type="range" id="vol-adventure" min="0" max="1" step="0.01" value="0.5" oninput="changeVolume('adventure', this.value)" class="w-full accent-[var(--primary)] bg-white/10 rounded-lg appearance-none h-1 cursor-pointer">
-                            </div>
-                        </div>
-
-                        <div class="flex justify-center gap-4 mt-8">
-                            <button id="btn-timer-zen" onclick="toggleTimer()" class="bg-[var(--primary)] px-8 md:px-12 py-4 md:py-5 rounded-3xl font-black uppercase tracking-widest shadow-xl shadow-[var(--primary)]/20 active:scale-95 transition-all">Iniciar</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ESTADO 2: MODO CRIAÇÃO -->
-                <div id="room-view-creation" class="col-start-1 row-start-1 room-hidden flex flex-col items-center w-full max-w-4xl transition-all duration-700 mt-16 md:mt-0">
-                    <div class="glass px-6 py-3 rounded-full mb-6 flex items-center gap-4 border border-[var(--primary)]/30 shadow-[0_0_20px_rgba(139,92,246,0.15)] bg-black/40">
-                         <i data-lucide="timer" class="w-5 h-5 text-[var(--primary)]"></i>
-                         <span id="timer-display-creation" class="font-black text-2xl tracking-widest text-white drop-shadow-md w-[80px] text-center">25:00</span>
-                         <button id="btn-timer-creation" onclick="toggleTimer()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-[var(--primary)] flex items-center justify-center transition-colors text-white">
-                             <i data-lucide="play" id="icon-timer-creation-play" class="w-4 h-4 ml-0.5 block"></i>
-                             <i data-lucide="pause" id="icon-timer-creation-pause" class="w-4 h-4 hidden"></i>
-                         </button>
-                    </div>
-
-                    <div class="glass flex-1 w-full min-h-[75vh] md:min-h-[85vh] rounded-[3rem] p-6 md:p-10 flex flex-col gap-6 relative overflow-hidden shadow-2xl border border-white/10">
-                        <div class="flex items-center gap-3 shrink-0 opacity-50">
-                            <i data-lucide="book-open" class="w-5 h-5 text-[var(--primary)]"></i>
-                            <h3 class="text-[10px] font-black uppercase text-zinc-300 tracking-[0.3em]">O seu Estúdio de Criação</h3>
-                        </div>
-                        
-                        <textarea id="room-notes-input" onchange="updateRoomNotes(this.value)" class="w-full flex-1 bg-transparent outline-none resize-none font-medium text-zinc-200 text-lg leading-relaxed custom-scrollbar placeholder:text-zinc-600" placeholder="A sua mesa está limpa. Comece a escrever a sua história, pensamentos ou anotações de estudo aqui..."></textarea>
-
-                        <div class="pt-6 border-t border-white/10 shrink-0">
-                            <h4 class="text-[9px] font-black uppercase text-zinc-500 tracking-widest mb-3 flex items-center gap-2"><i data-lucide="link" class="w-3 h-3"></i> Links e Referências</h4>
-                            <div id="room-links-container" class="flex flex-wrap gap-2 max-h-[80px] overflow-y-auto custom-scrollbar mb-4"></div>
-                            <div class="flex gap-2">
-                                <input id="room-new-link" type="url" placeholder="Cole aqui o link de uma pesquisa, música ou doc..." class="w-full bg-black/40 border border-white/5 rounded-xl px-5 py-3 outline-none text-xs font-bold focus:border-[var(--primary)] transition-colors" onkeydown="if(event.key==='Enter') addRoomLink()">
-                                <button id="btn-add-room-link" onclick="addRoomLink()" class="px-6 py-3 bg-white/10 hover:bg-[var(--primary)] border border-white/5 hover:border-[var(--primary)] rounded-xl text-white text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all whitespace-nowrap flex items-center justify-center">Adicionar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- Botão Novo -->
-    <button onclick="openModal()" class="fixed bottom-8 right-8 w-16 h-16 rounded-3xl bg-[var(--primary)] text-white shadow-2xl shadow-[var(--primary)]/40 flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
-        <i data-lucide="plus" class="w-8 h-8"></i>
-    </button>
-
-    <!-- Modal Novo Plantio - UI ATUALIZADA -->
-    <div id="modal" class="fixed inset-0 bg-black/95 z-[100] hidden items-center justify-center p-4 md:p-6 backdrop-blur-md">
+    <!-- Modal Novo Plantio (COMPLETO E CORRIGIDO) -->
+    <div id="modal" class="fixed inset-0 bg-black/95 z-[160] hidden items-center justify-center p-4 md:p-6 backdrop-blur-md">
         <div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-8 max-h-[90vh] overflow-y-auto custom-scrollbar">
             <div class="flex justify-between items-center">
                 <h3 class="text-3xl font-black tracking-tight">Novo Plantio</h3>
                 <button onclick="closeModal()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x" class="w-7 h-7"></i></button>
             </div>
-            
             <div class="space-y-6">
-                <div class="space-y-2">
-                    <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Nome do Projeto</label>
-                    <input id="proj-title" type="text" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:border-[var(--primary)] outline-none text-lg font-bold transition-colors">
+                <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Nome do Projeto</label><input id="proj-title" type="text" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:border-[var(--primary)] outline-none text-lg font-bold transition-colors"></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Tema Visual (Área)</label><select id="proj-icon" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none font-bold text-gray-300 focus:border-[var(--primary)] transition-colors cursor-pointer"><option value="briefcase" class="bg-[#0a0a0c]">💼 Trabalho & Carreira</option><option value="book" class="bg-[#0a0a0c]">📚 Estudos & Aprendizado</option><option value="heart" class="bg-[#0a0a0c]">🏋️ Saúde & Corpo (Oldschool)</option><option value="palette" class="bg-[#0a0a0c]">🎨 Arte & Criação</option><option value="coffee" class="bg-[#0a0a0c]">☕ Lazer & Pessoal (Unplug)</option></select></div>
+                    <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Prioridade</label><select id="proj-station" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none font-bold text-gray-300 focus:border-[var(--primary)] transition-colors cursor-pointer"><option value="now" class="bg-[#0a0a0c]">Projeto para agora</option><option value="next" class="bg-[#0a0a0c]">Projeto próximo</option><option value="someday" class="bg-[#0a0a0c]">Projeto futuro</option></select></div>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Tema Visual (Área)</label>
-                        <select id="proj-icon" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none font-bold text-gray-300 focus:border-[var(--primary)] transition-colors cursor-pointer">
-                            <option value="zap" class="bg-[#0a0a0c]">💼 Trabalho & Carreira</option>
-                            <option value="target" class="bg-[#0a0a0c]">📚 Estudos & Aprendizado</option>
-                            <option value="plane" class="bg-[#0a0a0c]">🏋️ Saúde & Corpo</option>
-                            <option value="palette" class="bg-[#0a0a0c]">🎨 Arte & Criação</option>
-                            <option value="dices" class="bg-[#0a0a0c]">☕ Lazer & Pessoal</option>
-                        </select>
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Prioridade</label>
-                        <select id="proj-station" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none font-bold text-gray-300 focus:border-[var(--primary)] transition-colors cursor-pointer">
-                            <option value="now" class="bg-[#0a0a0c]">Projeto para agora</option>
-                            <option value="next" class="bg-[#0a0a0c]">Projeto próximo</option>
-                            <option value="someday" class="bg-[#0a0a0c]">Projeto futuro</option>
-                        </select>
-                    </div>
+                    <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Hábito Diário (Opcional)</label><input id="proj-habit" type="text" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium transition-colors focus:border-[var(--primary)]"></div>
+                    <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Data de Entrega (Opcional)</label><input id="proj-deadline" type="date" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium text-zinc-400 transition-colors focus:border-[var(--primary)] [color-scheme:dark]"></div>
                 </div>
                 
-                <div class="space-y-2">
-                    <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Hábito Diário (Opcional)</label>
-                    <input id="proj-habit" type="text" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium transition-colors focus:border-[var(--primary)]">
-                </div>
-                
-                <div class="space-y-2">
-                    <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Marcos e Tarefas</label>
-                    <div class="flex gap-2">
-                        <input id="new-milestone-input" type="text" placeholder="Escreva uma tarefa e pressione Enter..." class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium transition-colors focus:border-[var(--primary)] text-sm" onkeydown="if(event.key==='Enter'){ event.preventDefault(); addTempMilestone(); }">
-                        <button type="button" onclick="addTempMilestone()" class="px-6 bg-white/5 border border-white/10 hover:bg-[var(--primary)] hover:border-[var(--primary)] rounded-2xl text-white transition-colors flex items-center justify-center">
-                            <i data-lucide="plus" class="w-5 h-5"></i>
-                        </button>
+                <div class="space-y-2"><label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Marcos e Tarefas</label><div class="flex gap-2"><input id="new-milestone-input" type="text" placeholder="Escreva uma tarefa e pressione Enter..." class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium transition-colors focus:border-[var(--primary)] text-sm" onkeydown="if(event.key==='Enter'){ event.preventDefault(); addTempMilestone(); }"><button type="button" onclick="addTempMilestone()" class="px-6 bg-white/5 border border-white/10 hover:bg-[var(--primary)] hover:border-[var(--primary)] rounded-2xl text-white transition-colors flex items-center justify-center"><i data-lucide="plus" class="w-5 h-5"></i></button></div><div id="temp-milestones-list" class="space-y-2 mt-3 max-h-40 overflow-y-auto custom-scrollbar"></div></div>
+            </div>
+            <button onclick="addProject()" class="w-full bg-[var(--primary)] py-5 rounded-[2rem] font-black text-white shadow-2xl shadow-[var(--primary)]/30 uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all">Plantar Semente</button>
+        </div>
+    </div>
+
+    <!-- Modais Restantes -->
+    <!-- Detalhes do Projeto -->
+    <section id="detail-view" class="fixed inset-0 bg-black/85 backdrop-blur-3xl z-[150] overflow-y-auto hidden">
+        <div id="vision-banner-container" class="absolute top-0 left-0 w-full h-[40vh] vision-banner pointer-events-none"></div>
+        <div class="relative max-w-4xl mx-auto p-6 py-12 min-h-screen flex flex-col">
+            <div class="flex justify-between items-center mb-12">
+                <button onclick="closeDetails()" class="flex items-center gap-2 text-zinc-300 hover:text-[var(--primary)] transition-colors font-bold uppercase tracking-widest text-xs drop-shadow-md"><i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar</button>
+                <div id="save-status" class="text-[10px] font-black text-emerald-500 uppercase tracking-widest opacity-0 transition-opacity">Guardado</div>
+            </div>
+            <div id="detail-content" class="space-y-12 flex-1 pb-24"></div>
+        </div>
+    </section>
+
+    <!-- Termómetro -->
+    <div id="stats-overlay" class="fixed inset-0 bg-black/80 z-[160] hidden items-start justify-center p-4 md:p-6 backdrop-blur-3xl animate-slide-up overflow-y-auto custom-scrollbar"><div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-8 shadow-2xl my-auto"><div class="flex justify-between items-center"><h3 class="text-3xl font-black">Evolução</h3><button onclick="closeStats()" class="text-zinc-500 hover:text-white"><i data-lucide="x"></i></button></div><div id="stats-chart" class="space-y-4"></div></div></div>
+    
+    <!-- Configurações -->
+    <div id="settings-overlay" class="fixed inset-0 bg-black/80 z-[160] hidden items-center justify-center p-4 md:p-6 backdrop-blur-md animate-slide-up">
+        <div class="glass w-full max-w-lg rounded-[3rem] p-8 md:p-10 space-y-8 flex flex-col max-h-[90vh] relative overflow-hidden shadow-2xl">
+            <div class="flex justify-between items-center shrink-0">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-[var(--primary)]/20 flex items-center justify-center border border-[var(--primary)]/30"><i data-lucide="settings" class="text-[var(--primary)] w-5 h-5"></i></div><div><h3 class="text-2xl font-black tracking-tight text-white">Ajustes</h3></div></div>
+                <button onclick="closeSettings()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            <div class="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-8 pb-4">
+                <div class="space-y-3"><h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2"><i data-lucide="user" class="w-3 h-3"></i> Perfil</h4><div class="flex gap-2"><input id="settings-name" type="text" placeholder="Como quer ser chamado?" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none text-sm font-bold focus:border-[var(--primary)] transition-colors text-white"><button onclick="saveProfileName()" class="px-6 py-4 bg-[var(--primary)] rounded-2xl text-white text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-lg shadow-[var(--primary)]/20">Salvar</button></div></div>
+                <div class="space-y-3"><h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2"><i data-lucide="timer" class="w-3 h-3"></i> Sala de Foco</h4><div class="flex items-center justify-between glass p-5 rounded-2xl border border-white/5"><div><span class="block text-sm font-bold text-zinc-200">Tempo Padrão (Minutos)</span><span class="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mt-1">Duração inicial do Timer</span></div><div class="flex items-center gap-2"><input id="settings-focus-time" type="number" min="1" max="120" value="25" class="w-20 bg-black/40 border border-white/10 rounded-xl px-3 py-3 outline-none text-center text-sm font-bold focus:border-[var(--primary)] transition-colors text-white"><button onclick="saveFocusSettings()" class="p-3 bg-white/10 hover:bg-[var(--primary)] rounded-xl transition-colors text-white" title="Salvar Tempo"><i data-lucide="save" class="w-5 h-5"></i></button></div></div></div>
+                <div class="space-y-3"><h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 flex items-center gap-2"><i data-lucide="database" class="w-3 h-3"></i> Dados e Ferramentas</h4><div class="flex gap-3"><button onclick="openTrash()" class="w-full glass py-4 rounded-2xl font-bold text-zinc-300 hover:bg-white/10 active:scale-95 transition-all text-xs flex items-center justify-center gap-2 border border-white/5"><i data-lucide="trash-2" class="w-4 h-4 text-rose-400"></i> Abrir Lixeira</button></div></div>
+                <div class="space-y-3 pt-6 border-t border-white/5"><h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-rose-500/80 flex items-center gap-2"><i data-lucide="shield-alert" class="w-3 h-3"></i> Acesso e Segurança</h4><div class="space-y-3"><button onclick="logout()" class="w-full bg-white/5 border border-white/10 py-4 rounded-2xl font-bold text-zinc-300 hover:bg-white/10 active:scale-95 transition-all text-xs flex items-center justify-center gap-2"><i data-lucide="log-out" class="w-4 h-4"></i> Sair do Jardim</button><button onclick="deleteAccount(this)" class="w-full bg-rose-500/10 border border-rose-500/20 py-4 rounded-2xl font-bold text-rose-500 hover:bg-rose-500 hover:text-white active:scale-95 transition-all text-xs flex items-center justify-center gap-2"><i data-lucide="user-x" class="w-4 h-4"></i> <span id="delete-btn-text">Excluir Conta</span></button></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lixeira -->
+    <div id="trash-overlay" class="fixed inset-0 bg-black/90 z-[170] hidden items-center justify-center p-4 md:p-6 backdrop-blur-xl animate-slide-up"><div class="glass w-full max-w-3xl rounded-[3rem] p-8 md:p-10 space-y-6 max-h-[90vh] flex flex-col relative overflow-hidden shadow-2xl"><div class="flex justify-between items-center relative z-10 border-b border-white/5 pb-6"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-rose-500/20 flex items-center justify-center border border-rose-500/30"><i data-lucide="trash-2" class="text-rose-500 w-5 h-5"></i></div><div><h3 class="text-2xl font-black tracking-tight text-white">Lixeira</h3><p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">Sementes descartadas</p></div></div><button onclick="closeTrash()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x"></i></button></div><div id="trash-list" class="flex-1 overflow-y-auto custom-scrollbar space-y-4 pr-2 relative z-10"></div></div></div>
+    
+    <!-- Mentor -->
+    <div id="mentor-overlay" class="fixed inset-0 bg-black/90 z-[160] hidden items-center justify-center p-6 backdrop-blur-md animate-slide-up"><div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-6 flex flex-col max-h-[85vh]"><div class="flex justify-between items-center"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center"><i data-lucide="sparkles" class="text-white w-6 h-6"></i></div><h3 class="text-2xl font-black tracking-tight">Mentor IA</h3></div><button onclick="closeMentor()" class="text-zinc-500 hover:text-white"><i data-lucide="x"></i></button></div><div id="mentor-response" class="flex-1 overflow-y-auto text-zinc-300 leading-relaxed text-lg space-y-4 custom-scrollbar"></div><button onclick="closeMentor()" class="w-full py-4 glass rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-white/5 transition-colors">Fechar</button></div></div>
+    
+    <!-- Seletor de Gif -->
+    <div id="gif-overlay" class="fixed inset-0 bg-black/90 z-[200] hidden items-center justify-center p-4 md:p-6 backdrop-blur-xl animate-slide-up"><div class="glass w-full max-w-4xl rounded-[3rem] p-8 md:p-10 flex flex-col max-h-[90vh] relative overflow-hidden shadow-2xl"><div class="flex justify-between items-center relative z-10 border-b border-white/5 pb-6 mb-6"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-[var(--primary)]/20 flex items-center justify-center border border-[var(--primary)]/30"><i data-lucide="image" class="text-[var(--primary)] w-5 h-5"></i></div><div><h3 class="text-2xl font-black tracking-tight text-white">Cenários de Foco</h3><p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">Escolha o seu ambiente visual</p></div></div><button onclick="closeGifSelector()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x"></i></button></div><div id="gif-grid" class="flex-1 overflow-y-auto custom-scrollbar pr-2 relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div></div></div>
+
+    <!-- SALA VIRTUAL HÍBRIDA -->
+    <div id="virtual-room-overlay" class="fixed inset-0 z-[180] hidden animate-slide-up">
+        <div id="room-bg" class="absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-1000 z-0"></div>
+        <div id="room-darken" class="absolute inset-0 bg-black/60 transition-all duration-1000 z-10"></div>
+        
+        <div class="absolute top-6 right-6 md:top-8 md:right-8 flex gap-3 z-50 transition-opacity duration-500" id="room-top-buttons">
+            <button onclick="toggleMobileMilestones()" class="md:hidden p-3 rounded-2xl glass hover:text-[var(--primary)] transition-all text-zinc-400" title="Ver Tarefas"><i data-lucide="list-todo" class="w-5 h-5"></i></button>
+            <button onclick="toggleRoomMode()" id="btn-toggle-mode" class="p-3 rounded-2xl glass hover:text-[var(--primary)] transition-all text-zinc-400 group" title="Modo Criação / Modo Zen"><i data-lucide="pen-tool" id="icon-mode-creation" class="w-5 h-5 block group-hover:scale-110 transition-transform"></i><i data-lucide="clock" id="icon-mode-zen" class="w-5 h-5 hidden group-hover:scale-110 transition-transform"></i></button>
+            <button onclick="openGifSelector()" class="p-3 rounded-2xl glass hover:text-[var(--primary)] transition-all text-zinc-400" title="Galeria de Cenários"><i data-lucide="image" class="w-5 h-5"></i></button>
+            <button onclick="closeVirtualRoom()" class="p-3 rounded-2xl glass hover:text-rose-400 transition-all text-zinc-400"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+
+        <div id="room-milestones-panel" class="absolute left-0 top-0 bottom-0 w-[85vw] md:w-80 bg-black/80 md:bg-black/20 backdrop-blur-2xl md:backdrop-blur-sm border-r border-white/5 transform -translate-x-full md:translate-x-0 transition-all duration-500 z-40 p-8 pt-24 md:pt-32 flex flex-col gap-6 overflow-y-auto custom-scrollbar md:opacity-20 hover:opacity-100">
+            <div class="flex justify-between items-center md:block"><h4 class="text-[10px] font-black uppercase text-zinc-400 tracking-[0.3em]">Marcos Ativos</h4><button onclick="toggleMobileMilestones()" class="md:hidden text-zinc-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+            <div id="room-milestones-list" class="space-y-4"></div>
+        </div>
+
+        <div class="absolute inset-0 z-20 flex items-start justify-center p-4 overflow-y-auto custom-scrollbar">
+            <div class="w-full grid place-items-center my-auto py-12 min-h-max">
+                <div id="room-view-zen" class="col-start-1 row-start-1 room-visible flex flex-col items-center justify-center w-full max-w-lg transition-all duration-700">
+                    <div class="text-center space-y-10 w-full">
+                        <div class="space-y-2"><h4 id="room-project-name" class="text-sm font-black text-[var(--primary)] uppercase tracking-[0.4em] drop-shadow-md">Sala de Foco</h4><h3 id="room-task-name" class="text-xl md:text-2xl font-bold text-zinc-300 line-clamp-2 drop-shadow-md">Sua Semente</h3></div>
+                        <div id="room-time-selector" class="flex justify-center gap-3 transition-opacity duration-500"><button onclick="setFocusTime(15)" id="btn-time-15" class="px-5 py-2 rounded-2xl glass font-bold text-xs transition-all hover:bg-white/5">15m</button><button onclick="setFocusTime(25)" id="btn-time-25" class="px-5 py-2 rounded-2xl glass font-bold text-xs transition-all text-[var(--primary)] border-[var(--primary)]">25m</button><button onclick="setFocusTime(45)" id="btn-time-45" class="px-5 py-2 rounded-2xl glass font-bold text-xs transition-all hover:bg-white/5">45m</button><button onclick="setFocusTime(60)" id="btn-time-60" class="px-5 py-2 rounded-2xl glass font-bold text-xs transition-all hover:bg-white/5">60m</button></div>
+                        <div class="relative flex items-center justify-center"><div id="timer-ring" class="w-64 h-64 md:w-72 md:h-72 rounded-full border-4 border-white/5 flex flex-col items-center justify-center transition-all relative glass"><span id="timer-display-zen" class="text-7xl md:text-8xl font-black tracking-tighter drop-shadow-lg">25:00</span><div id="focus-sound-indicator" class="mt-4 flex items-center gap-2 text-[10px] font-black uppercase text-zinc-400 hidden"><div class="audio-wave"><div class="audio-bar"></div><div class="audio-bar"></div><div class="audio-bar"></div></div>Som Ativo</div></div></div>
+                        <div class="flex flex-col gap-3 mt-8 max-w-xs mx-auto glass p-5 rounded-[2rem]">
+                            <h4 class="text-[9px] font-black uppercase text-zinc-500 tracking-widest text-left ml-2 mb-1">Mixer de Ambiente</h4>
+                            <div class="flex items-center gap-4"><button id="btn-sound-lessrain" onclick="toggleSound('lessrain')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-zinc-400 shrink-0"><i data-lucide="cloud-drizzle" class="w-5 h-5"></i></button><input type="range" id="vol-lessrain" min="0" max="1" step="0.01" value="0.3" oninput="changeVolume('lessrain', this.value)" class="w-full accent-[var(--primary)] bg-white/10 rounded-lg appearance-none h-1 cursor-pointer"></div>
+                            <div class="flex items-center gap-4"><button id="btn-sound-midnight" onclick="toggleSound('midnight')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-zinc-400 shrink-0"><i data-lucide="moon" class="w-5 h-5"></i></button><input type="range" id="vol-midnight" min="0" max="1" step="0.01" value="0.5" oninput="changeVolume('midnight', this.value)" class="w-full accent-[var(--primary)] bg-white/10 rounded-lg appearance-none h-1 cursor-pointer"></div>
+                            <div class="flex items-center gap-4"><button id="btn-sound-adventure" onclick="toggleSound('adventure')" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all text-zinc-400 shrink-0"><i data-lucide="flame" class="w-5 h-5"></i></button><input type="range" id="vol-adventure" min="0" max="1" step="0.01" value="0.5" oninput="changeVolume('adventure', this.value)" class="w-full accent-[var(--primary)] bg-white/10 rounded-lg appearance-none h-1 cursor-pointer"></div>
+                        </div>
+                        <div class="flex justify-center gap-4 mt-8"><button id="btn-timer-zen" onclick="toggleTimer()" class="bg-[var(--primary)] px-8 md:px-12 py-4 md:py-5 rounded-3xl font-black uppercase tracking-widest shadow-xl shadow-[var(--primary)]/20 active:scale-95 transition-all">Iniciar</button></div>
                     </div>
-                    <div id="temp-milestones-list" class="space-y-2 mt-3 max-h-40 overflow-y-auto custom-scrollbar">
-                        <!-- Lista de tarefas entra aqui -->
+                </div>
+
+                <div id="room-view-creation" class="col-start-1 row-start-1 room-hidden flex flex-col items-center w-full max-w-4xl transition-all duration-700 mt-16 md:mt-0">
+                    <div class="glass px-6 py-3 rounded-full mb-6 flex items-center gap-4 border border-[var(--primary)]/30 shadow-[0_0_20px_rgba(139,92,246,0.15)] bg-black/40"><i data-lucide="timer" class="w-5 h-5 text-[var(--primary)]"></i><span id="timer-display-creation" class="font-black text-2xl tracking-widest text-white drop-shadow-md w-[80px] text-center">25:00</span><button id="btn-timer-creation" onclick="toggleTimer()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-[var(--primary)] flex items-center justify-center transition-colors text-white"><i data-lucide="play" id="icon-timer-creation-play" class="w-4 h-4 ml-0.5 block"></i><i data-lucide="pause" id="icon-timer-creation-pause" class="w-4 h-4 hidden"></i></button></div>
+                    <div class="glass flex-1 w-full min-h-[75vh] md:min-h-[85vh] rounded-[3rem] p-6 md:p-10 flex flex-col gap-6 relative overflow-hidden shadow-2xl border border-white/10">
+                        <div class="flex items-center gap-3 shrink-0 opacity-50"><i data-lucide="book-open" class="w-5 h-5 text-[var(--primary)]"></i><h3 class="text-[10px] font-black uppercase text-zinc-300 tracking-[0.3em]">O seu Estúdio de Criação</h3></div>
+                        <textarea id="room-notes-input" onchange="updateRoomNotes(this.value)" class="w-full flex-1 bg-transparent outline-none resize-none font-medium text-zinc-200 text-lg leading-relaxed custom-scrollbar placeholder:text-zinc-600" placeholder="A sua mesa está limpa. Comece a escrever a sua história, pensamentos ou anotações de estudo aqui..."></textarea>
+                        <div class="pt-6 border-t border-white/10 shrink-0">
+                            <h4 class="text-[9px] font-black uppercase text-zinc-500 tracking-widest mb-3 flex items-center gap-2"><i data-lucide="link" class="w-3 h-3"></i> Links e Referências</h4>
+                            <div id="room-links-container" class="flex flex-wrap gap-2 max-h-[80px] overflow-y-auto custom-scrollbar mb-4"></div>
+                            <div class="flex gap-2"><input id="room-new-link" type="url" placeholder="Cole aqui o link..." class="w-full bg-black/40 border border-white/5 rounded-xl px-5 py-3 outline-none text-xs font-bold focus:border-[var(--primary)] transition-colors" onkeydown="if(event.key==='Enter') addRoomLink()"><button id="btn-add-room-link" onclick="addRoomLink()" class="px-6 py-3 bg-white/10 hover:bg-[var(--primary)] border border-white/5 hover:border-[var(--primary)] rounded-xl text-white text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all whitespace-nowrap">Adicionar</button></div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <button onclick="addProject()" class="w-full bg-[var(--primary)] py-5 rounded-[2rem] font-black text-white shadow-2xl shadow-[var(--primary)]/30 uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all">Plantar Semente</button>
         </div>
     </div>
 
@@ -514,11 +401,9 @@
         let achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || []; 
         let isOfflineMode = false; let currentAuthMode = 'login'; 
 
-        // Adição para a lista dinâmica de tarefas
         let tempMilestones = [];
-
-        // Controle de Tempo Padrão Dinâmico
         let selectedFocusTime = parseInt(localStorage.getItem('seed_default_focus')) || 25;
+        let draggedProjectId = null;
 
         const formatFocusTime = (mins) => { if (!mins) return ''; const h = Math.floor(mins / 60); const m = mins % 60; return (h > 0 ? `${h}H ` : '') + (m > 0 || h === 0 ? `${m}M` : ''); };
 
@@ -531,17 +416,14 @@
         const updateHeroName = () => { 
             const heroTitle = document.getElementById('main-hero-title'); 
             let nameToUse = null;
-            if(currentUser && currentUser.displayName) { 
-                nameToUse = currentUser.displayName;
-            } else if (isOfflineMode) {
-                nameToUse = localStorage.getItem('seed_offline_name');
-            }
+            if(currentUser && currentUser.displayName) { nameToUse = currentUser.displayName; } 
+            else if (isOfflineMode) { nameToUse = localStorage.getItem('seed_offline_name'); }
             
             if(nameToUse && heroTitle) { 
                 const firstName = nameToUse.trim().split(' ')[0]; 
-                heroTitle.innerHTML = `Bem-vindo, <br><span class="text-[var(--primary)]">${firstName}.</span>`; 
+                heroTitle.innerHTML = `Olá, ${firstName}. <br><span class="text-[var(--primary)] drop-shadow-md">O que vamos cultivar?</span>`; 
             } else if (heroTitle) { 
-                heroTitle.innerHTML = `O equilíbrio da <br><span class="text-[var(--primary)]">sua jornada.</span>`; 
+                heroTitle.innerHTML = `O equilíbrio da <br><span class="text-[var(--primary)] drop-shadow-md">sua jornada.</span>`; 
             } 
         };
 
@@ -581,50 +463,31 @@
         window.continueOffline = () => { isOfflineMode = true; document.getElementById('auth-overlay').classList.add('hidden'); const oldData = JSON.parse(localStorage.getItem('seed_master_v1')) || []; projects = oldData; achievements = JSON.parse(localStorage.getItem('seed_achievements_v1')) || []; updateHeroName(); renderProjects(); window.showToast("🌱 A Iniciar Modo Offline"); };
         
         window.openSettings = () => { 
-            document.getElementById('settings-overlay').classList.remove('hidden'); 
-            document.getElementById('settings-overlay').classList.add('flex'); 
-            
+            document.getElementById('settings-overlay').classList.remove('hidden'); document.getElementById('settings-overlay').classList.add('flex'); 
             if (currentUser && currentUser.displayName) { document.getElementById('settings-name').value = currentUser.displayName; } 
             else { document.getElementById('settings-name').value = localStorage.getItem('seed_offline_name') || ''; }
-            
-            document.getElementById('settings-focus-time').value = localStorage.getItem('seed_default_focus') || '25';
-            lucide.createIcons();
+            document.getElementById('settings-focus-time').value = localStorage.getItem('seed_default_focus') || '25'; lucide.createIcons();
         };
         window.closeSettings = () => { document.getElementById('settings-overlay').classList.remove('flex'); document.getElementById('settings-overlay').classList.add('hidden'); };
 
         window.saveProfileName = async () => {
-            const newName = document.getElementById('settings-name').value.trim();
-            if (!newName) return;
-            if (currentUser) {
-                try { await updateProfile(currentUser, { displayName: newName }); window.showToast("✅ Nome atualizado na Nuvem!"); updateHeroName(); } 
-                catch(e) { window.showToast("❌ Erro ao atualizar nome.", "error"); }
-            } else {
-                localStorage.setItem('seed_offline_name', newName); window.showToast("✅ Nome atualizado localmente!"); updateHeroName();
-            }
+            const newName = document.getElementById('settings-name').value.trim(); if (!newName) return;
+            if (currentUser) { try { await updateProfile(currentUser, { displayName: newName }); window.showToast("✅ Nome atualizado na Nuvem!"); updateHeroName(); } catch(e) { window.showToast("❌ Erro ao atualizar nome.", "error"); } } 
+            else { localStorage.setItem('seed_offline_name', newName); window.showToast("✅ Nome atualizado localmente!"); updateHeroName(); }
         };
 
-        window.saveFocusSettings = () => {
-            let mins = parseInt(document.getElementById('settings-focus-time').value);
-            if (isNaN(mins) || mins < 1) mins = 25;
-            localStorage.setItem('seed_default_focus', mins);
-            selectedFocusTime = mins; 
-            if (!isTimerRunning) { timeLeft = mins * 60; updateTimerDisplay(); }
-            window.showToast(`⏱️ Tempo Padrão definido: ${mins}m`);
-        };
-
+        window.saveFocusSettings = () => { let mins = parseInt(document.getElementById('settings-focus-time').value); if (isNaN(mins) || mins < 1) mins = 25; localStorage.setItem('seed_default_focus', mins); selectedFocusTime = mins; if (!isTimerRunning) { timeLeft = mins * 60; updateTimerDisplay(); } window.showToast(`⏱️ Tempo Padrão definido: ${mins}m`); };
         window.logout = async () => { if (unsubscribeSnapshot) { unsubscribeSnapshot(); unsubscribeSnapshot = null; } localStorage.removeItem('seed_master_v1'); localStorage.removeItem('seed_achievements_v1'); localStorage.removeItem('seed_activity_v1'); projects = []; achievements = []; isOfflineMode = false; renderProjects(); closeSettings(); if (currentUser) { await signOut(auth); } document.getElementById('auth-overlay').classList.remove('hidden'); window.showToast("🌱 Saiu do seu Jardim."); };
 
         window.deleteAccount = async (btn) => {
             if (btn.innerText.includes("CERTEZA")) {
                 try { if (unsubscribeSnapshot) { unsubscribeSnapshot(); unsubscribeSnapshot = null; } if (currentUser) { const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'seed_data', 'main'); await deleteDoc(docRef); await deleteUser(currentUser); } projects = []; achievements = []; localStorage.removeItem('seed_master_v1'); localStorage.removeItem('seed_achievements_v1'); renderProjects(); closeSettings(); isOfflineMode = false; document.getElementById('auth-overlay').classList.remove('hidden'); window.showToast("🗑️ Conta apagada com sucesso.", "success");
-                } catch (error) { if (error.code === 'auth/requires-recent-login') { window.showToast("❌ Por segurança, saia da conta e faça login novamente.", "error"); } else { window.showToast("❌ Erro ao excluir conta.", "error"); } btn.innerHTML = `<i data-lucide="user-x" class="w-4 h-4"></i> <span id="delete-btn-text">Excluir Conta e Apagar Tudo</span>`; btn.classList.remove('bg-rose-600', 'text-white'); lucide.createIcons(); }
-            } else { btn.innerHTML = `<i data-lucide="alert-triangle" class="w-4 h-4"></i> <span id="delete-btn-text">Certeza? Clique para apagar</span>`; btn.classList.add('bg-rose-600', 'text-white'); lucide.createIcons(); setTimeout(() => { if(document.body.contains(btn) && btn.innerText.includes("Certeza")) { btn.innerHTML = `<i data-lucide="user-x" class="w-4 h-4"></i> <span id="delete-btn-text">Excluir Conta e Apagar Tudo</span>`; btn.classList.remove('bg-rose-600', 'text-white'); lucide.createIcons(); } }, 4000); }
+                } catch (error) { if (error.code === 'auth/requires-recent-login') { window.showToast("❌ Por segurança, saia da conta e faça login novamente.", "error"); } else { window.showToast("❌ Erro ao excluir conta.", "error"); } btn.innerHTML = `<i data-lucide="user-x" class="w-4 h-4"></i> <span id="delete-btn-text">Excluir Conta</span>`; btn.classList.remove('bg-rose-600', 'text-white'); lucide.createIcons(); }
+            } else { btn.innerHTML = `<i data-lucide="alert-triangle" class="w-4 h-4"></i> <span id="delete-btn-text">Certeza? Clique para apagar</span>`; btn.classList.add('bg-rose-600', 'text-white'); lucide.createIcons(); setTimeout(() => { if(document.body.contains(btn) && btn.innerText.includes("Certeza")) { btn.innerHTML = `<i data-lucide="user-x" class="w-4 h-4"></i> <span id="delete-btn-text">Excluir Conta</span>`; btn.classList.remove('bg-rose-600', 'text-white'); lucide.createIcons(); } }, 4000); }
         };
 
         window.save = async () => {
-            if (currentUser) {
-                const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'seed_data', 'main');
-                try { await setDoc(docRef, { projects: projects, achievements: achievements }); localStorage.setItem('seed_master_v1', JSON.stringify(projects)); localStorage.setItem('seed_achievements_v1', JSON.stringify(achievements)); } catch(e) { console.log("Guardado apenas localmente."); }
+            if (currentUser) { const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'seed_data', 'main'); try { await setDoc(docRef, { projects: projects, achievements: achievements }); localStorage.setItem('seed_master_v1', JSON.stringify(projects)); localStorage.setItem('seed_achievements_v1', JSON.stringify(achievements)); } catch(e) { console.log("Guardado apenas localmente."); }
             } else { localStorage.setItem('seed_master_v1', JSON.stringify(projects)); localStorage.setItem('seed_achievements_v1', JSON.stringify(achievements)); }
             const s = document.getElementById('save-status'); if(s) { s.style.opacity = '1'; setTimeout(() => s.style.opacity = '0', 1000); }
         };
@@ -633,89 +496,134 @@
         const MEDALS = { explorador: { id: 'explorador', icon: '🥇', title: 'Explorador', desc: 'Criou 10 projetos' }, foco: { id: 'foco', icon: '🔥', title: 'Inabalável', desc: 'Sessão de 60m' }, botanico: { id: 'botanico', icon: '🌳', title: 'Botânico Master', desc: '5 sementes no Jardim' }, pesquisador: { id: 'pesquisador', icon: '📚', title: 'Pesquisador', desc: 'Notas com 1000+ letras' } };
         window.checkAchievements = () => { let unlockedAny = false; const safeAchievements = Array.isArray(achievements) ? achievements : []; if (!safeAchievements.includes('explorador') && projects.length >= 10) { safeAchievements.push('explorador'); unlockedAny = true; window.showToast('🏆 Conquista: Explorador de Ideias!'); } if (!safeAchievements.includes('botanico') && projects.filter(p => p.station === 'archive').length >= 5) { safeAchievements.push('botanico'); unlockedAny = true; window.showToast('🏆 Conquista: Botânico Master!'); } const hasLongNote = projects.some(p => (p.notes || '').length >= 1000); if (!safeAchievements.includes('pesquisador') && hasLongNote) { safeAchievements.push('pesquisador'); unlockedAny = true; window.showToast('🏆 Conquista: Pesquisador!'); } achievements = safeAchievements; if (unlockedAny) { save(); } };
 
-        // ------------------- CORREÇÃO DOS TEMAS DE FUNDO (ESTILO ORIGINAL) -------------------
-        const VIBE_IMAGES = { 
-            zap: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1000',
-            palette: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=1000',
-            plane: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1000', // Academia Oldschool Dark
-            target: 'https://images.unsplash.com/photo-1484417894907-623942c8ee29?auto=format&fit=crop&q=80&w=1000',
-            dices: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1000',
-            // Fallbacks de segurança para as chaves criadas recentemente
-            briefcase: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1000',
-            book: 'https://images.unsplash.com/photo-1484417894907-623942c8ee29?auto=format&fit=crop&q=80&w=1000',
-            heart: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1000', // Academia Oldschool Dark
-            coffee: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1000'
-        };
-        const PLANT_ICONS = { 
-            zap: 'tree-pine', palette: 'flower-2', plane: 'tree-deciduous', target: 'sprout', dices: 'clover',
-            briefcase: 'tree-pine', book: 'sprout', heart: 'tree-deciduous', coffee: 'clover'
-        };
-        // ------------------------------------------------------------------------------
+        const VIBE_IMAGES = { briefcase: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1000', book: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&q=80&w=1000', heart: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1000', palette: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=1000', coffee: 'https://images.unsplash.com/photo-1481833761820-0509d3217039?auto=format&fit=crop&q=80&w=1000', zap: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1000', plane: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1000', target: 'https://images.unsplash.com/photo-1484417894907-623942c8ee29?auto=format&fit=crop&q=80&w=1000', dices: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1000' };
+        const PLANT_ICONS = { briefcase: 'tree-pine', book: 'tree-deciduous', heart: 'flower-2', palette: 'clover', coffee: 'cherry', zap: 'tree-pine', plane: 'flower-2', target: 'tree-deciduous', dices: 'cherry' };
 
-        const FOCUS_SCENES = [
-            { name: 'Quarto Lo-Fi', url: 'https://i.pinimg.com/originals/ff/34/3a/ff343aa8819c2573ad3409baf4af5e3e.gif' },
-            { name: 'Viagem de Trem', url: 'https://i.pinimg.com/originals/92/9f/98/929f9811fba2f931a0f4b3581976695b.gif' },
-            { name: 'Cidade Noturna', url: 'https://i.pinimg.com/originals/49/cd/d8/49cdd838e8c6d7fe5e2dd55deead5567.gif' },
-            { name: 'Janela Chuvosa', url: 'https://i.pinimg.com/originals/81/81/90/81819033e7242c1d826af87e2fb4975d.gif' },
-            { name: 'Natureza', url: 'https://i.pinimg.com/originals/08/9d/be/089dbe8f9d422e09d2e4fcae0adec609.gif' },
-            { name: 'Meia-Noite', url: 'https://i.pinimg.com/originals/13/b0/00/13b0000818cfd9cf27d39afaa051dc23.gif' },
-            { name: 'Refúgio', url: 'https://i.pinimg.com/originals/d1/1a/42/d11a4231a6fd0b25c0b4b2d4634701e2.gif' },
-            { name: 'Fim de Tarde', url: 'https://i.pinimg.com/originals/49/4d/8c/494d8c14dbae01f9f90db8665edbe5f6.gif' },
-            { name: 'Metrópole', url: 'https://i.pinimg.com/originals/e4/c3/9a/e4c39a73c1d9f9d32ca69f9ea0783c66.gif' },
-            { name: 'Tranquilidade', url: 'https://i.pinimg.com/originals/91/96/32/919632d3c2d04ab12e56f886a428c528.gif' },
-            { name: 'Inspiração', url: 'https://i.pinimg.com/originals/39/38/77/3938775fa4484f170466ecfa6da4e662.gif' },
-            { name: 'Profundeza', url: 'https://i.pinimg.com/originals/ab/26/01/ab26019d6a9def8082a9d5134a9e2d74.gif' },
-            { name: 'Calmaria', url: 'https://i.pinimg.com/originals/26/d4/b6/26d4b6d862bd59f5bac487c6eb3a2af0.gif' },
-            { name: 'Retiro', url: 'https://i.pinimg.com/originals/57/3b/68/573b688fbac605dde5807bf57b725bd5.gif' }
-        ];
+        const FOCUS_SCENES = [ { name: 'Quarto Lo-Fi', url: 'https://i.pinimg.com/originals/ff/34/3a/ff343aa8819c2573ad3409baf4af5e3e.gif' }, { name: 'Viagem de Trem', url: 'https://i.pinimg.com/originals/92/9f/98/929f9811fba2f931a0f4b3581976695b.gif' }, { name: 'Cidade Noturna', url: 'https://i.pinimg.com/originals/49/cd/d8/49cdd838e8c6d7fe5e2dd55deead5567.gif' }, { name: 'Janela Chuvosa', url: 'https://i.pinimg.com/originals/81/81/90/81819033e7242c1d826af87e2fb4975d.gif' }, { name: 'Natureza', url: 'https://i.pinimg.com/originals/08/9d/be/089dbe8f9d422e09d2e4fcae0adec609.gif' }, { name: 'Meia-Noite', url: 'https://i.pinimg.com/originals/13/b0/00/13b0000818cfd9cf27d39afaa051dc23.gif' }, { name: 'Refúgio', url: 'https://i.pinimg.com/originals/d1/1a/42/d11a4231a6fd0b25c0b4b2d4634701e2.gif' }, { name: 'Fim de Tarde', url: 'https://i.pinimg.com/originals/49/4d/8c/494d8c14dbae01f9f90db8665edbe5f6.gif' }, { name: 'Metrópole', url: 'https://i.pinimg.com/originals/e4/c3/9a/e4c39a73c1d9f9d32ca69f9ea0783c66.gif' }, { name: 'Tranquilidade', url: 'https://i.pinimg.com/originals/91/96/32/919632d3c2d04ab12e56f886a428c528.gif' }, { name: 'Inspiração', url: 'https://i.pinimg.com/originals/39/38/77/3938775fa4484f170466ecfa6da4e662.gif' }, { name: 'Profundeza', url: 'https://i.pinimg.com/originals/ab/26/01/ab26019d6a9def8082a9d5134a9e2d74.gif' }, { name: 'Calmaria', url: 'https://i.pinimg.com/originals/26/d4/b6/26d4b6d862bd59f5bac487c6eb3a2af0.gif' }, { name: 'Retiro', url: 'https://i.pinimg.com/originals/57/3b/68/573b688fbac605dde5807bf57b725bd5.gif' } ];
         
         let currentSceneIndex = parseInt(localStorage.getItem('seed_focus_scene')) || 0;
 
-        window.openGifSelector = () => {
-            const grid = document.getElementById('gif-grid');
-            grid.innerHTML = FOCUS_SCENES.map((s, i) => `
-                <div onclick="selectScene(${i})" class="group cursor-pointer rounded-3xl overflow-hidden relative border-2 ${currentSceneIndex === i ? 'border-[var(--primary)] shadow-[0_0_20px_var(--primary)]' : 'border-white/5 hover:border-white/20'} transition-all h-32 md:h-40">
-                    <img src="${s.url}" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity ${currentSceneIndex === i ? 'opacity-100' : ''}">
-                    <div class="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/90 to-transparent">
-                        <span class="text-[10px] font-black uppercase tracking-widest text-white drop-shadow-md flex items-center gap-2">
-                            ${currentSceneIndex === i ? '<i data-lucide="check-circle-2" class="w-4 h-4 text-[var(--primary)]"></i>' : ''} ${s.name}
-                        </span>
-                    </div>
-                </div>
-            `).join('');
-            lucide.createIcons(); 
-            document.getElementById('gif-overlay').classList.remove('hidden');
-            document.getElementById('gif-overlay').classList.add('flex');
+        window.handleProjectDragStart = (e, id) => { draggedProjectId = id; e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', id); setTimeout(() => e.target.classList.add('opacity-30', 'scale-95'), 0); };
+        window.handleProjectDragOver = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; e.currentTarget.classList.add('border-[var(--primary)]', 'shadow-[0_0_30px_rgba(139,92,246,0.3)]'); };
+        window.handleProjectDragLeave = (e) => { e.currentTarget.classList.remove('border-[var(--primary)]', 'shadow-[0_0_30px_rgba(139,92,246,0.3)]'); };
+        window.handleProjectDrop = (e, targetId) => { e.preventDefault(); e.currentTarget.classList.remove('border-[var(--primary)]', 'shadow-[0_0_30px_rgba(139,92,246,0.3)]'); if (draggedProjectId === null || draggedProjectId === targetId) return; const draggedIndex = projects.findIndex(p => p.id === draggedProjectId); const targetIndex = projects.findIndex(p => p.id === targetId); if (draggedIndex !== -1 && targetIndex !== -1 && projects[draggedIndex].station === projects[targetIndex].station) { const draggedItem = projects.splice(draggedIndex, 1)[0]; projects.splice(targetIndex, 0, draggedItem); save(); renderProjects(); } draggedProjectId = null; };
+        window.handleProjectDragEnd = (e) => { e.target.classList.remove('opacity-30', 'scale-95'); draggedProjectId = null; document.querySelectorAll('.project-card').forEach(el => el.classList.remove('border-[var(--primary)]', 'shadow-[0_0_30px_rgba(139,92,246,0.3)]')); };
+        window.handleTabDragOver = (e) => { e.preventDefault(); e.currentTarget.classList.add('bg-[var(--primary)]/20', 'text-[var(--primary)]'); };
+        window.handleTabDragLeave = (e) => { e.currentTarget.classList.remove('bg-[var(--primary)]/20', 'text-[var(--primary)]'); };
+        window.handleTabDrop = (e, targetStation) => { 
+            e.preventDefault(); 
+            e.currentTarget.classList.remove('bg-[var(--primary)]/20', 'text-[var(--primary)]'); 
+            if (draggedProjectId !== null) { 
+                if (targetStation === 'archive') {
+                    window.showToast("❌ Finalize o projeto manualmente para enviá-lo ao Jardim.", "error");
+                    draggedProjectId = null;
+                    return;
+                }
+                const project = projects.find(p => p.id === draggedProjectId); 
+                if (project && project.station !== targetStation) { 
+                    project.station = targetStation; save(); renderProjects(); window.showToast("🌱 Projeto movido com sucesso!"); 
+                } 
+            } 
+            draggedProjectId = null; 
         };
 
+        window.openGifSelector = () => { const grid = document.getElementById('gif-grid'); grid.innerHTML = FOCUS_SCENES.map((s, i) => `<div onclick="selectScene(${i})" class="group cursor-pointer rounded-3xl overflow-hidden relative border-2 ${currentSceneIndex === i ? 'border-[var(--primary)] shadow-[0_0_20px_var(--primary)]' : 'border-white/5 hover:border-white/20'} transition-all h-32 md:h-40"><img src="${s.url}" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity ${currentSceneIndex === i ? 'opacity-100' : ''}"><div class="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/90 to-transparent"><span class="text-[10px] font-black uppercase tracking-widest text-white drop-shadow-md flex items-center gap-2">${currentSceneIndex === i ? '<i data-lucide="check-circle-2" class="w-4 h-4 text-[var(--primary)]"></i>' : ''} ${s.name}</span></div></div>`).join(''); lucide.createIcons(); document.getElementById('gif-overlay').classList.remove('hidden'); document.getElementById('gif-overlay').classList.add('flex'); };
         window.closeGifSelector = () => { document.getElementById('gif-overlay').classList.remove('flex'); document.getElementById('gif-overlay').classList.add('hidden'); };
         window.selectScene = (index) => { currentSceneIndex = index; localStorage.setItem('seed_focus_scene', index); document.getElementById('room-bg').style.backgroundImage = `url('${FOCUS_SCENES[index].url}')`; closeGifSelector(); window.showToast("🖼️ Cenário alterado!"); };
 
         let currentStation = 'now'; let activeProjectId = null; let timerInterval = null; let timeLeft = selectedFocusTime * 60; let isTimerRunning = false; let isCreationMode = false;
         
-        window.changeTheme = (theme) => { document.body.className = `theme-purple custom-scrollbar min-h-screen relative ${theme}`; localStorage.setItem('seed_theme', theme); lucide.createIcons(); };
-        window.setStation = (station) => { currentStation = station; document.querySelectorAll('.station-tab').forEach(t => { t.classList.remove('active', 'opacity-100'); t.classList.add('opacity-40'); }); const activeTab = document.getElementById(`tab-${station}`); activeTab.classList.remove('opacity-40'); activeTab.classList.add('active', 'opacity-100'); renderProjects(); };
+        window.changeTheme = (theme) => { document.body.className = `theme-purple custom-scrollbar min-h-screen relative overflow-x-hidden ${theme}`; localStorage.setItem('seed_theme', theme); lucide.createIcons(); };
+        
+        window.setStation = (station) => { 
+            currentStation = station; 
+            document.querySelectorAll('.sidebar-item').forEach(t => { t.classList.remove('active'); t.classList.add('border-transparent'); }); 
+            const activeDesktop = document.getElementById(`tab-${station}`); 
+            if(activeDesktop) { activeDesktop.classList.add('active'); activeDesktop.classList.remove('border-transparent'); }
+            document.querySelectorAll('[id^="mobile-tab-"]').forEach(t => { t.classList.remove('text-[var(--primary)]'); t.classList.add('text-zinc-500'); });
+            const activeMobile = document.getElementById(`mobile-tab-${station}`);
+            if(activeMobile) { activeMobile.classList.remove('text-zinc-500'); activeMobile.classList.add('text-[var(--primary)]'); }
+            renderProjects(); 
+        };
 
         const renderProjects = () => {
             const grid = document.getElementById('project-grid'); const filtered = projects.filter(p => p.station === currentStation);
-            if (currentStation === 'archive') { grid.className = "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6";
+            
+            if (currentStation === 'archive') { 
+                grid.className = "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8";
                 grid.innerHTML = filtered.length ? filtered.map(p => {
-                    let rarity = 'Comum'; let cardClass = 'border-white/5 hover:border-white/10'; let bgGradient = 'from-white/5 to-transparent'; let badgeClass = 'bg-white/5 text-zinc-500 border border-white/5'; let iconClass = 'text-white/20 group-hover:text-[var(--primary)]';
-                    if (p.milestones.length >= 5) { rarity = 'Lendária'; cardClass = 'border-amber-900/30 hover:border-amber-700/50 hover:shadow-[0_10px_30px_-15px_rgba(245,158,11,0.2)]'; bgGradient = 'from-amber-900/20 to-transparent'; badgeClass = 'bg-amber-900/40 text-amber-300/80 border border-amber-700/50'; iconClass = 'text-amber-500/40 group-hover:text-amber-400'; } 
-                    else if (p.milestones.length >= 3) { rarity = 'Rara'; cardClass = 'border-indigo-900/30 hover:border-indigo-700/50 hover:shadow-[0_10px_30px_-15px_rgba(79,70,229,0.2)]'; bgGradient = 'from-indigo-900/20 to-transparent'; badgeClass = 'bg-indigo-900/40 text-indigo-300/80 border border-indigo-700/50'; iconClass = 'text-indigo-400/40 group-hover:text-indigo-300'; }
-                    return `<div onclick="openDetails(${p.id})" class="glass p-6 rounded-[2.5rem] flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-500 group relative overflow-hidden min-h-[200px] border ${cardClass}"><div class="absolute inset-0 bg-gradient-to-t opacity-30 group-hover:opacity-100 transition-opacity ${bgGradient}"></div><div class="absolute top-4 right-4 text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded-full ${badgeClass} z-10 transition-all backdrop-blur-sm">${rarity}</div><i data-lucide="${PLANT_ICONS[p.icon] || 'flower-2'}" class="w-14 h-14 mb-4 relative z-10 group-hover:-translate-y-1 transition-all duration-500 ${iconClass}"></i><h4 class="font-bold text-sm line-clamp-2 px-2 text-zinc-300 relative z-10">${p.title}</h4><span class="text-[8px] font-bold uppercase mt-3 tracking-widest opacity-40 text-zinc-400 relative z-10">${p.archivedAt || 'Floresceu'}</span></div>`
-                }).join('') : `<div class="col-span-full py-24 text-center opacity-40 animate-slide-up"><i data-lucide="flower" class="w-16 h-16 mx-auto mb-6 text-zinc-500"></i><p class="font-black uppercase tracking-widest text-sm text-zinc-400">O seu jardim ainda está vazio.<br>Cultive sementes para vê-las florescer aqui.</p></div>`;
-            } else { grid.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8";
+                    let rarity = 'Semente Comum'; let bgGradient = 'from-emerald-900/10 to-transparent'; let borderClass = 'border-white/5 hover:border-emerald-500/30'; let shadowClass = 'hover:shadow-[0_0_30px_rgba(16,185,129,0.1)]'; let badgeClass = 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'; let glowClass = 'bg-emerald-500';
+                    if (p.milestones.length >= 7) { rarity = 'Planta Lendária'; bgGradient = 'from-amber-900/20 to-transparent'; borderClass = 'border-amber-500/20 hover:border-amber-500/50'; shadowClass = 'hover:shadow-[0_0_40px_rgba(245,158,11,0.2)]'; badgeClass = 'bg-amber-500/20 text-amber-300 border border-amber-500/30'; glowClass = 'bg-amber-500'; } 
+                    else if (p.milestones.length >= 4) { rarity = 'Planta Rara'; bgGradient = 'from-indigo-900/20 to-transparent'; borderClass = 'border-indigo-500/20 hover:border-indigo-500/50'; shadowClass = 'hover:shadow-[0_0_40px_rgba(99,102,241,0.2)]'; badgeClass = 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'; glowClass = 'bg-indigo-500'; }
+                    return `<div onclick="openDetails(${p.id})" class="glass p-6 md:p-8 rounded-[2.5rem] md:rounded-[3rem] flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-500 group relative overflow-hidden aspect-[4/3] md:aspect-square border ${borderClass} ${shadowClass}"><div class="absolute inset-0 bg-gradient-to-b ${bgGradient} opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div><div class="absolute top-[40%] left-1/2 -translate-x-1/2 w-24 h-24 ${glowClass} blur-[50px] opacity-20 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none"></div><div class="absolute top-4 right-4 text-[7px] font-black uppercase tracking-widest px-2 py-1 rounded-full ${badgeClass} z-10 backdrop-blur-sm transition-all duration-500 group-hover:scale-105 shadow-lg">${rarity}</div><div class="relative z-10 w-16 h-16 md:w-20 md:h-20 mb-4 rounded-full bg-black/20 flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform duration-500 shadow-2xl backdrop-blur-md"><div class="absolute inset-0 rounded-full border border-white/10 rotate-45 pointer-events-none"></div><i data-lucide="${PLANT_ICONS[p.icon] || 'tree-deciduous'}" class="w-8 h-8 md:w-10 md:h-10 text-emerald-400 drop-shadow-[0_0_15px_rgba(52,211,153,0.5)]"></i></div><h4 class="font-bold text-sm line-clamp-2 px-2 text-zinc-300 relative z-10 group-hover:text-white transition-colors">${p.title}</h4><span class="text-[7px] font-black uppercase mt-3 tracking-widest opacity-50 text-zinc-400 relative z-10 flex items-center justify-center gap-1 group-hover:opacity-100 transition-opacity">Colhido: ${p.archivedAt || 'Recentemente'}</span></div>`;
+                }).join('') : `<div class="col-span-full py-24 text-center opacity-40 animate-slide-up"><div class="w-24 h-24 mx-auto mb-6 rounded-full bg-white/5 flex items-center justify-center border border-white/5"><i data-lucide="flower" class="w-10 h-10 text-zinc-500"></i></div><p class="font-black uppercase tracking-widest text-sm text-zinc-400">A sua Estufa está vazia.<br>Cultive sementes até aos 100% para as ver florescer aqui.</p></div>`;
+            } else { 
+                grid.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8";
                 grid.innerHTML = filtered.length ? filtered.map(p => {
                     const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0;
-                    return `<div onclick="openDetails(${p.id})" class="glass p-8 rounded-[3rem] space-y-6 project-card cursor-pointer animate-slide-up relative overflow-hidden group"><img src="${VIBE_IMAGES[p.icon]}" class="absolute top-0 left-0 w-full h-full object-cover opacity-[0.05]"><div class="relative z-10 space-y-6"><div class="flex justify-between items-start"><div class="flex flex-col gap-3"><div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/5"><i data-lucide="${PLANT_ICONS[p.icon] || 'flower-2'}" class="text-[var(--primary)] w-7 h-7"></i></div>${p.focusTime ? `<div class="text-[10px] font-black uppercase text-blue-400/80 tracking-widest flex items-center gap-1.5"><i data-lucide="clock" class="w-3 h-3"></i> ${formatFocusTime(p.focusTime)}</div>` : ''}</div><div class="text-right"><div class="text-2xl font-black">${prog}%</div><span class="text-[8px] font-black uppercase text-zinc-400">Progresso</span></div></div><h4 class="text-xl font-black mb-1 line-clamp-1">${p.title}</h4><div class="h-2 w-full progress-bar rounded-full"><div class="progress-fill h-full rounded-full" style="width: ${prog}%"></div></div>${p.habit ? `<div class="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Streak: ${p.habit.streak}d</div>` : ''}</div></div>`;
+                    let plantIcon = 'sprout'; let plantColor = 'text-emerald-500/40'; let plantGlow = '';
+                    if (prog === 100) { plantIcon = PLANT_ICONS[p.icon] || 'tree-deciduous'; plantColor = 'text-emerald-400'; plantGlow = 'drop-shadow-[0_0_10px_rgba(52,211,153,0.6)]'; }
+                    else if (prog >= 70) { plantIcon = 'flower-2'; plantColor = 'text-emerald-400/80'; }
+                    else if (prog >= 30) { plantIcon = 'leaf'; plantColor = 'text-emerald-500/60'; }
+                    
+                    let deadlineHtml = '';
+                    if (p.deadline) {
+                        const today = new Date(); today.setHours(0,0,0,0);
+                        const tgt = new Date(p.deadline + 'T00:00:00');
+                        const diffDays = Math.ceil((tgt - today) / (1000 * 60 * 60 * 24));
+                        let dColor = 'text-blue-400'; let dText = 'Entrega: ' + tgt.toLocaleDateString('pt-BR', {day:'2-digit', month:'short'});
+                        if (diffDays < 0) { dColor = 'text-rose-500'; dText = 'Atrasado'; }
+                        else if (diffDays === 0) { dColor = 'text-amber-500'; dText = 'Termina Hoje'; }
+                        else if (diffDays <= 3) { dColor = 'text-amber-400'; dText = diffDays + ' dias restantes'; }
+                        deadlineHtml = `<div class="text-[9px] font-black uppercase ${dColor} tracking-widest flex items-center gap-1.5"><i data-lucide="flag" class="w-3 h-3"></i> ${dText}</div>`;
+                    }
+
+                    return `<div draggable="true" ondragstart="handleProjectDragStart(event, ${p.id})" ondragover="handleProjectDragOver(event)" ondragleave="handleProjectDragLeave(event)" ondrop="handleProjectDrop(event, ${p.id})" ondragend="handleProjectDragEnd(event)" onclick="openDetails(${p.id})" class="glass p-6 md:p-8 rounded-[2.5rem] md:rounded-[3rem] flex flex-col justify-between project-card cursor-pointer animate-slide-up relative overflow-hidden group aspect-square max-h-[320px] max-w-sm mx-auto w-full">
+                        <img src="${VIBE_IMAGES[p.icon]}" class="absolute top-0 left-0 w-full h-full object-cover opacity-[0.05] pointer-events-none">
+                        <div class="relative z-10 flex flex-col h-full pointer-events-none">
+                            <div class="flex justify-between items-start">
+                                <div class="flex flex-col gap-3">
+                                    <div class="relative w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-black/40 flex items-center justify-center border border-white/5 group-hover:border-emerald-500/30 transition-colors shadow-lg">
+                                        <div class="absolute inset-0 bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl pointer-events-none"></div>
+                                        <i data-lucide="${plantIcon}" class="${plantColor} w-6 h-6 md:w-7 md:h-7 relative z-10 transition-all duration-500 group-hover:scale-110 ${plantGlow}"></i>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xl md:text-2xl font-black flex items-center justify-end gap-2">
+                                        <i data-lucide="${p.icon}" class="w-4 h-4 text-zinc-500 opacity-50" title="Tema do Projeto"></i> ${prog}%
+                                    </div>
+                                    <span class="text-[8px] font-black uppercase text-zinc-400">Progresso</span>
+                                </div>
+                            </div>
+                            <div class="mt-auto space-y-3">
+                                <div class="flex flex-wrap items-center gap-3 mb-2">
+                                    ${p.focusTime ? `<div class="text-[9px] font-black uppercase text-blue-400/80 tracking-widest flex items-center gap-1.5"><i data-lucide="clock" class="w-3 h-3"></i> ${formatFocusTime(p.focusTime)}</div>` : ''}
+                                    ${deadlineHtml}
+                                </div>
+                                <h4 class="text-lg md:text-xl font-black line-clamp-2 leading-tight">${p.title}</h4>
+                                <div>
+                                    <div class="h-2 w-full progress-bar rounded-full">
+                                        <div class="progress-fill h-full rounded-full" style="width: ${prog}%"></div>
+                                    </div>
+                                </div>
+                                ${p.habit ? `<div class="text-[9px] font-bold text-emerald-500 uppercase tracking-widest truncate">Streak: ${p.habit.streak}d</div>` : ''}
+                            </div>
+                        </div>
+                    </div>`;
                 }).join('') : `<div class="col-span-full py-24 text-center opacity-40 animate-slide-up"><i data-lucide="leaf" class="w-16 h-16 mx-auto mb-6"></i><p class="font-black uppercase tracking-widest text-sm">Terra pronta para o plantio</p></div>`;
-            } lucide.createIcons();
+            } 
+            lucide.createIcons();
         };
 
         window.openDetails = (id) => {
-            activeProjectId = id; const p = projects.find(p => p.id === id); const isArchived = p.station === 'archive'; document.getElementById('vision-banner-container').innerHTML = `<img src="${VIBE_IMAGES[p.icon]}" class="w-full h-full object-cover">`;
+            activeProjectId = id; const p = projects.find(p => p.id === id); if (!p) return; const isArchived = p.station === 'archive'; document.getElementById('vision-banner-container').innerHTML = `<img src="${VIBE_IMAGES[p.icon]}" class="w-full h-full object-cover">`;
             const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0; const isHabitDone = p.habit && p.habit.lastCheck === new Date().toISOString().split('T')[0];
+            
+            let deadlineBadge = '';
+            if (p.deadline) {
+                const tgt = new Date(p.deadline + 'T00:00:00');
+                deadlineBadge = `<div class="inline-flex gap-1.5 px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-widest text-zinc-300 drop-shadow-md"><i data-lucide="flag" class="w-3 h-3"></i> Entrega: ${tgt.toLocaleDateString('pt-BR')}</div>`;
+            }
             
             document.getElementById('detail-content').innerHTML = `
                 <div class="max-w-3xl mx-auto space-y-12">
@@ -724,6 +632,7 @@
                             <div class="flex flex-wrap gap-2 items-center">
                                 <div class="inline-flex gap-2 px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-widest text-[var(--primary)] drop-shadow-md">${isArchived ? '<i data-lucide="tree-deciduous" class="w-3 h-3"></i> JARDIM' : p.station.toUpperCase()}</div>
                                 ${p.focusTime ? `<div class="inline-flex gap-1.5 px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-widest text-blue-400 drop-shadow-md"><i data-lucide="clock" class="w-3 h-3"></i> ${formatFocusTime(p.focusTime)}</div>` : ''}
+                                ${deadlineBadge}
                             </div>
                             <h2 class="text-3xl md:text-5xl font-black tracking-tighter drop-shadow-lg">${p.title}</h2>
                         </div>
@@ -788,319 +697,46 @@
             document.getElementById('detail-view').classList.remove('hidden'); document.body.style.overflow = 'hidden'; lucide.createIcons();
         };
 
-        window.printProject = (id) => {
-            const p = projects.find(proj => proj.id === id);
-            if (!p) return;
-            const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0;
-            
-            const printWindow = window.open('', '', 'width=800,height=600');
-            printWindow.document.write(`
-                <html>
-                    <head>
-                        <title>Relatório - ${p.title}</title>
-                        <style>
-                            body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #222; line-height: 1.6; padding: 40px; max-width: 800px; margin: 0 auto; background: #fff; }
-                            h1 { color: #111; border-bottom: 2px solid #8B5CF6; padding-bottom: 10px; margin-bottom: 20px; font-size: 2.5em; }
-                            h2 { color: #444; margin-top: 40px; font-size: 1.2em; text-transform: uppercase; letter-spacing: 2px; }
-                            .meta { color: #555; font-size: 0.9em; margin-bottom: 40px; padding: 15px; background: #f9f9f9; border-radius: 8px; }
-                            .meta strong { color: #111; }
-                            .milestone { margin: 8px 0; padding: 12px 15px; background: #fdfdfd; border: 1px solid #eee; border-radius: 6px; font-size: 1.1em; }
-                            .completed { text-decoration: line-through; color: #888; background: #f4f4f5; }
-                            .notes { white-space: pre-wrap; background: #fdfdfd; padding: 25px; border-radius: 8px; border: 1px solid #eee; border-left: 4px solid #8B5CF6; font-size: 1.05em; color: #444; }
-                            .footer { margin-top: 60px; font-size: 0.8em; color: #aaa; text-align: center; border-top: 1px solid #eee; padding-top: 20px; }
-                        </style>
-                    </head>
-                    <body>
-                        <h1>${p.title}</h1>
-                        <div class="meta">
-                            <strong>Status:</strong> ${p.station === 'archive' ? 'No Jardim (Concluído)' : 'Em Cultivo'}<br>
-                            <strong>Progresso:</strong> ${prog}% concluído<br>
-                            <strong>Tempo Total de Foco:</strong> ${formatFocusTime(p.focusTime) || 'Nenhuma sessão registada'}
-                            ${p.habit ? `<br><strong>Hábito Associado:</strong> ${p.habit.title} (${p.habit.streak} dias seguidos)` : ''}
-                        </div>
-                        
-                        <h2>Tarefas e Marcos</h2>
-                        ${p.milestones.map(m => `<div class="milestone ${m.completed ? 'completed' : ''}"><strong>[ ${m.completed ? 'X' : '&nbsp;&nbsp;'} ]</strong> ${m.text}</div>`).join('')}
-                        
-                        ${p.notes ? `<h2>Anotações do Projeto</h2><div class="notes">${p.notes}</div>` : ''}
-                        
-                        <div class="footer">Gerado via Seed App</div>
-                    </body>
-                </html>
-            `);
-            printWindow.document.close();
-            printWindow.focus();
-            
-            setTimeout(() => { printWindow.print(); printWindow.close(); }, 250);
-        };
+        window.printProject = (id) => { const p = projects.find(proj => proj.id === id); if (!p) return; const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0; const printWindow = window.open('', '', 'width=800,height=600'); printWindow.document.write(`<html><head><title>Relatório - ${p.title}</title><style>body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #222; line-height: 1.6; padding: 40px; max-width: 800px; margin: 0 auto; background: #fff; } h1 { color: #111; border-bottom: 2px solid #8B5CF6; padding-bottom: 10px; margin-bottom: 20px; font-size: 2.5em; } h2 { color: #444; margin-top: 40px; font-size: 1.2em; text-transform: uppercase; letter-spacing: 2px; } .meta { color: #555; font-size: 0.9em; margin-bottom: 40px; padding: 15px; background: #f9f9f9; border-radius: 8px; } .meta strong { color: #111; } .milestone { margin: 8px 0; padding: 12px 15px; background: #fdfdfd; border: 1px solid #eee; border-radius: 6px; font-size: 1.1em; } .completed { text-decoration: line-through; color: #888; background: #f4f4f5; } .notes { white-space: pre-wrap; background: #fdfdfd; padding: 25px; border-radius: 8px; border: 1px solid #eee; border-left: 4px solid #8B5CF6; font-size: 1.05em; color: #444; } .footer { margin-top: 60px; font-size: 0.8em; color: #aaa; text-align: center; border-top: 1px solid #eee; padding-top: 20px; }</style></head><body><h1>${p.title}</h1><div class="meta"><strong>Status:</strong> ${p.station === 'archive' ? 'No Jardim (Concluído)' : 'Em Cultivo'}<br><strong>Progresso:</strong> ${prog}% concluído<br><strong>Tempo Total de Foco:</strong> ${formatFocusTime(p.focusTime) || 'Nenhuma sessão registada'}${p.habit ? `<br><strong>Hábito Associado:</strong> ${p.habit.title} (${p.habit.streak} dias seguidos)` : ''}</div><h2>Tarefas e Marcos</h2>${p.milestones.map(m => `<div class="milestone ${m.completed ? 'completed' : ''}"><strong>[ ${m.completed ? 'X' : '&nbsp;&nbsp;'} ]</strong> ${m.text}</div>`).join('')}${p.notes ? `<h2>Anotações do Projeto</h2><div class="notes">${p.notes}</div>` : ''}<div class="footer">Gerado via Seed App</div></body></html>`); printWindow.document.close(); printWindow.focus(); setTimeout(() => { printWindow.print(); printWindow.close(); }, 250); };
 
-        window.openVirtualRoom = () => {
-            const p = projects.find(p => p.id === activeProjectId); if(!p) return;
-            isCreationMode = false;
-            
-            document.getElementById('room-project-name').innerText = p.title; 
-            document.getElementById('room-task-name').innerText = p.milestones.find(m=>!m.completed)?.text || "Sessão de Foco Livre"; 
-            document.getElementById('room-notes-input').value = p.notes || '';
-            
-            renderRoomLinks();
-            renderRoomMilestones();
+        window.openVirtualRoom = () => { const p = projects.find(p => p.id === activeProjectId); if(!p) return; isCreationMode = false; document.getElementById('room-project-name').innerText = p.title; document.getElementById('room-task-name').innerText = p.milestones.find(m=>!m.completed)?.text || "Sessão de Foco Livre"; document.getElementById('room-notes-input').value = p.notes || ''; renderRoomLinks(); renderRoomMilestones(); document.getElementById('room-bg').style.backgroundImage = `url('${FOCUS_SCENES[currentSceneIndex].url}')`; document.getElementById('room-bg').style.opacity = '1'; document.getElementById('room-darken').className = 'absolute inset-0 bg-black/60 transition-all duration-1000 z-10'; document.getElementById('room-time-selector').style.opacity = '1'; document.getElementById('room-time-selector').style.pointerEvents = 'auto'; if (!isTimerRunning) { let defaultTime = parseInt(localStorage.getItem('seed_default_focus')) || 25; setFocusTime(defaultTime); } updateRoomUI(); document.getElementById('virtual-room-overlay').classList.remove('hidden'); document.getElementById('virtual-room-overlay').classList.add('block'); lucide.createIcons(); };
+        window.closeVirtualRoom = () => { clearInterval(timerInterval); isTimerRunning = false; let defaultTime = parseInt(localStorage.getItem('seed_default_focus')) || 25; selectedFocusTime = defaultTime; timeLeft = defaultTime * 60; updateTimerDisplay(); document.getElementById('timer-ring').classList.remove('timer-active'); document.getElementById('btn-timer-zen').innerText = "Iniciar"; document.getElementById('icon-timer-creation-play').classList.remove('hidden'); document.getElementById('icon-timer-creation-play').classList.add('block'); document.getElementById('icon-timer-creation-pause').classList.remove('block'); document.getElementById('icon-timer-creation-pause').classList.add('hidden'); if(typeof soundStates !== 'undefined') { if(soundStates.lessrain) toggleSound('lessrain'); if(soundStates.midnight) toggleSound('midnight'); if(soundStates.adventure) toggleSound('adventure'); } document.getElementById('room-bg').style.opacity = '0'; document.getElementById('room-darken').className = 'absolute inset-0 bg-black/95 backdrop-blur-3xl transition-all duration-1000 z-10'; document.getElementById('virtual-room-overlay').classList.remove('block'); document.getElementById('virtual-room-overlay').classList.add('hidden'); if (activeProjectId && !document.getElementById('detail-view').classList.contains('hidden')) { openDetails(activeProjectId); } };
+        window.toggleRoomMode = () => { isCreationMode = !isCreationMode; updateRoomUI(); };
 
-            document.getElementById('room-bg').style.backgroundImage = `url('${FOCUS_SCENES[currentSceneIndex].url}')`; 
-            document.getElementById('room-bg').style.opacity = '1'; 
-            document.getElementById('room-darken').className = 'absolute inset-0 bg-black/60 transition-all duration-1000 z-10';
-            
-            document.getElementById('room-time-selector').style.opacity = '1'; 
-            document.getElementById('room-time-selector').style.pointerEvents = 'auto';
+        const updateRoomUI = () => { const zenView = document.getElementById('room-view-zen'); const creationView = document.getElementById('room-view-creation'); const iconCreation = document.getElementById('icon-mode-creation'); const iconZen = document.getElementById('icon-mode-zen'); const milestonesPanel = document.getElementById('room-milestones-panel'); if (isCreationMode) { zenView.classList.remove('room-visible'); zenView.classList.add('room-hidden'); creationView.classList.remove('room-hidden'); creationView.classList.add('room-visible'); iconCreation.classList.remove('block'); iconCreation.classList.add('hidden'); iconZen.classList.remove('hidden'); iconZen.classList.add('block'); document.getElementById('room-darken').classList.remove('bg-black/60'); document.getElementById('room-darken').classList.add('bg-black/80'); milestonesPanel.classList.add('opacity-0', 'pointer-events-none', '!-translate-x-full'); } else { creationView.classList.remove('room-visible'); creationView.classList.add('room-hidden'); zenView.classList.remove('room-hidden'); zenView.classList.add('room-visible'); iconZen.classList.remove('block'); iconZen.classList.add('hidden'); iconCreation.classList.remove('hidden'); iconCreation.classList.add('block'); document.getElementById('room-darken').classList.remove('bg-black/80'); document.getElementById('room-darken').classList.add('bg-black/60'); milestonesPanel.classList.remove('opacity-0', 'pointer-events-none', '!-translate-x-full'); } };
+        window.toggleMobileMilestones = () => { const panel = document.getElementById('room-milestones-panel'); if (panel.classList.contains('-translate-x-full')) { panel.classList.remove('-translate-x-full'); } else { panel.classList.add('-translate-x-full'); } };
 
-            if (!isTimerRunning) {
-                let defaultTime = parseInt(localStorage.getItem('seed_default_focus')) || 25;
-                setFocusTime(defaultTime);
-            }
+        const renderRoomMilestones = () => { const p = projects.find(p => p.id === activeProjectId); if(!p) return; const container = document.getElementById('room-milestones-list'); container.innerHTML = p.milestones.map((m, i) => `<div class="flex items-start gap-3 group cursor-pointer" onclick="toggleRoomMilestone(${i})"><div class="w-5 h-5 mt-0.5 shrink-0 rounded-md border border-white/30 flex items-center justify-center ${m.completed ? 'bg-[var(--primary)] border-[var(--primary)]' : 'group-hover:border-[var(--primary)]'} transition-all">${m.completed ? '<i data-lucide="check" class="w-3 h-3 text-white"></i>' : ''}</div><span class="text-sm font-medium ${m.completed ? 'line-through text-zinc-600' : 'text-zinc-300 group-hover:text-white'} transition-colors leading-snug">${m.text}</span></div>`).join(''); lucide.createIcons(); document.getElementById('room-task-name').innerText = p.milestones.find(m=>!m.completed)?.text || "Sessão de Foco Livre"; };
+        window.toggleRoomMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(!p) return; p.milestones[i].completed = !p.milestones[i].completed; save(); renderRoomMilestones(); const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0; if (prog === 100) window.showToast("🎉 Todas as tarefas concluídas!"); };
+        window.updateRoomNotes = (val) => { const p = projects.find(proj => proj.id === activeProjectId); if(p && p.station !== 'archive') { p.notes = val; save(); window.checkAchievements(); } };
 
-            updateRoomUI();
-            document.getElementById('virtual-room-overlay').classList.remove('hidden');
-            document.getElementById('virtual-room-overlay').classList.add('block'); 
-            lucide.createIcons();
-        };
-
-        window.closeVirtualRoom = () => { 
-            clearInterval(timerInterval); isTimerRunning = false; 
-            let defaultTime = parseInt(localStorage.getItem('seed_default_focus')) || 25;
-            selectedFocusTime = defaultTime; timeLeft = defaultTime * 60; updateTimerDisplay();
-            
-            document.getElementById('timer-ring').classList.remove('timer-active'); 
-            document.getElementById('btn-timer-zen').innerText = "Iniciar"; 
-            document.getElementById('icon-timer-creation-play').classList.remove('hidden'); document.getElementById('icon-timer-creation-play').classList.add('block');
-            document.getElementById('icon-timer-creation-pause').classList.remove('block'); document.getElementById('icon-timer-creation-pause').classList.add('hidden');
-
-            if(typeof soundStates !== 'undefined') { if(soundStates.lessrain) toggleSound('lessrain'); if(soundStates.midnight) toggleSound('midnight'); if(soundStates.adventure) toggleSound('adventure'); }
-            
-            document.getElementById('room-bg').style.opacity = '0'; 
-            document.getElementById('room-darken').className = 'absolute inset-0 bg-black/95 backdrop-blur-3xl transition-all duration-1000 z-10';
-            
-            document.getElementById('virtual-room-overlay').classList.remove('block'); document.getElementById('virtual-room-overlay').classList.add('hidden'); 
-            openDetails(activeProjectId); 
-        };
-
-        window.toggleRoomMode = () => {
-            isCreationMode = !isCreationMode;
-            updateRoomUI();
-        };
-
-        const updateRoomUI = () => {
-            const zenView = document.getElementById('room-view-zen');
-            const creationView = document.getElementById('room-view-creation');
-            const iconCreation = document.getElementById('icon-mode-creation');
-            const iconZen = document.getElementById('icon-mode-zen');
-            const milestonesPanel = document.getElementById('room-milestones-panel');
-            
-            if (isCreationMode) {
-                zenView.classList.remove('room-visible'); zenView.classList.add('room-hidden');
-                creationView.classList.remove('room-hidden'); creationView.classList.add('room-visible');
-                
-                iconCreation.classList.remove('block'); iconCreation.classList.add('hidden');
-                iconZen.classList.remove('hidden'); iconZen.classList.add('block');
-                
-                document.getElementById('room-darken').classList.remove('bg-black/60'); document.getElementById('room-darken').classList.add('bg-black/80'); 
-                
-                milestonesPanel.classList.add('opacity-0', 'pointer-events-none', '!-translate-x-full');
-            } else {
-                creationView.classList.remove('room-visible'); creationView.classList.add('room-hidden');
-                zenView.classList.remove('room-hidden'); zenView.classList.add('room-visible');
-                
-                iconZen.classList.remove('block'); iconZen.classList.add('hidden');
-                iconCreation.classList.remove('hidden'); iconCreation.classList.add('block');
-                
-                document.getElementById('room-darken').classList.remove('bg-black/80'); document.getElementById('room-darken').classList.add('bg-black/60');
-                
-                milestonesPanel.classList.remove('opacity-0', 'pointer-events-none', '!-translate-x-full');
-            }
-        };
-
-        window.toggleMobileMilestones = () => {
-            const panel = document.getElementById('room-milestones-panel');
-            if (panel.classList.contains('-translate-x-full')) { 
-                panel.classList.remove('-translate-x-full'); 
-            } else { 
-                panel.classList.add('-translate-x-full'); 
-            }
-        };
-
-        const renderRoomMilestones = () => {
-            const p = projects.find(p => p.id === activeProjectId); if(!p) return;
-            const container = document.getElementById('room-milestones-list');
-            container.innerHTML = p.milestones.map((m, i) => `
-                <div class="flex items-start gap-3 group cursor-pointer" onclick="toggleRoomMilestone(${i})">
-                    <div class="w-5 h-5 mt-0.5 shrink-0 rounded-md border border-white/30 flex items-center justify-center ${m.completed ? 'bg-[var(--primary)] border-[var(--primary)]' : 'group-hover:border-[var(--primary)]'} transition-all">
-                        ${m.completed ? '<i data-lucide="check" class="w-3 h-3 text-white"></i>' : ''}
-                    </div>
-                    <span class="text-sm font-medium ${m.completed ? 'line-through text-zinc-600' : 'text-zinc-300 group-hover:text-white'} transition-colors leading-snug">${m.text}</span>
-                </div>
-            `).join('');
-            lucide.createIcons();
-            document.getElementById('room-task-name').innerText = p.milestones.find(m=>!m.completed)?.text || "Sessão de Foco Livre"; 
-        };
-
-        window.toggleRoomMilestone = (i) => {
-            const p = projects.find(p => p.id === activeProjectId); if(!p) return;
-            p.milestones[i].completed = !p.milestones[i].completed; save(); renderRoomMilestones();
-            const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0;
-            if (prog === 100) window.showToast("🎉 Todas as tarefas concluídas!");
-        };
-
-        window.updateRoomNotes = (val) => { 
-            const p = projects.find(proj => proj.id === activeProjectId); 
-            if(p && p.station !== 'archive') { 
-                p.notes = val; 
-                save(); 
-                window.checkAchievements(); 
-            } 
-        };
-
-        const renderRoomLinks = () => {
-            const p = projects.find(p => p.id === activeProjectId); if(!p) return;
-            const container = document.getElementById('room-links-container');
-            container.innerHTML = p.links && p.links.length > 0 ? p.links.map((l, i) => `
-                <div class="flex items-center gap-1 bg-white/10 border border-white/10 rounded-xl pl-3 pr-2 py-1.5 group hover:bg-white/20 transition-colors">
-                    <a href="${l.url}" target="_blank" class="flex items-center gap-2 text-[11px] font-bold text-zinc-200 hover:text-white transition-colors truncate max-w-[250px]" title="${l.title || l.url}">
-                        <img src="https://www.google.com/s2/favicons?domain=${l.domain}&sz=64" class="w-4 h-4 rounded-full bg-black/50" onerror="this.style.display='none'">
-                        <span class="truncate">${l.title}</span>
-                    </a>
-                    <button onclick="removeRoomLink(${i})" class="p-1 opacity-0 group-hover:opacity-100 hover:text-rose-400 transition-all ml-1" title="Remover Link"><i data-lucide="x" class="w-3 h-3"></i></button>
-                </div>
-            `).join('') : '<span class="text-[10px] text-zinc-500 font-medium my-auto italic">Nenhum link. A sua mesa está vazia.</span>';
-            lucide.createIcons();
-        };
-
+        const renderRoomLinks = () => { const p = projects.find(p => p.id === activeProjectId); if(!p) return; const container = document.getElementById('room-links-container'); container.innerHTML = p.links && p.links.length > 0 ? p.links.map((l, i) => `<div class="flex items-center gap-1 bg-white/10 border border-white/10 rounded-xl pl-3 pr-2 py-1.5 group hover:bg-white/20 transition-colors"><a href="${l.url}" target="_blank" class="flex items-center gap-2 text-[11px] font-bold text-zinc-200 hover:text-white transition-colors truncate max-w-[250px]" title="${l.title || l.url}"><img src="https://www.google.com/s2/favicons?domain=${l.domain}&sz=64" class="w-4 h-4 rounded-full bg-black/50" onerror="this.style.display='none'"><span class="truncate">${l.title}</span></a><button onclick="removeRoomLink(${i})" class="p-1 opacity-0 group-hover:opacity-100 hover:text-rose-400 transition-all ml-1" title="Remover Link"><i data-lucide="x" class="w-3 h-3"></i></button></div>`).join('') : '<span class="text-[10px] text-zinc-500 font-medium my-auto italic">Nenhum link. A sua mesa está vazia.</span>'; lucide.createIcons(); };
         window.addRoomLink = async () => { const input = document.getElementById('room-new-link'); const btn = document.getElementById('btn-add-room-link'); let url = input.value.trim(); if (!url) return; if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url; try { const urlObj = new URL(url); let domain = urlObj.hostname.replace('www.', ''); btn.innerHTML = '<i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i>'; btn.disabled = true; lucide.createIcons(); let pageTitle = domain; try { const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`); if (response.ok) { const data = await response.json(); const doc = new DOMParser().parseFromString(data.contents, "text/html"); const titleTag = doc.querySelector('title'); if (titleTag && titleTag.innerText) { pageTitle = titleTag.innerText.trim(); } } } catch(err) { console.log("Aviso: Não foi possível buscar o título."); } const p = projects.find(proj => proj.id === activeProjectId); if (!p.links) p.links = []; p.links.push({ url: url, domain: domain, title: pageTitle }); save(); input.value = ''; renderRoomLinks(); btn.innerText = "ADICIONAR"; btn.disabled = false; } catch(e) { window.showToast("❌ Endereço inválido.", "error"); btn.innerText = "ADICIONAR"; btn.disabled = false; } };
         window.removeRoomLink = (index) => { const p = projects.find(proj => proj.id === activeProjectId); if (p && p.links) { p.links.splice(index, 1); save(); renderRoomLinks(); } };
 
-        window.setFocusTime = (minutes) => {
-            if (isTimerRunning) return;
-            selectedFocusTime = minutes; timeLeft = minutes * 60; updateTimerDisplay();
-            [15, 25, 45, 60].forEach(m => { 
-                const btn = document.getElementById(`btn-time-${m}`); 
-                if (btn) { 
-                    if (m === minutes) { btn.classList.add('text-[var(--primary)]', 'border-[var(--primary)]'); } 
-                    else { btn.classList.remove('text-[var(--primary)]', 'border-[var(--primary)]'); } 
-                } 
-            });
-        };
+        window.setFocusTime = (minutes) => { if (isTimerRunning) return; selectedFocusTime = minutes; timeLeft = minutes * 60; updateTimerDisplay(); [15, 25, 45, 60].forEach(m => { const btn = document.getElementById(`btn-time-${m}`); if (btn) { if (m === minutes) { btn.classList.add('text-[var(--primary)]', 'border-[var(--primary)]'); } else { btn.classList.remove('text-[var(--primary)]', 'border-[var(--primary)]'); } } }); };
+        window.toggleTimer = () => { const btnZen = document.getElementById('btn-timer-zen'); const ring = document.getElementById('timer-ring'); const timeSelector = document.getElementById('room-time-selector'); const iconPlay = document.getElementById('icon-timer-creation-play'); const iconPause = document.getElementById('icon-timer-creation-pause'); if(isTimerRunning) { clearInterval(timerInterval); btnZen.innerText = "Retomar"; ring.classList.remove('timer-active'); iconPlay.classList.remove('hidden'); iconPlay.classList.add('block'); iconPause.classList.remove('block'); iconPause.classList.add('hidden'); timeSelector.style.opacity = '1'; timeSelector.style.pointerEvents = 'auto'; } else { timeSelector.style.opacity = '0'; timeSelector.style.pointerEvents = 'none'; timerInterval = setInterval(() => { timeLeft--; updateTimerDisplay(); if(timeLeft<=0) { clearInterval(timerInterval); const p = projects.find(proj => proj.id === activeProjectId); if(p) { p.focusTime = (p.focusTime || 0) + selectedFocusTime; } if (selectedFocusTime === 60 && !achievements.includes('foco')) { achievements.push('foco'); setTimeout(() => window.showToast('🏆 Conquista: Foco Inabalável!'), 2000); } save(); closeVirtualRoom(); window.showToast(`✅ Sessão de ${selectedFocusTime}m concluída!`); } }, 1000); btnZen.innerText = "Pausar"; ring.classList.add('timer-active'); iconPlay.classList.remove('block'); iconPlay.classList.add('hidden'); iconPause.classList.remove('hidden'); iconPause.classList.add('block'); } isTimerRunning = !isTimerRunning; };
+        const updateTimerDisplay = () => { const text = `${Math.floor(timeLeft/60).toString().padStart(2,'0')}:${(timeLeft%60).toString().padStart(2,'0')}`; document.getElementById('timer-display-zen').innerText = text; document.getElementById('timer-display-creation').innerText = text; };
 
-        window.toggleTimer = () => {
-            const btnZen = document.getElementById('btn-timer-zen'); 
-            const ring = document.getElementById('timer-ring');
-            const timeSelector = document.getElementById('room-time-selector'); 
-            const iconPlay = document.getElementById('icon-timer-creation-play');
-            const iconPause = document.getElementById('icon-timer-creation-pause');
+        window.addTempMilestone = () => { const input = document.getElementById('new-milestone-input'); const val = input.value.trim(); if(val) { tempMilestones.push({ text: val, completed: false }); input.value = ''; window.renderTempMilestones(); } };
+        window.removeTempMilestone = (index) => { tempMilestones.splice(index, 1); window.renderTempMilestones(); };
+        window.renderTempMilestones = () => { const list = document.getElementById('temp-milestones-list'); list.innerHTML = tempMilestones.map((m, i) => `<div class="flex items-center justify-between bg-black/40 border border-white/5 p-3 rounded-xl animate-slide-up"><span class="text-sm font-medium text-zinc-300 truncate">${m.text}</span><button type="button" onclick="removeTempMilestone(${i})" class="text-rose-500 hover:text-rose-400 p-1 shrink-0 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button></div>`).join(''); lucide.createIcons(); };
 
-            if(isTimerRunning) { 
-                clearInterval(timerInterval); 
-                btnZen.innerText = "Retomar"; 
-                ring.classList.remove('timer-active');
-                iconPlay.classList.remove('hidden'); iconPlay.classList.add('block'); 
-                iconPause.classList.remove('block'); iconPause.classList.add('hidden');
-                timeSelector.style.opacity = '1'; timeSelector.style.pointerEvents = 'auto'; 
-            } else { 
-                timeSelector.style.opacity = '0'; timeSelector.style.pointerEvents = 'none'; 
-                timerInterval = setInterval(() => { 
-                    timeLeft--; updateTimerDisplay(); 
-                    if(timeLeft<=0) { 
-                        clearInterval(timerInterval); 
-                        const p = projects.find(proj => proj.id === activeProjectId); if(p) { p.focusTime = (p.focusTime || 0) + selectedFocusTime; }
-                        
-                        if (selectedFocusTime === 60 && !achievements.includes('foco')) {
-                            achievements.push('foco');
-                            setTimeout(() => window.showToast('🏆 Conquista: Foco Inabalável!'), 2000);
-                        }
-                        
-                        save(); closeVirtualRoom(); window.showToast(`✅ Sessão de ${selectedFocusTime}m concluída!`);
-                    } 
-                }, 1000); 
-                btnZen.innerText = "Pausar"; 
-                ring.classList.add('timer-active');
-                iconPlay.classList.remove('block'); iconPlay.classList.add('hidden'); 
-                iconPause.classList.remove('hidden'); iconPause.classList.add('block');
-            }
-            isTimerRunning = !isTimerRunning;
-        };
+        window.addProject = () => { const title = document.getElementById('proj-title').value.trim(); if(!title) { window.showToast("❌ O projeto precisa de um título.", "error"); return; } const pendingInput = document.getElementById('new-milestone-input').value.trim(); if(pendingInput) { tempMilestones.push({ text: pendingInput, completed: false }); } const habit = document.getElementById('proj-habit').value.trim(); const deadline = document.getElementById('proj-deadline').value; const finalMilestones = tempMilestones.length > 0 ? [...tempMilestones] : [{text: 'Dar o primeiro passo', completed: false}]; projects.unshift({ id: Date.now(), title: title, icon: document.getElementById('proj-icon').value, station: document.getElementById('proj-station').value, notes: '', links: [], focusTime: 0, habit: habit ? { title: habit, streak: 0, lastCheck: '' } : null, deadline: deadline || null, milestones: finalMilestones }); save(); window.checkAchievements(); closeModal(); renderProjects(); };
         
-        const updateTimerDisplay = () => { 
-            const text = `${Math.floor(timeLeft/60).toString().padStart(2,'0')}:${(timeLeft%60).toString().padStart(2,'0')}`;
-            document.getElementById('timer-display-zen').innerText = text; 
-            document.getElementById('timer-display-creation').innerText = text;
-        };
-
-        // --- SISTEMA DE TAREFAS DINÂMICO (NOVO PLANTIO) ---
-        window.addTempMilestone = () => {
-            const input = document.getElementById('new-milestone-input');
-            const val = input.value.trim();
-            if(val) {
-                tempMilestones.push({ text: val, completed: false });
-                input.value = '';
-                window.renderTempMilestones();
-            }
-        };
-
-        window.removeTempMilestone = (index) => {
-            tempMilestones.splice(index, 1);
-            window.renderTempMilestones();
-        };
-
-        window.renderTempMilestones = () => {
-            const list = document.getElementById('temp-milestones-list');
-            list.innerHTML = tempMilestones.map((m, i) => `
-                <div class="flex items-center justify-between bg-black/40 border border-white/5 p-3 rounded-xl animate-slide-up">
-                    <span class="text-sm font-medium text-zinc-300 truncate">${m.text}</span>
-                    <button type="button" onclick="removeTempMilestone(${i})" class="text-rose-500 hover:text-rose-400 p-1 shrink-0 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
-                </div>
-            `).join('');
-            lucide.createIcons();
-        };
-
-        window.addProject = () => { 
-            const title = document.getElementById('proj-title').value.trim(); 
-            if(!title) { window.showToast("❌ O projeto precisa de um título.", "error"); return; } 
-            
-            // Adicionar qualquer tarefa que tenha ficado escrita no input sem pressionar enter
-            const pendingInput = document.getElementById('new-milestone-input').value.trim();
-            if(pendingInput) { tempMilestones.push({ text: pendingInput, completed: false }); }
-
-            const habit = document.getElementById('proj-habit').value.trim(); 
-            const finalMilestones = tempMilestones.length > 0 ? [...tempMilestones] : [{text: 'Dar o primeiro passo', completed: false}];
-
-            projects.unshift({ 
-                id: Date.now(), 
-                title: title, 
-                icon: document.getElementById('proj-icon').value, 
-                station: document.getElementById('proj-station').value, 
-                notes: '', 
-                links: [], 
-                focusTime: 0, 
-                habit: habit ? { title: habit, streak: 0, lastCheck: '' } : null, 
-                milestones: finalMilestones 
-            }); 
-            
-            save(); window.checkAchievements(); closeModal(); renderProjects(); 
-        };
-
         window.openModal = () => { 
             document.getElementById('modal').classList.remove('hidden'); 
             document.getElementById('modal').classList.add('flex'); 
-            
-            // Limpar formulário sempre que abrir
             document.getElementById('proj-title').value = ''; 
             document.getElementById('proj-habit').value = ''; 
-            document.getElementById('new-milestone-input').value = '';
-            tempMilestones = [];
-            if(document.getElementById('temp-milestones-list')) window.renderTempMilestones();
+            const deadlineInput = document.getElementById('proj-deadline');
+            if (deadlineInput) { deadlineInput.value = ''; }
+            document.getElementById('new-milestone-input').value = ''; 
+            tempMilestones = []; 
+            if(document.getElementById('temp-milestones-list')) window.renderTempMilestones(); 
         };
-
-        window.closeModal = () => { 
-            document.getElementById('modal').classList.remove('flex'); 
-            document.getElementById('modal').classList.add('hidden'); 
-        };
-        // ----------------------------------------------------
+        
+        window.closeModal = () => { document.getElementById('modal').classList.remove('flex'); document.getElementById('modal').classList.add('hidden'); };
 
         window.archiveProject = (id) => { const p = projects.find(p => p.id === id); p.station = 'archive'; p.archivedAt = new Date().toLocaleDateString('pt-BR'); save(); window.checkAchievements(); window.closeDetails(); };
         window.toggleMilestone = (i) => { const p = projects.find(p => p.id === activeProjectId); if(p.station==='archive') return; p.milestones[i].completed = !p.milestones[i].completed; save(); openDetails(activeProjectId); };
@@ -1126,73 +762,25 @@
         window.renderTrash = () => { const trashList = document.getElementById('trash-list'); const trashProjects = projects.filter(p => p.station === 'trash'); if (trashProjects.length === 0) { trashList.innerHTML = `<div class="py-16 text-center opacity-30"><i data-lucide="wind" class="w-16 h-16 mx-auto mb-4 text-zinc-500"></i><p class="font-black uppercase tracking-widest text-xs">Lixeira limpa e vazia.</p></div>`; } else { trashList.innerHTML = trashProjects.map(p => `<div class="glass p-5 rounded-3xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border border-rose-500/10 hover:border-rose-500/30 transition-colors"><div class="flex items-center gap-4"><div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 border border-white/5"><i data-lucide="${p.icon || 'leaf'}" class="w-6 h-6 text-zinc-500"></i></div><div><h4 class="font-bold text-white text-base line-clamp-1">${p.title}</h4><p class="text-[10px] font-black uppercase tracking-widest text-rose-500 mt-1">Descartada</p></div></div><div class="flex items-center gap-3 w-full md:w-auto"><button onclick="restoreProject(${p.id})" class="flex-1 md:flex-none px-5 py-3 rounded-2xl bg-white/5 hover:bg-emerald-500/20 hover:text-emerald-400 text-[10px] font-black uppercase tracking-widest transition-all text-zinc-300">Restaurar</button><button onclick="permanentDeleteProject(${p.id}, this)" class="flex-1 md:flex-none px-5 py-3 rounded-2xl bg-rose-500/10 hover:bg-rose-500 hover:text-white text-[10px] font-black uppercase tracking-widest transition-all text-rose-500 border border-rose-500/20">Excluir Definitivamente</button></div></div>`).join(''); } lucide.createIcons(); };
         window.restoreProject = (id) => { const p = projects.find(proj => proj.id === id); if(p) { p.station = 'now'; save(); renderTrash(); renderProjects(); window.showToast("🌱 Ideia restaurada com sucesso!"); } };
         window.permanentDeleteProject = (id, btn) => { if(btn.innerText.includes("CERTEZA")) { projects = projects.filter(proj => proj.id !== id); save(); renderTrash(); renderProjects(); window.showToast("🔥 Ideia pulverizada para sempre."); } else { btn.innerText = "CERTEZA? CLIQUE NOVAMENTE"; btn.classList.add('bg-rose-600', 'text-white'); btn.classList.remove('text-rose-500'); setTimeout(() => { if(document.body.contains(btn) && btn.innerText.includes("CERTEZA")) { btn.innerText = "EXCLUIR DEFINITIVAMENTE"; btn.classList.remove('bg-rose-600', 'text-white'); btn.classList.add('text-rose-500'); } }, 3000); } };
-        window.closeDetails = () => { document.getElementById('detail-view').classList.remove('flex'); document.body.style.overflow = 'auto'; document.getElementById('detail-view').classList.add('hidden'); renderProjects(); };
+        
+        window.closeDetails = () => { 
+            activeProjectId = null; 
+            document.getElementById('detail-view').classList.remove('flex'); 
+            document.body.style.overflow = 'auto'; 
+            document.getElementById('detail-view').classList.add('hidden'); 
+            renderProjects(); 
+        };
 
         let soundStates = { lessrain: false, midnight: false, adventure: false };
-        window.toggleSound = (type) => {
-            const audio = document.getElementById(`audio-${type}`); const btn = document.getElementById(`btn-sound-${type}`); const indicator = document.getElementById('focus-sound-indicator');
-            if (soundStates[type]) { audio.pause(); soundStates[type] = false; btn.classList.remove('text-[var(--primary)]', 'bg-[var(--primary)]/20'); btn.classList.add('text-zinc-400', 'bg-white/5');
-            } else {
-                audio.volume = document.getElementById(`vol-${type}`).value;
-                audio.play().then(() => { 
-                    soundStates[type] = true; btn.classList.remove('text-zinc-400', 'bg-white/5'); btn.classList.add('text-[var(--primary)]', 'bg-[var(--primary)]/20'); 
-                    if (Object.values(soundStates).some(state => state === true)) { indicator.classList.remove('hidden'); }
-                }).catch(e => { console.log("Servidor carregando o áudio...", e); window.showToast("⏳ Áudio a carregar. Verifique os nomes dos ficheiros no GitHub.", "error"); audio.load(); });
-            }
-            if (Object.values(soundStates).some(state => state === true)) { indicator.classList.remove('hidden'); } else { indicator.classList.add('hidden'); }
-        };
+        window.toggleSound = (type) => { const audio = document.getElementById(`audio-${type}`); const btn = document.getElementById(`btn-sound-${type}`); const indicator = document.getElementById('focus-sound-indicator'); if (soundStates[type]) { audio.pause(); soundStates[type] = false; btn.classList.remove('text-[var(--primary)]', 'bg-[var(--primary)]/20'); btn.classList.add('text-zinc-400', 'bg-white/5'); } else { audio.volume = document.getElementById(`vol-${type}`).value; audio.play().then(() => { soundStates[type] = true; btn.classList.remove('text-zinc-400', 'bg-white/5'); btn.classList.add('text-[var(--primary)]', 'bg-[var(--primary)]/20'); if (Object.values(soundStates).some(state => state === true)) { indicator.classList.remove('hidden'); } }).catch(e => { console.log("Servidor carregando o áudio...", e); window.showToast("⏳ Áudio a carregar. Verifique os nomes dos ficheiros no GitHub.", "error"); audio.load(); }); } if (Object.values(soundStates).some(state => state === true)) { indicator.classList.remove('hidden'); } else { indicator.classList.add('hidden'); } };
         window.changeVolume = (type, value) => { const audio = document.getElementById(`audio-${type}`); if(audio) audio.volume = value; };
 
-        window.openStats = () => {
-            try {
-                const validProjects = projects.filter(p => p.station !== 'trash');
-                const total = validProjects.length; const archived = validProjects.filter(p => p.station === 'archive').length;
-                const inProgress = validProjects.filter(p => p.station === 'now').length; const planning = validProjects.filter(p => p.station === 'next' || p.station === 'someday').length;
-                let totalMilestones = 0; let completedMilestones = 0;
-                validProjects.forEach(p => { totalMilestones += p.milestones.length; completedMilestones += p.milestones.filter(m => m.completed).length; });
-                const overallProgress = totalMilestones === 0 ? 0 : Math.round((completedMilestones / totalMilestones) * 100);
-
-                const safeAchievements = Array.isArray(achievements) ? achievements : [];
-
-                document.getElementById('stats-chart').innerHTML = `
-                    <div class="glass p-6 rounded-2xl flex justify-between items-center mb-4 border border-[var(--primary)]"><span class="font-bold text-lg">Evolução Geral da Vida</span><span class="font-black text-3xl text-[var(--primary)]">${overallProgress}%</span></div>
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="layers" class="w-8 h-8 text-indigo-400"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Ideias Totais</span><span class="font-black text-3xl">${total}</span></div>
-                        <div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="award" class="w-8 h-8 text-emerald-400"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">No Jardim (Fim)</span><span class="font-black text-3xl text-emerald-400">${archived}</span></div>
-                        <div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="zap" class="w-8 h-8 text-[var(--primary)]"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Ativos Agora</span><span class="font-black text-3xl text-[var(--primary)]">${inProgress}</span></div>
-                        <div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="calendar" class="w-8 h-8 text-blue-400"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Planejamento</span><span class="font-black text-3xl text-blue-400">${planning}</span></div>
-                    </div>
-                    <div class="glass p-6 rounded-2xl space-y-4 mt-4"><h4 class="text-[10px] font-black uppercase tracking-widest text-zinc-400 text-center">Sala de Troféus</h4>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">${Object.values(MEDALS).map(m => { const unlocked = safeAchievements.includes(m.id); return `<div class="glass p-4 rounded-xl text-center flex flex-col items-center justify-center gap-2 ${unlocked ? 'border border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.2)] bg-amber-500/10' : 'opacity-40 grayscale'} transition-all"><div class="text-3xl drop-shadow-md">${m.icon}</div><div class="text-[10px] font-black uppercase text-zinc-200">${m.title}</div><div class="text-[8px] text-zinc-400 leading-tight">${m.desc}</div></div>`; }).join('')}</div>
-                    </div>
-                `; lucide.createIcons(); document.getElementById('stats-overlay').classList.remove('hidden'); document.getElementById('stats-overlay').classList.add('flex');
-            } catch(e) { console.error(e); window.showToast("Erro ao abrir termómetro.", "error"); }
-        };
+        window.openStats = () => { try { const validProjects = projects.filter(p => p.station !== 'trash'); const total = validProjects.length; const archived = validProjects.filter(p => p.station === 'archive').length; const inProgress = validProjects.filter(p => p.station === 'now').length; const planning = validProjects.filter(p => p.station === 'next' || p.station === 'someday').length; let totalMilestones = 0; let completedMilestones = 0; validProjects.forEach(p => { totalMilestones += p.milestones.length; completedMilestones += p.milestones.filter(m => m.completed).length; }); const overallProgress = totalMilestones === 0 ? 0 : Math.round((completedMilestones / totalMilestones) * 100); const safeAchievements = Array.isArray(achievements) ? achievements : []; document.getElementById('stats-chart').innerHTML = `<div class="glass p-6 rounded-2xl flex justify-between items-center mb-4 border border-[var(--primary)]"><span class="font-bold text-lg">Evolução Geral da Vida</span><span class="font-black text-3xl text-[var(--primary)]">${overallProgress}%</span></div><div class="grid grid-cols-2 gap-4 mb-4"><div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="layers" class="w-8 h-8 text-indigo-400"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Ideias Totais</span><span class="font-black text-3xl">${total}</span></div><div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="award" class="w-8 h-8 text-emerald-400"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">No Jardim (Fim)</span><span class="font-black text-3xl text-emerald-400">${archived}</span></div><div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="zap" class="w-8 h-8 text-[var(--primary)]"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Ativos Agora</span><span class="font-black text-3xl text-[var(--primary)]">${inProgress}</span></div><div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="calendar" class="w-8 h-8 text-blue-400"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Planejamento</span><span class="font-black text-3xl text-blue-400">${planning}</span></div></div><div class="glass p-6 rounded-2xl space-y-4 mt-4"><h4 class="text-[10px] font-black uppercase tracking-widest text-zinc-400 text-center">Sala de Troféus</h4><div class="grid grid-cols-2 md:grid-cols-4 gap-4">${Object.values(MEDALS).map(m => { const unlocked = safeAchievements.includes(m.id); return `<div class="glass p-4 rounded-xl text-center flex flex-col items-center justify-center gap-2 ${unlocked ? 'border border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.2)] bg-amber-500/10' : 'opacity-40 grayscale'} transition-all"><div class="text-3xl drop-shadow-md">${m.icon}</div><div class="text-[10px] font-black uppercase text-zinc-200">${m.title}</div><div class="text-[8px] text-zinc-400 leading-tight">${m.desc}</div></div>`; }).join('')}</div></div>`; lucide.createIcons(); document.getElementById('stats-overlay').classList.remove('hidden'); document.getElementById('stats-overlay').classList.add('flex'); } catch(e) { console.error(e); window.showToast("Erro ao abrir termómetro.", "error"); } };
         window.closeStats = () => { document.getElementById('stats-overlay').classList.remove('flex'); document.getElementById('stats-overlay').classList.add('hidden'); };
 
         window.closeMentor = () => { document.getElementById('mentor-overlay').classList.remove('flex'); document.getElementById('mentor-overlay').classList.add('hidden'); };
         
-        window.askMentor = () => {
-            const p = projects.find(p => p.id === activeProjectId); if(!p) return;
-            document.getElementById('mentor-overlay').classList.remove('hidden'); document.getElementById('mentor-overlay').classList.add('flex'); 
-            const responseDiv = document.getElementById('mentor-response');
-            
-            responseDiv.innerHTML = `
-                <div class="text-center space-y-4 py-8">
-                    <div class="w-16 h-16 bg-[var(--primary)]/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-[var(--primary)]/30">
-                        <i data-lucide="sparkles" class="w-8 h-8 text-[var(--primary)]"></i>
-                    </div>
-                    <h4 class="text-2xl md:text-3xl font-black text-white tracking-tight">Mentor IA em breve!</h4>
-                    <p class="text-zinc-400 text-sm md:text-base leading-relaxed max-w-md mx-auto">
-                        A inteligência artificial do seu jardim está a ser treinada neste momento. Muito em breve, você terá conselhos ultra-personalizados baseados nos seus marcos e anotações.
-                    </p>
-                    <div class="inline-block mt-6 px-4 py-2 rounded-full border border-[var(--primary)]/30 bg-[var(--primary)]/10 text-[var(--primary)] text-[10px] font-black uppercase tracking-widest shadow-[0_0_15px_rgba(139,92,246,0.2)]">
-                        Em Construção 🚧
-                    </div>
-                </div>
-            `;
-            lucide.createIcons();
-        };
+        window.askMentor = () => { const p = projects.find(p => p.id === activeProjectId); if(!p) return; document.getElementById('mentor-overlay').classList.remove('hidden'); document.getElementById('mentor-overlay').classList.add('flex'); const responseDiv = document.getElementById('mentor-response'); responseDiv.innerHTML = `<div class="text-center space-y-4 py-8"><div class="w-16 h-16 bg-[var(--primary)]/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-[var(--primary)]/30"><i data-lucide="sparkles" class="w-8 h-8 text-[var(--primary)]"></i></div><h4 class="text-2xl md:text-3xl font-black text-white tracking-tight">Mentor IA em breve!</h4><p class="text-zinc-400 text-sm md:text-base leading-relaxed max-w-md mx-auto">A inteligência artificial do seu jardim está a ser treinada neste momento. Muito em breve, você terá conselhos ultra-personalizados baseados nos seus marcos e anotações.</p><div class="inline-block mt-6 px-4 py-2 rounded-full border border-[var(--primary)]/30 bg-[var(--primary)]/10 text-[var(--primary)] text-[var(--primary)] text-[10px] font-black uppercase tracking-widest shadow-[0_0_15px_rgba(139,92,246,0.2)]">Em Construção 🚧</div></div>`; lucide.createIcons(); };
 
         window.onload = () => { changeTheme(localStorage.getItem('seed_theme') || 'theme-purple'); renderProjects(); };
     </script>
