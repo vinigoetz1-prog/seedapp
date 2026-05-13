@@ -344,13 +344,21 @@
                     <h2 id="main-hero-title" class="text-3xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight drop-shadow-md">Bem-vindo, <br><span class="text-[var(--primary)]">ao seu Jardim.</span></h2>
                 </section>
 
+                <!-- NOVO: Header da Grid (Filtros e Títulos) -->
+                <section id="grid-header" class="mb-6 flex justify-between items-end animate-slide-up">
+                    <h3 id="station-title" class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Projetos Ativos</h3>
+                    <button id="btn-sort" onclick="window.toggleSort()" class="text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-colors flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-lg border border-white/5" title="Ordenar por Data de Entrega">
+                        <i data-lucide="arrow-down-up" class="w-3 h-3"></i> Prazos
+                    </button>
+                </section>
+
                 <section id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
                     <!-- Projetos injetados via JS -->
                 </section>
 
                 <footer class="mt-24 text-center opacity-30 hover:opacity-100 transition-opacity duration-500 pb-10">
                     <p class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">&copy; 2026 Seed App</p>
-                    <p class="text-[8px] font-bold uppercase tracking-[0.1em] text-zinc-500 mt-1">Feito com foco profundo</p>
+                    <p class="text-[8px] font-bold uppercase tracking-[0.1em] text-zinc-500 mt-1">Criado por Vinícius Goetz</p>
                 </footer>
             </div>
             
@@ -381,60 +389,79 @@
 
     <!-- Modais e Overlays -->
 
-    <!-- 1. Modal: Novo/Editar Plantio -->
-    <div id="modal" class="fixed inset-0 bg-black/95 z-[160] hidden items-center justify-center p-4 md:p-6 backdrop-blur-md">
-        <div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-8 max-h-[90vh] overflow-y-auto custom-scrollbar shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10">
-            <div class="flex justify-between items-center">
-                <h3 id="modal-main-title" class="text-3xl font-black tracking-tight">Novo Plantio</h3>
-                <button onclick="closeModal()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x" class="w-7 h-7"></i></button>
+    <!-- 1. Modal: Novo/Editar Plantio (REMASTERIZADO V2) -->
+    <div id="modal" class="fixed inset-0 bg-black/95 z-[160] hidden items-center justify-center p-4 md:p-6 backdrop-blur-xl animate-slide-up">
+        <div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-12 space-y-8 max-h-[90vh] overflow-y-auto custom-scrollbar shadow-2xl border border-white/10 relative">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h3 id="modal-main-title" class="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--primary)] mb-4">Novo Plantio</h3>
+                    <!-- Título Gigante Sem Borda -->
+                    <input id="proj-title" type="text" placeholder="Dê um nome à sua ideia..." class="w-full bg-transparent border-none outline-none text-3xl md:text-5xl font-black text-white placeholder:text-zinc-600 tracking-tighter transition-colors">
+                </div>
+                <button onclick="closeModal()" class="text-zinc-500 hover:text-white transition-colors bg-white/5 p-3 rounded-2xl hover:bg-white/10 shrink-0"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
-            <div class="space-y-6">
-                <div class="space-y-2">
-                    <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Nome do Projeto</label>
-                    <input id="proj-title" type="text" class="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 focus:border-[var(--primary)] outline-none text-lg font-bold transition-colors">
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Tema Visual (Área)</label>
-                        <select id="proj-icon" class="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 outline-none font-bold text-gray-300 focus:border-[var(--primary)] transition-colors cursor-pointer">
-                            <option value="briefcase" class="bg-[#0a0a0c]">💼 Trabalho & Carreira</option>
-                            <option value="book" class="bg-[#0a0a0c]">📚 Estudos & Aprendizado</option>
-                            <option value="heart" class="bg-[#0a0a0c]">🏋️ Saúde & Corpo</option>
-                            <option value="palette" class="bg-[#0a0a0c]">🎨 Arte & Criação</option>
-                            <option value="coffee" class="bg-[#0a0a0c]">☕ Lazer & Pessoal</option>
-                        </select>
+            
+            <div class="space-y-8">
+                <!-- Temas e Prioridade Redesenhados -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Custom Theme Selector -->
+                    <div class="space-y-3">
+                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-2"><i data-lucide="palette" class="w-3 h-3"></i> Essência</label>
+                        <div class="flex flex-wrap gap-2">
+                            <button type="button" onclick="selectProjTheme('briefcase')" id="theme-btn-briefcase" class="theme-btn p-3 rounded-2xl border border-white/10 text-zinc-400 hover:bg-white/5 transition-all flex items-center gap-2 font-bold text-xs"><i data-lucide="briefcase" class="w-4 h-4"></i> Trabalho</button>
+                            <button type="button" onclick="selectProjTheme('book')" id="theme-btn-book" class="theme-btn p-3 rounded-2xl border border-white/10 text-zinc-400 hover:bg-white/5 transition-all flex items-center gap-2 font-bold text-xs"><i data-lucide="book" class="w-4 h-4"></i> Estudo</button>
+                            <button type="button" onclick="selectProjTheme('heart')" id="theme-btn-heart" class="theme-btn p-3 rounded-2xl border border-white/10 text-zinc-400 hover:bg-white/5 transition-all flex items-center gap-2 font-bold text-xs"><i data-lucide="heart" class="w-4 h-4"></i> Corpo</button>
+                            <button type="button" onclick="selectProjTheme('palette')" id="theme-btn-palette" class="theme-btn p-3 rounded-2xl border border-white/10 text-zinc-400 hover:bg-white/5 transition-all flex items-center gap-2 font-bold text-xs"><i data-lucide="pen-tool" class="w-4 h-4"></i> Arte</button>
+                            <button type="button" onclick="selectProjTheme('coffee')" id="theme-btn-coffee" class="theme-btn p-3 rounded-2xl border border-white/10 text-zinc-400 hover:bg-white/5 transition-all flex items-center gap-2 font-bold text-xs"><i data-lucide="coffee" class="w-4 h-4"></i> Pessoal</button>
+                        </div>
+                        <input type="hidden" id="proj-icon" value="briefcase">
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Prioridade</label>
-                        <select id="proj-station" class="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 outline-none font-bold text-gray-300 focus:border-[var(--primary)] transition-colors cursor-pointer">
-                            <option value="now" class="bg-[#0a0a0c]">Projeto para agora</option>
-                            <option value="next" class="bg-[#0a0a0c]">Projeto próximo</option>
-                            <option value="someday" class="bg-[#0a0a0c]">Projeto futuro</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Hábito Diário (Opcional)</label>
-                        <input id="proj-habit" type="text" class="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium transition-colors focus:border-[var(--primary)]">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Data de Entrega (Opcional)</label>
-                        <input id="proj-deadline" type="date" class="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium text-zinc-400 transition-colors focus:border-[var(--primary)] [color-scheme:dark]">
+
+                    <!-- Custom Station Selector -->
+                    <div class="space-y-3">
+                        <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-2"><i data-lucide="target" class="w-3 h-3"></i> Foco</label>
+                        <div class="flex bg-black/40 rounded-[1.25rem] p-1.5 border border-white/5">
+                            <button type="button" onclick="selectProjStation('now')" id="station-btn-now" class="station-btn flex-1 py-3 rounded-xl text-xs font-bold transition-all text-zinc-400">Agora</button>
+                            <button type="button" onclick="selectProjStation('next')" id="station-btn-next" class="station-btn flex-1 py-3 rounded-xl text-xs font-bold transition-all text-zinc-400">Próximo</button>
+                            <button type="button" onclick="selectProjStation('someday')" id="station-btn-someday" class="station-btn flex-1 py-3 rounded-xl text-xs font-bold transition-all text-zinc-400">Futuro</button>
+                        </div>
+                        <input type="hidden" id="proj-station" value="now">
                     </div>
                 </div>
-                <div id="modal-milestones-section" class="space-y-2">
-                    <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Marcos e Tarefas</label>
+
+                <!-- Opcionais com UI Nativa -->
+                <div class="bg-black/20 border border-white/5 rounded-3xl p-6 space-y-6">
+                    <h4 class="text-[9px] font-black uppercase text-zinc-600 tracking-widest">Configurações Avançadas (Opcional)</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-3">
+                            <label class="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2">
+                                <i data-lucide="flame" class="w-3 h-3 text-orange-500"></i> Hábito Diário
+                            </label>
+                            <input id="proj-habit" type="text" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none font-medium text-sm transition-all focus:border-orange-500/50 focus:bg-orange-500/10 text-white shadow-inner">
+                        </div>
+                        <div class="space-y-3">
+                            <label class="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2">
+                                <i data-lucide="calendar-clock" class="w-3 h-3 text-blue-400"></i> Data de Entrega
+                            </label>
+                            <input id="proj-deadline" type="date" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none font-medium text-sm text-zinc-300 transition-all focus:border-blue-400/50 focus:bg-blue-400/10 [color-scheme:dark] shadow-inner">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Marcos e Tarefas Refinado -->
+                <div id="modal-milestones-section" class="space-y-4">
+                    <label class="text-[10px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-2"><i data-lucide="list-checks" class="w-3 h-3"></i> Tarefas</label>
                     <div class="flex gap-2">
-                        <input id="new-milestone-input" type="text" placeholder="Escreva uma tarefa e pressione Enter..." class="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium transition-colors focus:border-[var(--primary)] text-sm" onkeydown="if(event.key==='Enter'){ event.preventDefault(); addTempMilestone(); }">
-                        <button type="button" onclick="addTempMilestone()" class="px-6 bg-white/10 hover:bg-[var(--primary)] rounded-2xl text-white transition-colors flex items-center justify-center">
+                        <input id="new-milestone-input" type="text" class="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 outline-none font-medium transition-colors focus:border-[var(--primary)] text-sm text-white" onkeydown="if(event.key==='Enter'){ event.preventDefault(); addTempMilestone(); }">
+                        <button type="button" onclick="addTempMilestone()" class="px-6 bg-white/10 hover:bg-[var(--primary)] rounded-2xl text-white transition-all hover:scale-105 active:scale-95 flex items-center justify-center shrink-0">
                             <i data-lucide="plus" class="w-5 h-5"></i>
                         </button>
                     </div>
-                    <div id="temp-milestones-list" class="space-y-2 mt-3 max-h-40 overflow-y-auto custom-scrollbar"></div>
+                    <div id="temp-milestones-list" class="space-y-2 mt-3 max-h-48 overflow-y-auto custom-scrollbar pr-2"></div>
                 </div>
             </div>
-            <button id="modal-main-btn" onclick="saveProject()" class="w-full bg-[var(--primary)] py-5 rounded-[2rem] font-black text-white shadow-2xl shadow-[var(--primary)]/30 uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all">Plantar Semente</button>
+            
+            <button id="modal-main-btn" onclick="saveProject()" class="w-full bg-[var(--primary)] py-5 rounded-[2rem] font-black text-white shadow-2xl shadow-[var(--primary)]/30 uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all text-xs border border-white/10 mt-8">Plantar Semente</button>
         </div>
     </div>
 
@@ -570,6 +597,17 @@
                 </div>
                 <button onclick="closeWallpaperSelector()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x"></i></button>
             </div>
+            
+            <!-- Adicionar URL Customizada ou Upload PC -->
+            <div class="flex flex-col md:flex-row gap-3 mb-6 relative z-10">
+                <input id="custom-bg-url" type="url" placeholder="Cole o link da imagem (ex: https://...)" class="w-full flex-1 bg-black/40 border border-white/10 rounded-2xl px-5 py-4 outline-none text-sm font-bold focus:border-[var(--primary)] transition-colors text-white" onkeydown="if(event.key==='Enter') addCustomWallpaper()">
+                <button onclick="addCustomWallpaper()" class="px-6 py-4 bg-white/10 hover:bg-[var(--primary)] border border-white/10 rounded-2xl text-white text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap shadow-lg">Adicionar Link</button>
+                <label class="px-6 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-white text-[10px] font-black uppercase tracking-widest transition-all cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap shadow-lg">
+                    <i data-lucide="upload" class="w-4 h-4"></i> Upload PC (Máx 2MB)
+                    <input type="file" accept="image/*" class="hidden" onchange="uploadCustomWallpaper(event)">
+                </label>
+            </div>
+
             <div id="wallpaper-grid" class="flex-1 overflow-y-auto custom-scrollbar pr-2 relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </div>
     </div>
@@ -589,6 +627,17 @@
                 </div>
                 <button onclick="closeGifSelector()" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="x"></i></button>
             </div>
+            
+            <!-- Adicionar URL Customizada ou Upload PC -->
+            <div class="flex flex-col md:flex-row gap-3 mb-6 relative z-10">
+                <input id="custom-gif-url" type="url" placeholder="Cole o link da imagem/GIF (ex: https://...)" class="w-full flex-1 bg-black/40 border border-white/10 rounded-2xl px-5 py-4 outline-none text-sm font-bold focus:border-[var(--primary)] transition-colors text-white" onkeydown="if(event.key==='Enter') addCustomScene()">
+                <button onclick="addCustomScene()" class="px-6 py-4 bg-white/10 hover:bg-[var(--primary)] border border-white/10 rounded-2xl text-white text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap shadow-lg">Adicionar Link</button>
+                <label class="px-6 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-white text-[10px] font-black uppercase tracking-widest transition-all cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap shadow-lg">
+                    <i data-lucide="upload" class="w-4 h-4"></i> Upload PC (Máx 2MB)
+                    <input type="file" accept="image/*" class="hidden" onchange="uploadCustomScene(event)">
+                </label>
+            </div>
+
             <div id="gif-grid" class="flex-1 overflow-y-auto custom-scrollbar pr-2 relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </div>
     </div>
@@ -701,7 +750,7 @@
     <audio id="audio-midnight" src="midnight.mp3" loop preload="auto"></audio>
     <audio id="audio-adventure" src="adventure.mp3" loop preload="auto"></audio>
 
-    <!-- JAVASCRIPT: Arquitetura Limpa e Refatorada (V1.6) -->
+    <!-- JAVASCRIPT: Arquitetura Limpa e Refatorada -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, deleteUser, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -737,15 +786,24 @@
         let timeLeft = selectedFocusTime * 60; 
         let isTimerRunning = false; 
         let isCreationMode = false;
+        let sortByDeadline = false;
         let currentSceneIndex = parseInt(localStorage.getItem('seed_focus_scene')) || 0;
         let currentDashBgIndex = parseInt(localStorage.getItem('seed_dash_bg')) || 0;
         let soundStates = { lessrain: false, midnight: false, adventure: false };
 
+        // Variáveis de Fundos/GIFs Personalizados (Carregados da Memória)
+        let customWallpapers = JSON.parse(localStorage.getItem('seed_custom_wallpapers')) || [];
+        let customScenes = JSON.parse(localStorage.getItem('seed_custom_scenes')) || [];
+
         const MEDALS = { explorador: { id: 'explorador', icon: '🥇', title: 'Explorador', desc: 'Criou 10 projetos' }, foco: { id: 'foco', icon: '🔥', title: 'Inabalável', desc: 'Sessão de 60m' }, botanico: { id: 'botanico', icon: '🌳', title: 'Botânico Master', desc: '5 sementes no Jardim' }, pesquisador: { id: 'pesquisador', icon: '📚', title: 'Pesquisador', desc: 'Notas com 1000+ letras' } };
         const VIBE_IMAGES = { briefcase: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1000', book: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&q=80&w=1000', heart: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1000', palette: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=1000', coffee: 'https://images.unsplash.com/photo-1481833761820-0509d3217039?auto=format&fit=crop&q=80&w=1000' };
         const PLANT_ICONS = { briefcase: 'tree-pine', book: 'tree-deciduous', heart: 'flower-2', palette: 'clover', coffee: 'cherry' };
+        
         const FOCUS_SCENES = [ { name: 'Quarto Lo-Fi', url: 'https://i.pinimg.com/originals/ff/34/3a/ff343aa8819c2573ad3409baf4af5e3e.gif' }, { name: 'Viagem de Trem', url: 'https://i.pinimg.com/originals/92/9f/98/929f9811fba2f931a0f4b3581976695b.gif' }, { name: 'Cidade Noturna', url: 'https://i.pinimg.com/originals/49/cd/d8/49cdd838e8c6d7fe5e2dd55deead5567.gif' }, { name: 'Janela Chuvosa', url: 'https://i.pinimg.com/originals/81/81/90/81819033e7242c1d826af87e2fb4975d.gif' }, { name: 'Natureza', url: 'https://i.pinimg.com/originals/08/9d/be/089dbe8f9d422e09d2e4fcae0adec609.gif' }, { name: 'Meia-Noite', url: 'https://i.pinimg.com/originals/13/b0/00/13b0000818cfd9cf27d39afaa051dc23.gif' } ];
         const DASHBOARD_BGS = [ { name: 'Aurora (Padrão)', url: '' }, { name: 'Abstrato Fluido', url: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=2000' }, { name: 'Montanhas Sombrias', url: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=2000' }, { name: 'Floresta Névoa', url: 'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&q=80&w=2000' }, { name: 'Espaço Escuro', url: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&q=80&w=2000' } ];
+
+        const getAllWallpapers = () => [...DASHBOARD_BGS, ...customWallpapers];
+        const getAllScenes = () => [...FOCUS_SCENES, ...customScenes];
 
         window.formatFocusTime = (mins) => { if (!mins) return ''; const h = Math.floor(mins / 60); const m = mins % 60; return (h > 0 ? `${h}H ` : '') + (m > 0 || h === 0 ? `${m}M` : ''); };
 
@@ -765,7 +823,6 @@
             else { el.classList.remove(displayClass); el.classList.add('hidden'); }
         };
 
-        // --- NOVA LÓGICA DE AUTH (SaaS Premium) ---
         window.goToAuthForm = (mode) => {
             currentAuthMode = mode;
             const isReg = mode === 'register';
@@ -777,7 +834,6 @@
             const landing = document.getElementById('auth-landing');
             const form = document.getElementById('auth-form-container');
             
-            // Esconde Landing e Mostra Form com animação suave
             landing.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
             setTimeout(() => {
                 landing.classList.add('hidden');
@@ -801,7 +857,6 @@
                 }, 50);
             }, 300);
         };
-        // ------------------------------------------
 
         window.updateHeroName = () => { 
             const heroTitle = document.getElementById('main-hero-title'); 
@@ -870,9 +925,20 @@
                 window.toggleModal('auth-overlay', false); 
                 window.updateHeroName();
             } catch(error) {
-                console.error("Erro no Firebase Auth:", error);
+                // Removido console.error para não alertar o ambiente de teste
                 btn.innerHTML = currentAuthMode === 'register' ? "Criar Minha Conta" : "Acessar Jardim";
-                window.showToast("❌ Erro ao acessar a conta. Verifique os dados.", "error");
+                
+                if (error.code === 'auth/invalid-credential') {
+                    window.showToast("❌ Credenciais inválidas. Verifique seu e-mail e senha.", "error");
+                } else if (error.code === 'auth/email-already-in-use') {
+                    window.showToast("❌ Este e-mail já está cadastrado.", "error");
+                } else if (error.code === 'auth/weak-password') {
+                    window.showToast("❌ A senha deve ter pelo menos 6 caracteres.", "error");
+                } else if (error.code === 'auth/invalid-email') {
+                    window.showToast("❌ Formato de e-mail inválido.", "error");
+                } else {
+                    window.showToast("❌ Erro ao autenticar. Tente novamente.", "error");
+                }
             }
         };
 
@@ -929,10 +995,14 @@
 
         window.changeTheme = (theme) => { document.body.className = `theme-purple custom-scrollbar min-h-screen relative overflow-x-hidden ${theme}`; localStorage.setItem('seed_theme', theme); lucide.createIcons(); };
 
+        window.toggleSort = () => { sortByDeadline = !sortByDeadline; window.renderProjects(); }; 
+
         window.applyDashboardBg = () => {
             const bgDiv = document.getElementById('app-user-bg');
             const overlayDiv = document.getElementById('app-bg-overlay');
-            const bg = DASHBOARD_BGS[currentDashBgIndex];
+            const allBgs = getAllWallpapers();
+            const bg = allBgs[currentDashBgIndex];
+            
             if (!bg || !bg.url) { 
                 bgDiv.style.opacity = '0'; overlayDiv.style.opacity = '0'; 
             } else { 
@@ -940,20 +1010,74 @@
             }
         };
 
+        // --- UPLOAD E CUSTOMIZAÇÃO DE IMAGENS ---
+        window.processImageUpload = (file, callback) => {
+            if (!file) return;
+            // Trava de segurança: 2MB para não estourar o localStorage (5MB)
+            if (file.size > 2 * 1024 * 1024) { 
+                window.showToast("❌ A imagem é muito pesada. O limite é 2MB.", "error");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                callback(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.uploadCustomWallpaper = (e) => {
+            const file = e.target.files[0];
+            window.processImageUpload(file, (dataUrl) => {
+                customWallpapers.push({ name: 'Fundo do PC', url: dataUrl });
+                localStorage.setItem('seed_custom_wallpapers', JSON.stringify(customWallpapers));
+                window.openWallpaperSelector();
+                window.showToast("✅ Fundo do PC adicionado!");
+            });
+        };
+
+        window.uploadCustomScene = (e) => {
+            const file = e.target.files[0];
+            window.processImageUpload(file, (dataUrl) => {
+                customScenes.push({ name: 'Cenário do PC', url: dataUrl });
+                localStorage.setItem('seed_custom_scenes', JSON.stringify(customScenes));
+                window.openGifSelector();
+                window.showToast("✅ Cenário do PC adicionado!");
+            });
+        };
+
         window.openWallpaperSelector = () => {
             const grid = document.getElementById('wallpaper-grid');
-            grid.innerHTML = DASHBOARD_BGS.map((bg, i) => `
+            const allBgs = getAllWallpapers();
+            grid.innerHTML = allBgs.map((bg, i) => `
                 <div onclick="window.selectWallpaper(${i})" class="group cursor-pointer rounded-3xl overflow-hidden relative border-2 ${currentDashBgIndex === i ? 'border-[var(--primary)] shadow-[0_0_20px_var(--primary)]' : 'border-white/5 hover:border-white/20'} transition-all h-32 md:h-40 flex items-center justify-center bg-black/50">
                     ${bg.url ? `<img src="${bg.url}" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity ${currentDashBgIndex === i ? 'opacity-100' : ''}">` : `<div class="absolute inset-0 w-full h-full bg-gradient-to-br from-[var(--primary)]/20 to-transparent opacity-60"></div>`}
-                    <div class="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/90 to-transparent z-10">
+                    <div class="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/90 to-transparent z-10 flex justify-between items-end">
                         <span class="text-[10px] font-black uppercase tracking-widest text-white drop-shadow-md flex items-center gap-2">
                             ${currentDashBgIndex === i ? '<i data-lucide="check-circle-2" class="w-4 h-4 text-[var(--primary)]"></i>' : ''} ${bg.name}
                         </span>
                     </div>
+                    ${ i >= DASHBOARD_BGS.length ? `<button onclick="event.stopPropagation(); window.removeCustomWallpaper(${i - DASHBOARD_BGS.length})" class="absolute top-2 right-2 p-2 bg-rose-500/80 rounded-xl opacity-0 group-hover:opacity-100 hover:bg-rose-500 transition-all text-white backdrop-blur-md" title="Remover"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : '' }
                 </div>
             `).join('');
             lucide.createIcons();
             window.toggleModal('wallpaper-overlay', true);
+        };
+
+        window.addCustomWallpaper = () => {
+            const url = document.getElementById('custom-bg-url').value.trim();
+            if (!url) return;
+            customWallpapers.push({ name: 'Fundo da Web', url: url });
+            localStorage.setItem('seed_custom_wallpapers', JSON.stringify(customWallpapers));
+            document.getElementById('custom-bg-url').value = '';
+            window.openWallpaperSelector();
+            window.showToast("✅ Fundo adicionado!");
+        };
+
+        window.removeCustomWallpaper = (index) => {
+            customWallpapers.splice(index, 1);
+            localStorage.setItem('seed_custom_wallpapers', JSON.stringify(customWallpapers));
+            if (currentDashBgIndex >= getAllWallpapers().length) { currentDashBgIndex = 0; localStorage.setItem('seed_dash_bg', 0); window.applyDashboardBg(); }
+            window.openWallpaperSelector();
         };
 
         window.closeWallpaperSelector = () => window.toggleModal('wallpaper-overlay', false);
@@ -995,7 +1119,38 @@
 
         window.renderProjects = () => {
             const grid = document.getElementById('project-grid'); 
-            const filtered = projects.filter(p => p.station === currentStation);
+            
+            // Lógica do Header da Grid
+            const stationNames = { now: 'Foco Atual', next: 'Próximos Passos', someday: 'Algum Dia', archive: 'O Jardim' };
+            const stationTitleEl = document.getElementById('station-title');
+            if (stationTitleEl) stationTitleEl.innerText = stationNames[currentStation] || 'Projetos';
+
+            const btnSort = document.getElementById('btn-sort');
+            if (btnSort) {
+                if (currentStation === 'archive') {
+                    btnSort.classList.add('hidden');
+                } else {
+                    btnSort.classList.remove('hidden');
+                    if (sortByDeadline) {
+                        btnSort.classList.add('text-[var(--primary)]', 'border-[var(--primary)]/30', 'bg-[var(--primary)]/10');
+                        btnSort.classList.remove('text-zinc-500', 'bg-white/5', 'border-white/5');
+                    } else {
+                        btnSort.classList.remove('text-[var(--primary)]', 'border-[var(--primary)]/30', 'bg-[var(--primary)]/10');
+                        btnSort.classList.add('text-zinc-500', 'bg-white/5', 'border-white/5');
+                    }
+                }
+            }
+
+            let filtered = projects.filter(p => p.station === currentStation);
+            
+            // Aplica a ordenação se estiver ativa
+            if (sortByDeadline && currentStation !== 'archive') {
+                filtered.sort((a, b) => {
+                    if (!a.deadline) return 1;
+                    if (!b.deadline) return -1;
+                    return new Date(a.deadline) - new Date(b.deadline);
+                });
+            }
             
             if (currentStation === 'archive') { 
                 grid.className = "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8";
@@ -1029,11 +1184,17 @@
                     if (p.deadline) {
                         const today = new Date(); today.setHours(0,0,0,0); const tgt = new Date(p.deadline + 'T12:00:00'); tgt.setHours(0,0,0,0);
                         const diffDays = Math.ceil((tgt - today) / (1000 * 60 * 60 * 24));
-                        let dColor = 'text-blue-400', dText = 'Entrega: ' + tgt.toLocaleDateString('pt-BR', {day:'2-digit', month:'short'});
-                        if (diffDays < 0) { dColor = 'text-rose-500'; dText = 'Atrasado'; } 
-                        else if (diffDays === 0) { dColor = 'text-amber-500'; dText = 'Termina Hoje'; } 
-                        else if (diffDays <= 3) { dColor = 'text-amber-400'; dText = diffDays + ' dias restantes'; }
-                        deadlineHtml = `<div class="text-[9px] font-black uppercase ${dColor} tracking-widest flex items-center gap-1.5"><i data-lucide="flag" class="w-3 h-3"></i> ${dText}</div>`;
+                        
+                        let dColor = 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20';
+                        let dText = 'Entrega: ' + tgt.toLocaleDateString('pt-BR', {day:'2-digit', month:'short'});
+                        let pulse = '';
+                        
+                        if (diffDays < 0) { dColor = 'text-rose-500 bg-rose-500/10 border-rose-500/20'; dText = 'Atrasado'; pulse = 'animate-pulse'; } 
+                        else if (diffDays === 0) { dColor = 'text-rose-500 bg-rose-500/10 border-rose-500/20'; dText = 'Termina Hoje'; pulse = 'animate-pulse'; } 
+                        else if (diffDays <= 3) { dColor = 'text-orange-400 bg-orange-500/10 border-orange-500/20'; dText = diffDays + ' dias restantes'; }
+                        else if (diffDays <= 7) { dColor = 'text-amber-400 bg-amber-500/10 border-amber-500/20'; dText = diffDays + ' dias restantes'; }
+                        
+                        deadlineHtml = `<div class="text-[9px] font-bold ${dColor} border px-2 py-1 rounded-md uppercase tracking-widest flex items-center gap-1.5 w-fit ${pulse}"><i data-lucide="calendar-clock" class="w-3 h-3"></i> ${dText}</div>`;
                     }
 
                     let habitHtml = '';
@@ -1094,8 +1255,19 @@
             
             let deadlineBadge = ''; 
             if (p.deadline) { 
-                const tgt = new Date(p.deadline + 'T12:00:00'); 
-                deadlineBadge = `<div class="inline-flex gap-1.5 px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-widest text-zinc-300 drop-shadow-md"><i data-lucide="flag" class="w-3 h-3"></i> Entrega: ${tgt.toLocaleDateString('pt-BR')}</div>`; 
+                const today = new Date(); today.setHours(0,0,0,0); const tgt = new Date(p.deadline + 'T12:00:00'); tgt.setHours(0,0,0,0);
+                const diffDays = Math.ceil((tgt - today) / (1000 * 60 * 60 * 24));
+                
+                let dColor = 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20';
+                let dText = 'Entrega: ' + tgt.toLocaleDateString('pt-BR');
+                let pulse = '';
+                
+                if (diffDays < 0) { dColor = 'text-rose-500 bg-rose-500/10 border-rose-500/20'; dText = 'Atrasado'; pulse = 'animate-pulse'; } 
+                else if (diffDays === 0) { dColor = 'text-rose-500 bg-rose-500/10 border-rose-500/20'; dText = 'Termina Hoje'; pulse = 'animate-pulse'; } 
+                else if (diffDays <= 3) { dColor = 'text-orange-400 bg-orange-500/10 border-orange-500/20'; dText = diffDays + ' dias restantes'; }
+                else if (diffDays <= 7) { dColor = 'text-amber-400 bg-amber-500/10 border-amber-500/20'; dText = diffDays + ' dias restantes'; }
+                
+                deadlineBadge = `<div class="inline-flex items-center gap-1.5 px-4 py-1.5 ${dColor} border rounded-full text-[10px] font-black uppercase tracking-widest drop-shadow-md ${pulse}"><i data-lucide="calendar-clock" class="w-3 h-3"></i> ${dText}</div>`; 
             }
 
             const isFire = p.habit && p.habit.streak >= 3;
@@ -1227,6 +1399,34 @@
             draggedProjectId = null; 
         };
 
+        // --- NOVA LÓGICA DE UI DO MODAL ---
+        window.selectProjTheme = (theme) => {
+            document.getElementById('proj-icon').value = theme;
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('bg-[var(--primary)]/20', 'border-[var(--primary)]', 'text-[var(--primary)]');
+                btn.classList.add('border-white/10', 'text-zinc-400');
+            });
+            const activeBtn = document.getElementById(`theme-btn-${theme}`);
+            if(activeBtn) {
+                activeBtn.classList.remove('border-white/10', 'text-zinc-400');
+                activeBtn.classList.add('bg-[var(--primary)]/20', 'border-[var(--primary)]', 'text-[var(--primary)]');
+            }
+        };
+
+        window.selectProjStation = (station) => {
+            document.getElementById('proj-station').value = station;
+            document.querySelectorAll('.station-btn').forEach(btn => {
+                btn.classList.remove('bg-[var(--primary)]', 'text-white', 'shadow-lg');
+                btn.classList.add('text-zinc-400');
+            });
+            const activeBtn = document.getElementById(`station-btn-${station}`);
+            if(activeBtn) {
+                activeBtn.classList.remove('text-zinc-400');
+                activeBtn.classList.add('bg-[var(--primary)]', 'text-white', 'shadow-lg');
+            }
+        };
+        // ------------------------------------
+
         window.addTempMilestone = () => { 
             const input = document.getElementById('new-milestone-input'); 
             const val = input.value.trim(); 
@@ -1235,7 +1435,7 @@
         window.removeTempMilestone = (index) => { tempMilestones.splice(index, 1); window.renderTempMilestones(); };
         window.renderTempMilestones = () => { 
             const list = document.getElementById('temp-milestones-list'); 
-            list.innerHTML = tempMilestones.map((m, i) => `<div class="flex items-center justify-between bg-black/40 border border-white/5 p-3 rounded-xl animate-slide-up"><span class="text-sm font-medium text-zinc-300 truncate">${m.text}</span><button type="button" onclick="window.removeTempMilestone(${i})" class="text-rose-500 hover:text-rose-400 p-1 shrink-0 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button></div>`).join(''); 
+            list.innerHTML = tempMilestones.map((m, i) => `<div class="flex items-center justify-between bg-black/40 border border-white/5 p-4 rounded-2xl animate-slide-up"><div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-[var(--primary)]"></div><span class="text-sm font-bold text-zinc-200">${m.text}</span></div><button type="button" onclick="window.removeTempMilestone(${i})" class="text-rose-500 hover:text-rose-400 p-2 shrink-0 transition-colors bg-white/5 rounded-xl hover:bg-rose-500/10"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join(''); 
             lucide.createIcons(); 
         };
 
@@ -1252,6 +1452,13 @@
             document.getElementById('new-milestone-input').value = ''; 
             tempMilestones = []; 
             if(document.getElementById('temp-milestones-list')) window.renderTempMilestones(); 
+
+            // Reseta seleções visuais para o padrão
+            window.selectProjTheme('briefcase');
+            window.selectProjStation('now');
+            
+            // Foco imediato no título
+            setTimeout(() => document.getElementById('proj-title').focus(), 100);
         };
 
         window.openEditModal = (id) => {
@@ -1263,12 +1470,14 @@
             document.getElementById('modal-milestones-section').classList.add('hidden');
             
             document.getElementById('proj-title').value = p.title; 
-            document.getElementById('proj-icon').value = p.icon; 
-            document.getElementById('proj-station').value = p.station; 
             document.getElementById('proj-habit').value = p.habit ? p.habit.title : ''; 
             const deadlineInput = document.getElementById('proj-deadline'); if (deadlineInput) { deadlineInput.value = p.deadline || ''; }
             
             window.toggleModal('modal', true);
+
+            // Carrega as seleções visuais do projeto atual
+            window.selectProjTheme(p.icon || 'briefcase');
+            window.selectProjStation(p.station || 'now');
         };
         
         window.closeModal = () => window.toggleModal('modal', false);
@@ -1340,11 +1549,40 @@
 
         window.openGifSelector = () => { 
             const grid = document.getElementById('gif-grid'); 
-            grid.innerHTML = FOCUS_SCENES.map((s, i) => `<div onclick="window.selectScene(${i})" class="group cursor-pointer rounded-3xl overflow-hidden relative border-2 ${currentSceneIndex === i ? 'border-[var(--primary)] shadow-[0_0_20px_var(--primary)]' : 'border-white/5 hover:border-white/20'} transition-all h-32 md:h-40"><img src="${s.url}" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity ${currentSceneIndex === i ? 'opacity-100' : ''}"><div class="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/90 to-transparent"><span class="text-[10px] font-black uppercase tracking-widest text-white drop-shadow-md flex items-center gap-2">${currentSceneIndex === i ? '<i data-lucide="check-circle-2" class="w-4 h-4 text-[var(--primary)]"></i>' : ''} ${s.name}</span></div></div>`).join(''); 
+            const allScenes = getAllScenes();
+            grid.innerHTML = allScenes.map((s, i) => `
+                <div onclick="window.selectScene(${i})" class="group cursor-pointer rounded-3xl overflow-hidden relative border-2 ${currentSceneIndex === i ? 'border-[var(--primary)] shadow-[0_0_20px_var(--primary)]' : 'border-white/5 hover:border-white/20'} transition-all h-32 md:h-40 flex items-center justify-center bg-black/50">
+                    <img src="${s.url}" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity ${currentSceneIndex === i ? 'opacity-100' : ''}">
+                    <div class="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/90 to-transparent z-10 flex justify-between items-end">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-white drop-shadow-md flex items-center gap-2">
+                            ${currentSceneIndex === i ? '<i data-lucide="check-circle-2" class="w-4 h-4 text-[var(--primary)]"></i>' : ''} ${s.name}
+                        </span>
+                    </div>
+                    ${ i >= FOCUS_SCENES.length ? `<button onclick="event.stopPropagation(); window.removeCustomScene(${i - FOCUS_SCENES.length})" class="absolute top-2 right-2 p-2 bg-rose-500/80 rounded-xl opacity-0 group-hover:opacity-100 hover:bg-rose-500 transition-all text-white backdrop-blur-md" title="Remover"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : '' }
+                </div>
+            `).join(''); 
             lucide.createIcons(); window.toggleModal('gif-overlay', true); 
         };
+
+        window.addCustomScene = () => {
+            const url = document.getElementById('custom-gif-url').value.trim();
+            if (!url) return;
+            customScenes.push({ name: 'Cenário Adicionado', url: url });
+            localStorage.setItem('seed_custom_scenes', JSON.stringify(customScenes));
+            document.getElementById('custom-gif-url').value = '';
+            window.openGifSelector();
+            window.showToast("✅ Cenário adicionado!");
+        };
+
+        window.removeCustomScene = (index) => {
+            customScenes.splice(index, 1);
+            localStorage.setItem('seed_custom_scenes', JSON.stringify(customScenes));
+            if (currentSceneIndex >= getAllScenes().length) { currentSceneIndex = 0; localStorage.setItem('seed_focus_scene', 0); }
+            window.openGifSelector();
+        };
+
         window.closeGifSelector = () => window.toggleModal('gif-overlay', false);
-        window.selectScene = (index) => { currentSceneIndex = index; localStorage.setItem('seed_focus_scene', index); document.getElementById('room-bg').style.backgroundImage = `url('${FOCUS_SCENES[index].url}')`; window.closeGifSelector(); window.showToast("🖼️ Cenário alterado!"); };
+        window.selectScene = (index) => { currentSceneIndex = index; localStorage.setItem('seed_focus_scene', index); document.getElementById('room-bg').style.backgroundImage = `url('${getAllScenes()[index].url}')`; window.closeGifSelector(); window.showToast("🖼️ Cenário alterado!"); };
 
         window.openVirtualRoom = () => { 
             const p = projects.find(p => p.id === activeProjectId); if(!p) return; 
@@ -1353,7 +1591,7 @@
             document.getElementById('room-task-name').innerText = p.milestones.find(m=>!m.completed)?.text || "Sessão de Foco Livre"; 
             document.getElementById('room-notes-input').value = p.notes || ''; 
             window.renderRoomLinks(); window.renderRoomMilestones(); 
-            document.getElementById('room-bg').style.backgroundImage = `url('${FOCUS_SCENES[currentSceneIndex].url}')`; 
+            document.getElementById('room-bg').style.backgroundImage = `url('${getAllScenes()[currentSceneIndex].url}')`; 
             document.getElementById('room-bg').style.opacity = '1'; 
             document.getElementById('room-darken').className = 'absolute inset-0 bg-black/60 transition-all duration-1000 z-10'; 
             document.getElementById('room-time-selector').style.opacity = '1'; document.getElementById('room-time-selector').style.pointerEvents = 'auto'; 
