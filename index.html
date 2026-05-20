@@ -565,20 +565,49 @@
         </div>
     </div>
     
-    <!-- 6. Modal: Mentor IA -->
-    <div id="mentor-overlay" class="fixed inset-0 bg-black/90 z-[160] hidden items-center justify-center p-6 backdrop-blur-md animate-slide-up">
-        <div class="glass w-full max-w-2xl rounded-[3rem] p-8 md:p-10 space-y-6 flex flex-col max-h-[85vh] border border-white/10">
-            <div class="flex justify-between items-center">
+    <!-- 6. Modal: Mentor IA (REMASTERIZADO COM API GEMINI) -->
+    <div id="mentor-overlay" class="fixed inset-0 bg-black/90 z-[160] hidden items-center justify-center p-4 md:p-6 backdrop-blur-xl animate-slide-up">
+        <div class="glass w-full max-w-3xl rounded-[3rem] p-8 space-y-6 flex flex-col h-[85vh] md:h-[80vh] border border-white/10 shadow-2xl">
+            <!-- Header -->
+            <div class="flex justify-between items-center shrink-0 border-b border-white/5 pb-4">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                        <i data-lucide="sparkles" class="text-white w-6 h-6"></i>
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-[var(--primary)] flex items-center justify-center shadow-lg shadow-[var(--primary)]/30">
+                        <i data-lucide="sparkles" class="text-white w-5 h-5"></i>
                     </div>
-                    <h3 class="text-2xl font-black tracking-tight">Mentor IA</h3>
+                    <div>
+                        <h3 class="text-2xl font-black tracking-tight">Mentor IA</h3>
+                        <p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold">Conselhos baseados no seu projeto</p>
+                    </div>
                 </div>
-                <button onclick="closeMentor()" class="text-zinc-500 hover:text-white"><i data-lucide="x"></i></button>
+                <button onclick="closeMentor()" class="text-zinc-500 hover:text-white transition-colors bg-white/5 p-2 rounded-xl hover:bg-white/10"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
-            <div id="mentor-response" class="flex-1 overflow-y-auto text-zinc-300 leading-relaxed text-lg space-y-4 custom-scrollbar"></div>
-            <button onclick="closeMentor()" class="w-full py-4 bg-white/5 rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-white/10 transition-colors border border-white/10">Fechar</button>
+            
+            <!-- Chat Area -->
+            <div id="mentor-chat-history" class="flex-1 overflow-y-auto custom-scrollbar space-y-6 pr-2 flex flex-col scroll-smooth">
+                <!-- Injetado via JS -->
+            </div>
+
+            <!-- Quick Prompts & Input -->
+            <div class="shrink-0 space-y-4 pt-4 border-t border-white/5">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                    <button onclick="sendMentorMessage('🔪 Quebre a minha próxima tarefa em 3 passos menores e práticos.')" class="bg-black/20 hover:bg-white/10 border border-white/5 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest text-zinc-300 transition-colors flex items-center justify-center gap-2">
+                        <i data-lucide="list-tree" class="w-3 h-3 text-emerald-400"></i> Quebrar Tarefas
+                    </button>
+                    <button onclick="sendMentorMessage('🚧 Estou travado e sem motivação. Me dê um conselho pragmático baseado nas minhas anotações.')" class="bg-black/20 hover:bg-white/10 border border-white/5 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest text-zinc-300 transition-colors flex items-center justify-center gap-2">
+                        <i data-lucide="brain-circuit" class="w-3 h-3 text-amber-400"></i> Estou Travado
+                    </button>
+                    <button onclick="sendMentorMessage('📝 Faça uma revisão geral do projeto (analisando meu prazo, tarefas e notas) e me diga onde focar.')" class="bg-black/20 hover:bg-white/10 border border-white/5 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest text-zinc-300 transition-colors flex items-center justify-center gap-2">
+                        <i data-lucide="line-chart" class="w-3 h-3 text-blue-400"></i> Revisão Geral
+                    </button>
+                </div>
+                
+                <div class="flex gap-2">
+                    <input id="mentor-input" type="text" placeholder="Pergunte algo sobre o seu projeto..." class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none font-medium text-sm transition-all focus:border-[var(--primary)] focus:bg-white/10 text-white shadow-inner" onkeydown="if(event.key==='Enter') sendMentorMessage()">
+                    <button onclick="sendMentorMessage()" class="px-6 bg-[var(--primary)] hover:bg-[var(--primary-dark)] rounded-2xl text-white transition-all shadow-lg hover:scale-105 active:scale-95 flex items-center justify-center shrink-0">
+                        <i data-lucide="send" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -756,6 +785,10 @@
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, deleteUser, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // CHAVE DE API DA INTELIGÊNCIA ARTIFICIAL (GEMINI)
+        // Quando for subir para o seu GitHub, cole sua chave do Google AI Studio aqui dentro das aspas:
+        const GEMINI_API_KEY = ""; 
+
         const firebaseConfig = { 
             apiKey: "AIzaSyCReE2nGwS6i3ZCAwphTykSL5g-VbDP07k", 
             authDomain: "projectseed-b4af5.firebaseapp.com", 
@@ -782,6 +815,7 @@
         let editingProjectId = null;
         let currentStation = 'now'; 
         let activeProjectId = null; 
+        let draggedMilestoneIndex = null;
         let timerInterval = null; 
         let timeLeft = selectedFocusTime * 60; 
         let isTimerRunning = false; 
@@ -1249,7 +1283,11 @@
             if (!p) return; 
             
             const isArchived = p.station === 'archive'; 
-            document.getElementById('vision-banner-container').innerHTML = `<img src="${VIBE_IMAGES[p.icon]}" class="w-full h-full object-cover">`;
+            
+            const fallbackImg = VIBE_IMAGES['briefcase'];
+            const imgSrc = VIBE_IMAGES[p.icon] || fallbackImg;
+            document.getElementById('vision-banner-container').innerHTML = `<img src="${imgSrc}" class="w-full h-full object-cover" onerror="this.src='${fallbackImg}'">`;
+            
             const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0; 
             const isHabitDone = p.habit && p.habit.lastCheck === new Date().toISOString().split('T')[0];
             
@@ -1668,7 +1706,151 @@
         window.openStats = () => { try { const validProjects = projects.filter(p => p.station !== 'trash'); const total = validProjects.length; const archived = validProjects.filter(p => p.station === 'archive').length; const inProgress = validProjects.filter(p => p.station === 'now').length; const planning = validProjects.filter(p => p.station === 'next' || p.station === 'someday').length; let totalMilestones = 0; let completedMilestones = 0; validProjects.forEach(p => { totalMilestones += p.milestones.length; completedMilestones += p.milestones.filter(m => m.completed).length; }); const overallProgress = totalMilestones === 0 ? 0 : Math.round((completedMilestones / totalMilestones) * 100); const safeAchievements = Array.isArray(achievements) ? achievements : []; document.getElementById('stats-chart').innerHTML = `<div class="glass p-6 rounded-2xl flex justify-between items-center mb-4 border border-[var(--primary)]"><span class="font-bold text-lg">Evolução Geral da Vida</span><span class="font-black text-3xl text-[var(--primary)]">${overallProgress}%</span></div><div class="grid grid-cols-2 gap-4 mb-4"><div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="layers" class="w-8 h-8 text-indigo-400"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Ideias Totais</span><span class="font-black text-3xl">${total}</span></div><div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="award" class="w-8 h-8 text-emerald-400"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">No Jardim (Fim)</span><span class="font-black text-3xl text-emerald-400">${archived}</span></div><div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="zap" class="w-8 h-8 text-[var(--primary)]"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Ativos Agora</span><span class="font-black text-3xl text-[var(--primary)]">${inProgress}</span></div><div class="glass p-6 rounded-2xl flex flex-col justify-center items-center text-center gap-2 hover:bg-white/5 transition-colors"><i data-lucide="calendar" class="w-8 h-8 text-blue-400"></i><span class="text-[10px] font-black uppercase tracking-widest text-zinc-400">Planejamento</span><span class="font-black text-3xl text-blue-400">${planning}</span></div></div><div class="glass p-6 rounded-2xl space-y-4 mt-4"><h4 class="text-[10px] font-black uppercase tracking-widest text-zinc-400 text-center">Sala de Troféus</h4><div class="grid grid-cols-2 md:grid-cols-4 gap-4">${Object.values(MEDALS).map(m => { const unlocked = safeAchievements.includes(m.id); return `<div class="glass p-4 rounded-xl text-center flex flex-col items-center justify-center gap-2 ${unlocked ? 'border border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.2)] bg-amber-500/10' : 'opacity-40 grayscale'} transition-all"><div class="text-3xl drop-shadow-md">${m.icon}</div><div class="text-[10px] font-black uppercase text-zinc-200">${m.title}</div><div class="text-[8px] text-zinc-400 leading-tight">${m.desc}</div></div>`; }).join('')}</div></div>`; lucide.createIcons(); window.toggleModal('stats-overlay', true); } catch(e) { console.error(e); window.showToast("Erro ao abrir termómetro.", "error"); } };
         window.closeStats = () => window.toggleModal('stats-overlay', false);
 
-        window.askMentor = () => { const p = projects.find(p => p.id === activeProjectId); if(!p) return; window.toggleModal('mentor-overlay', true); document.getElementById('mentor-response').innerHTML = `<div class="text-center space-y-4 py-8"><div class="w-16 h-16 bg-[var(--primary)]/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-[var(--primary)]/30"><i data-lucide="sparkles" class="w-8 h-8 text-[var(--primary)]"></i></div><h4 class="text-2xl md:text-3xl font-black text-white tracking-tight">Mentor IA em breve!</h4><p class="text-zinc-400 text-sm md:text-base leading-relaxed max-w-md mx-auto">A inteligência artificial do seu jardim está a ser treinada neste momento. Muito em breve, você terá conselhos ultra-personalizados baseados nos seus marcos e anotações.</p><div class="inline-block mt-6 px-4 py-2 rounded-full border border-[var(--primary)]/30 bg-[var(--primary)]/10 text-[var(--primary)] text-[var(--primary)] text-[10px] font-black uppercase tracking-widest shadow-[0_0_15px_rgba(139,92,246,0.2)]">Em Construção 🚧</div></div>`; lucide.createIcons(); };
+        // --- MENTOR IA ENGINE (API GEMINI) ---
+        window.askMentor = () => { 
+            const p = projects.find(p => p.id === activeProjectId); 
+            if(!p) return; 
+            
+            const chatHistory = document.getElementById('mentor-chat-history');
+            chatHistory.innerHTML = `
+                <div class="flex items-start gap-4 animate-slide-up">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500 to-[var(--primary)] flex items-center justify-center shrink-0 shadow-lg shadow-[var(--primary)]/30 border border-white/10"><i data-lucide="sparkles" class="w-5 h-5 text-white"></i></div>
+                    <div class="bg-white/5 border border-white/10 rounded-2xl rounded-tl-none p-5 text-sm text-zinc-300 leading-relaxed shadow-lg">
+                        Olá! Estou analisando o seu projeto <b class="text-white">${p.title}</b>.<br><br>
+                        Como o seu Mentor focado em execução, o que você quer resolver nesta sessão? Pode usar os botões abaixo ou me perguntar qualquer coisa.
+                    </div>
+                </div>
+            `;
+            
+            window.toggleModal('mentor-overlay', true); 
+            lucide.createIcons(); 
+        };
+
+        window.sendMentorMessage = async (quickPrompt = null) => {
+            const input = document.getElementById('mentor-input');
+            const message = quickPrompt || input.value.trim();
+            if (!message) return;
+            
+            input.value = '';
+            const chatHistory = document.getElementById('mentor-chat-history');
+            
+            // Renderiza Mensagem do Usuário
+            chatHistory.innerHTML += `
+                <div class="flex items-start gap-4 flex-row-reverse animate-slide-up">
+                    <div class="w-10 h-10 rounded-2xl bg-zinc-800 flex items-center justify-center shrink-0 border border-white/10"><i data-lucide="user" class="w-5 h-5 text-white"></i></div>
+                    <div class="bg-[var(--primary)] border border-white/10 text-white rounded-2xl rounded-tr-none p-5 text-sm shadow-[0_0_20px_rgba(139,92,246,0.3)]">${message}</div>
+                </div>
+            `;
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+            
+            // Renderiza Indicador de Carregamento
+            const loadingId = 'loading-' + Date.now();
+            chatHistory.innerHTML += `
+                <div id="${loadingId}" class="flex items-start gap-4 animate-slide-up">
+                    <div class="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0"><i data-lucide="sparkles" class="w-5 h-5 text-[var(--primary)]"></i></div>
+                    <div class="bg-white/5 border border-white/10 rounded-2xl rounded-tl-none p-5 text-sm text-zinc-400 flex items-center gap-3">Analisando contexto <i data-lucide="loader-2" class="w-4 h-4 animate-spin text-[var(--primary)]"></i></div>
+                </div>
+            `;
+            lucide.createIcons();
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+            
+            // Constrói o Contexto do Projeto para a IA ler
+            const p = projects.find(proj => proj.id === activeProjectId);
+            if(!p) return;
+            
+            const tarefas = p.milestones.map(m => `[${m.completed ? 'CONCLUÍDO' : 'PENDENTE'}] ${m.text}`).join('\n');
+            const progresso = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0;
+            const dataLimite = p.deadline ? new Date(p.deadline + 'T12:00:00').toLocaleDateString('pt-BR') : 'Sem prazo definido';
+            
+            const contexto = `Você é um mentor pragmático de produtividade e foco de alta performance, agindo dentro do aplicativo "Seed".
+Seja direto, empático e focado na execução. Sem cerimônias longas.
+
+CONTEXTO DO PROJETO ATUAL DO USUÁRIO:
+Título: "${p.title}"
+Área: ${p.icon}
+Progresso: ${progresso}%
+Data Limite: ${dataLimite}
+
+TAREFAS DO PROJETO:
+${tarefas}
+
+ANOTAÇÕES LIVRES DO USUÁRIO (Rascunhos, estudos, links):
+${p.notes || '(Usuário ainda não fez anotações neste projeto).'}
+
+MENSAGEM/PEDIDO DO USUÁRIO:
+"${message}"
+
+INSTRUÇÕES DE RESPOSTA:
+1. Responda diretamente à mensagem do usuário baseado no contexto acima.
+2. Seja pragmático, curto e acionável (máximo 2 a 3 parágrafos curtos).
+3. Use formatação Markdown (**negrito** para destacar palavras-chave, listas se necessário).
+4. O seu objetivo é destravar o usuário para que ele inicie um timer de foco imediatamente após fechar o chat.`;
+
+            try {
+                // A chave virá da constante, mas o ambiente de teste ignora e injeta a dele
+                const apiKey = GEMINI_API_KEY; 
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                
+                // Lógica de Backoff (Retentativa) exigida pela API
+                let result = null;
+                let retries = 5;
+                let delay = 1000;
+                
+                const payload = {
+                    contents: [{ parts: [{ text: contexto }] }],
+                    systemInstruction: { parts: [{ text: "Responda sempre em Português do Brasil de forma pragmática, moderna e encorajadora." }] }
+                };
+
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        const response = await fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        if (response.ok) {
+                            result = await response.json();
+                            break;
+                        }
+                    } catch(e) {}
+                    await new Promise(r => setTimeout(r, delay));
+                    delay *= 2; // exponential backoff
+                }
+                
+                document.getElementById(loadingId)?.remove();
+                
+                if (result && result.candidates && result.candidates[0].content.parts[0].text) {
+                    let aiText = result.candidates[0].content.parts[0].text;
+                    
+                    // Conversor Básico de Markdown para HTML (Negrito, Quebra de Linha, Listas)
+                    aiText = aiText.replace(/\*\*(.*?)\*\*/g, '<b class="text-white">$1</b>');
+                    aiText = aiText.replace(/\*(.*?)\*/g, '<i class="text-zinc-200">$1</i>');
+                    aiText = aiText.replace(/\n\n/g, '<br><br>');
+                    aiText = aiText.replace(/\n\* /g, '<br>• ');
+                    aiText = aiText.replace(/\n- /g, '<br>• ');
+                    
+                    chatHistory.innerHTML += `
+                        <div class="flex items-start gap-4 animate-slide-up">
+                            <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500 to-[var(--primary)] flex items-center justify-center shrink-0 shadow-lg shadow-[var(--primary)]/30 border border-white/10"><i data-lucide="sparkles" class="w-5 h-5 text-white"></i></div>
+                            <div class="bg-white/5 border border-white/10 rounded-2xl rounded-tl-none p-5 text-sm text-zinc-300 leading-relaxed shadow-lg">${aiText}</div>
+                        </div>
+                    `;
+                } else {
+                    throw new Error("API falhou ou não retornou texto");
+                }
+            } catch (error) {
+                document.getElementById(loadingId)?.remove();
+                chatHistory.innerHTML += `
+                    <div class="flex items-start gap-4 animate-slide-up">
+                        <div class="w-10 h-10 rounded-2xl bg-rose-500 flex items-center justify-center shrink-0"><i data-lucide="alert-triangle" class="w-5 h-5 text-white"></i></div>
+                        <div class="bg-rose-500/10 border border-rose-500/20 rounded-2xl rounded-tl-none p-5 text-sm text-rose-400">Falha ao conectar com a IA. Tente enviar a mensagem novamente ou verifique se colocou a sua Chave de API no código.</div>
+                    </div>
+                `;
+            }
+            lucide.createIcons();
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        };
+
         window.closeMentor = () => window.toggleModal('mentor-overlay', false);
 
         window.printProject = (id) => { const p = projects.find(proj => proj.id === id); if (!p) return; const prog = Math.round((p.milestones.filter(m => m.completed).length / p.milestones.length) * 100) || 0; const printWindow = window.open('', '', 'width=800,height=600'); printWindow.document.write(`<html><head><title>Relatório - ${p.title}</title><style>body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #222; line-height: 1.6; padding: 40px; max-width: 800px; margin: 0 auto; background: #fff; } h1 { color: #111; border-bottom: 2px solid #8B5CF6; padding-bottom: 10px; margin-bottom: 20px; font-size: 2.5em; } h2 { color: #444; margin-top: 40px; font-size: 1.2em; text-transform: uppercase; letter-spacing: 2px; } .meta { color: #555; font-size: 0.9em; margin-bottom: 40px; padding: 15px; background: #f9f9f9; border-radius: 8px; } .meta strong { color: #111; } .milestone { margin: 8px 0; padding: 12px 15px; background: #fdfdfd; border: 1px solid #eee; border-radius: 6px; font-size: 1.1em; } .completed { text-decoration: line-through; color: #888; background: #f4f4f5; } .notes { white-space: pre-wrap; background: #fdfdfd; padding: 25px; border-radius: 8px; border: 1px solid #eee; border-left: 4px solid #8B5CF6; font-size: 1.05em; color: #444; } .footer { margin-top: 60px; font-size: 0.8em; color: #aaa; text-align: center; border-top: 1px solid #eee; padding-top: 20px; }</style></head><body><h1>${p.title}</h1><div class="meta"><strong>Status:</strong> ${p.station === 'archive' ? 'No Jardim (Concluído)' : 'Em Cultivo'}<br><strong>Progresso:</strong> ${prog}% concluído<br><strong>Tempo Total de Foco:</strong> ${window.formatFocusTime(p.focusTime) || 'Nenhuma sessão registada'}${p.habit ? `<br><strong>Hábito Associado:</strong> ${p.habit.title} (${p.habit.streak} dias seguidos)` : ''}</div><h2>Tarefas e Marcos</h2>${p.milestones.map(m => `<div class="milestone ${m.completed ? 'completed' : ''}"><strong>[ ${m.completed ? 'X' : '&nbsp;&nbsp;'} ]</strong> ${m.text}</div>`).join('')}${p.notes ? `<h2>Anotações do Projeto</h2><div class="notes">${p.notes}</div>` : ''}<div class="footer">Gerado via Seed App</div></body></html>`); printWindow.document.close(); printWindow.focus(); setTimeout(() => { printWindow.print(); printWindow.close(); }, 250); };
